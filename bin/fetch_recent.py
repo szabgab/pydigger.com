@@ -21,7 +21,7 @@ def get_travis_status(builds):
 
 
 latest_url = 'https://pypi.python.org/pypi?%3Aaction=rss'
-print('Fetching ' + latest_url)
+#print('Fetching ' + latest_url)
 try:
     f = urllib2.urlopen(latest_url)
     rss_data = f.read()
