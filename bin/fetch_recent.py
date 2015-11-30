@@ -61,7 +61,13 @@ for item in root.iter('item'):
         entries.append(o)
         continue
 
-    match = re.search(r'^https?://github.com/(.*?)/?$', o['home_page'])
+    try:
+        match = re.search(r'^https?://github.com/(.*?)/?$', o['home_page'])
+    except Exception as e:
+        print(e)
+        print(o['home_page'])
+        continue
+
     if not match:
         o['error'] = 'Home page URL is not GitHub'
         entries.append(o)
