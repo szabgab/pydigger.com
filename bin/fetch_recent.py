@@ -19,7 +19,7 @@ def get_travis_status(builds):
         return 'passing'
     return 'unknown'
 
-def main():
+def get_latest():
     latest_url = 'https://pypi.python.org/pypi?%3Aaction=rss'
     #print('Fetching ' + latest_url)
     try:
@@ -29,8 +29,16 @@ def main():
     except urllib2.HTTPError as e:
         print(e, 'while fetching', latest_url)
         exit
-
     #print(rss_data)
+    return rss_data
+
+def save_json(entries):
+    f = open('recent.json', 'w')
+    f.write(json.dumps(entries))
+    f.close()
+
+def main():
+    rss_data = get_latest()
 
     root = ET.fromstring(rss_data)
 
@@ -112,9 +120,6 @@ def main():
 
         entries.append(o)
         #break
-
-    f = open('recent.json', 'w')
-    f.write(json.dumps(entries))
-    f.close()
+    save_json(entries)
 
 main()
