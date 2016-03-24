@@ -121,5 +121,3 @@ def main():
         entries.append(o)
         #break
     save_json(entries)
-
-main()
