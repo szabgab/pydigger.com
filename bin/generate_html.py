@@ -1,9 +1,8 @@
 from __future__ import print_function
 import json, os
 
-f = open('recent.json', 'r')
-data = json.load(f)
-f.close
+with open('recent.json', 'r') as f:
+    data = json.load(f)
 
 html = '''
 <!DOCTYPE html>
@@ -12,10 +11,10 @@ html = '''
   <meta charset="utf-8">
   <meta name="viewport"
      content="width=device-width, initial-scale=1, user-scalable=yes">
-  <title>Python Maven</title>
+  <title>Python for Code-Maven</title>
 </head>
 <body>
-<h1>Python Maven</h1>
+<h1>Python for Code-Maven</h1>
 <table>
 <tr>
   <th>Name</th><th>Travis-CI</th><th>Error</th>
@@ -66,5 +65,3 @@ except:
 fh = open('html/index.html', 'w')
 fh.write(html)
 fh.close
-
-
