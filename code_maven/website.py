@@ -20,8 +20,26 @@ def main():
         data = data,
     )
 
+
+@app.route("/pypi/<name>")
+def pypi(name):
+    package = db.packages.find_one({'name' : name})
+    if not package:
+        return render_template('404.html',
+            title = name + " not found",
+            package_name = name), 404
+    return render_template('package.html',
+        title = name,
+        package = package
+    )
+
+
 @app.route("/about")
 def about():
     return render_template('about.html',
         title = "About PyDigger"
     )
+
+@app.errorhandler(404)
+def not_found(error):
+    return render_template('404.html'), 404

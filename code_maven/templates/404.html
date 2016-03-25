@@ -1,0 +1,13 @@
+{% include "incl/header.html" %}
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <h1>Not Found</h1>
+        {% if package %}
+            The Pypi package <b>{{package_name}}</b>. Maybe try to look at <a href="http://pypi.python.org/pypi/{{package_name}}">PyPi</a> directly or evan try your luck with
+            the <a href="http://pypi.python.org/pypi/{{package_name}}/json">JSON file on PyPi</a>
+        {% endif %}
+    </div>
+    <div class="col-md-1"></div>
+</div>
+{% include "incl/footer.html" %}

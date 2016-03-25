@@ -1,0 +1,35 @@
+{% include "incl/header.html" %}
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <table>
+            <tr><td>Name</td><td><a href="http://pypi.python.org/pypi/{{package.name}}">{{package.name}}</a> <a href="http://pypi.python.org/pypi/{{package.name}}/json">JSON</a></td>
+            <tr><td>Version</td><td><a href="http://pypi.python.org/pypi/{{package.name}}/{{package.version}}">{{package.version}}</a> <a href="http://pypi.python.org/pypi/{{package.name}}/{{package.version}}/json">JSON</a></td>
+            <tr><td>Desc</td><td>{{package.short_description}}</td></tr>
+            <tr><td>pubDate</td><td>{{package.pubDate}}</td></tr>
+            <tr><td>maintainer</td><td>{{package.maintainer}}</td></tr>
+            <tr><td>docs_url</td><td>{{package.docs_url}}</td></tr>
+            <tr><td>requires_python</td><td>{{package.requires_python}}</td></tr>
+            <tr><td>VCS</td>
+                {% if package.github %}
+                   <td><a href="{{ package.home_page }}"><img src="/static/img/github-24-000000.png"></a></td>
+                {% else %}
+                   <td></td>
+                {% endif %}
+            </tr>
+            <tr><td>Travis-CI</td><td>
+                {% if package.travis_status %}
+                    <img src="/static/img/build-{{ package.travis_status }}.png">
+                {% else %}
+                   na
+                {% endif %}
+            </td></tr>
+
+        </table>
+        <!--
+            {{package}}
+        -->
+    </div>
+    <div class="col-md-1"></div>
+</div>
+{% include "incl/footer.html" %}

@@ -3,17 +3,22 @@
 <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-10">
-        {{data[0]}}
     <table>
     <tr>
-      <th>Name</th><th>Travis-CI</th><th>Error</th>
+      <th>Name</th><th>Repo</th><th>Travis-CI</th><th>Error</th>
     </tr>
     {% for e in data %}
         <tr>
         {% if 'home_page' in e %}
-            <td><a href="{{ e['home_page'] }}">{{ e['name'] }}</a></td>
+            <td><a href="/pypi/{{e['name']}}">{{ e['name'] }}</a></td>
         {% else %}
             <td>{{ e['name'] }}</td>
+        {% endif %}
+
+        {% if e.github %}
+            <td><a href="{{ e.home_page }}"><img src="/static/img/github-24-000000.png"></a></td>
+        {% else %}
+            <td></td>
         {% endif %}
 
         {% if 'travis_status' in e %}
@@ -21,6 +26,7 @@
         {% else %}
             <td>na</td>
         {% endif %}
+
         {% if 'error' in e %}
             <td>{{ e['error'] }}</td>
         {% else %}

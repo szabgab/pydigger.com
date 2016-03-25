@@ -74,7 +74,7 @@ def check_github(o, user, package):
     except urllib2.HTTPError as e:
         #print(e, 'while fetching', travis_yml_url)
         #o['cm']['error'] = 'Could not find .travis.yml in the GitHub repository'
-        o['travis-ci'] = False
+        o['travis_ci'] = False
         return()
 
     # if there is a travis.yml check the status
