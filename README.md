@@ -1,1 +1,1 @@
-Placeholder for the http://python-maven.com/ domain
+Placeholder for the http://pydigger.com/ domain
