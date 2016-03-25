@@ -1,13 +1,21 @@
 from __future__ import print_function
 import urllib2, json, re, sys
 import xml.etree.ElementTree as ET
+from pymongo import MongoClient
+
+
+client = MongoClient()
+db = client.pydigger
 
 def warn(msg):
     sys.stderr.write(msg + "\n")
 
-my_entries = []
+#my_entries = []
 def save_entry(e):
-    my_entries.append(e)
+    #my_entries.append(e)
+    #print(e)
+    db.packages.insert(e)
+
 
 def get_travis_status(builds):
     if not builds:
@@ -43,17 +51,57 @@ def save_json():
     f.write(json.dumps(my_entries))
     f.close()
 
+
+def check_github(o, user, package):
+    travis_yml_url = 'https://raw.githubusercontent.com/' + user + '/' + package + '/master/.travis.yml'
+        #print(travis_yml_url)
+    try:
+        f = urllib2.urlopen(travis_yml_url)
+        travis_yml = f.read()
+        f.close()
+    except urllib2.HTTPError as e:
+        #print(e, 'while fetching', travis_yml_url)
+        #o['cm']['error'] = 'Could not find .travis.yml in the GitHub repository'
+        o['travis-ci'] = False
+        return()
+
+    # if there is a travis.yml check the status
+    travis_url = 'https://api.travis-ci.org/repos/' + user + '/' + package + '/builds';
+    #print(travis_url)
+    try:
+        req = urllib2.Request(travis_url)
+        req.add_header('Accept', 'application/vnd.travis-ci.2+json')
+        f = urllib2.urlopen(req)
+        travis_data_json = f.read()
+        f.close()
+    except urllib2.HTTPError as e:
+        #print(e, 'while fetching', travis_url)
+        o['error'] = 'Could not get status from Travis-CI API'
+        return()
+
+    travis_data = json.loads(travis_data_json)
+    #print(travis_data)
+    #return();
+    if not travis_data or 'builds' not in travis_data or len(travis_data['builds']) == 0:
+        o['error'] = 'Could not find builds in data received from travis-ci.org'
+        return()
+
+    o['travis_status'] = get_travis_status(travis_data['builds'])
+    return()
+
 def main():
     rss_data = get_latest()
 
     root = ET.fromstring(rss_data)
 
     for item in root.iter('item'):
-        o = { 'rss' : {}, 'cm' : {} }
-        for name in ['title', 'link', 'description', 'pubDate']:
-            o['rss'][name] = item.find(name).text
+        o = {}
+        o['title'] = item.find('title').text
+        o['link'] = item.find('link').text
+        o['short_description'] = item.find('description').text
+        o['pubDate'] = item.find('pubDate').text
 
-        url = o['rss']['link'] + '/json';
+        url = o['link'] + '/json';
         #print(url)
         try:
             f = urllib2.urlopen(url)
@@ -61,7 +109,7 @@ def main():
             f.close()
         except urllib2.HTTPError as e:
             #print(e, 'while fetching', url)
-            o['cm']['error'] = 'Could not fetch details of PyPi package'
+            o['error'] = 'Could not fetch details of PyPi package'
             save_entry(o)
             continue
 
@@ -70,67 +118,29 @@ def main():
         #    del package_data['info']['description'] # its too big and I am not sure what to do with it anyway, or maybe not
         #print(package_data)
 
-        o['package'] = package_data
-        if 'info' in package_data and 'home_page' in package_data['info']:
-            o['cm']['home_page'] = package_data['info']['home_page']
-        else:
-            #o['cm']['error'] = 'Could not find home_page'
-            save_entry(o)
-            continue
+        #o['package'] = package_data
+        if 'info' in package_data:
+            info = package_data['info']
+            if 'home_page' in info:
+                o['home_page'] = info['home_page']
 
-        try:
-            match = re.search(r'^https?://github.com/(.*?)/?$', o['cm']['home_page'])
-        except Exception as e:
-            warn(e)
-            warn(o['cm']['home_page'])
-            continue
+            for f in ['maintainer', 'docs_url', 'requires_python']:
+                if f in info:
+                    o[f] = info[f]
 
-        if not match:
-            o['cm']['github'] = False
-            #o['error'] = 'Home page URL is not GitHub'
-            save_entry(o)
-            continue
-        #print(o)
-        o['cm']['github'] = True
 
-        travis_yml_url = 'https://raw.githubusercontent.com/' + match.group(1) + '/master/.travis.yml'
-        #print(travis_yml_url)
-        try:
-            f = urllib2.urlopen(travis_yml_url)
-            travis_yml = f.read()
-            f.close()
-        except urllib2.HTTPError as e:
-            #print(e, 'while fetching', travis_yml_url)
-            #o['cm']['error'] = 'Could not find .travis.yml in the GitHub repository'
-            o['cm']['travis-ci'] = False
-            save_entry(o)
-            continue
+        if 'home_page' in o:
+            try:
+                match = re.search(r'^https?://github.com/([^/]+)/([^/]+)/?$', o['home_page'])
+            except Exception as e:
+                warn(e)
+                warn(o['home_page'])
 
-        # if there is a travis.yml check the status
-        travis_url = 'https://api.travis-ci.org/repos/' + match.group(1) + '/builds';
-        #print(travis_url)
-        try:
-            req = urllib2.Request(travis_url)
-            req.add_header('Accept', 'application/vnd.travis-ci.2+json')
-            f = urllib2.urlopen(req)
-            travis_data_json = f.read()
-            f.close()
-        except urllib2.HTTPError as e:
-            #print(e, 'while fetching', travis_url)
-            o['cm']['error'] = 'Could not get status from Travis-CI API'
-            save_entry(o)
-            continue
-
-        travis_data = json.loads(travis_data_json)
-        #print(travis_data)
-        #return();
-        if not travis_data or 'builds' not in travis_data or len(travis_data['builds']) == 0:
-            o['cm']['error'] = 'Could not find builds in data received from travis-ci.org'
-            save_entry(o)
-            continue
-
-        o['cm']['travis_status'] = get_travis_status(travis_data['builds'])
-
+            if match:
+                o['github'] = True
+                check_github(o, match.group(1), match.group(2))
+            else:
+                o['github'] = False
+                #o['error'] = 'Home page URL is not GitHub'
+            #print(o)
         save_entry(o)
-        #break
-    save_json()

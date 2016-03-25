@@ -5,6 +5,9 @@ TODO
 ======
 
 * Start using real database to easily hold older information as well
+* We cannot store the data received from Pypi as it is in a MongoDB database as
+  it has places where the version number is a key and has . in it which cannot be
+  a key in MongoDB.
 * Create page about each package and show more details there
 * Show statistics about each field we show
 * Switch to the GitHub API
