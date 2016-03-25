@@ -7,6 +7,7 @@ TODO
 * Start using real database to easily hold older information as well
 * Create page about each package and show more details there
 * Show statistics about each field we show
+* Switch to the GitHub API
 
 
 
@@ -71,3 +72,7 @@ the specific version of the given package. Like this:
     },
     "urls": []
 }
+
+
+We save these two data structures and in addition we try to determine if the package has Git repository and
+if Travis-CI is configured in that repository.
