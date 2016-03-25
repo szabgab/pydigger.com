@@ -14,6 +14,18 @@ def warn(msg):
 def save_entry(e):
     #my_entries.append(e)
     #print(e)
+    # TODO make sure we only add newer version!
+    # Version numbers I've seen:
+    # 1.0.3
+    # 20160325.161225
+    # 0.2.0.dev20160325161211
+    # 3.1.0a12
+    # 2.0.0.dev11
+
+    doc = db.packages.find_one({'name' : e['name']})
+    if doc:
+        #print(doc)
+        db.packages.remove({'name' : e['name']})
     db.packages.insert(e)
 
 
@@ -96,7 +108,10 @@ def main():
 
     for item in root.iter('item'):
         o = {}
-        o['title'] = item.find('title').text
+        title = item.find('title').text.split(' ')
+        o['name'] = title[0]
+        o['version'] = title[1]
+        # we might want to later verify from the package_data that these are the real name and version
         o['link'] = item.find('link').text
         o['short_description'] = item.find('description').text
         o['pubDate'] = item.find('pubDate').text

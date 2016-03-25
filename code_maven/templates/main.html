@@ -3,6 +3,7 @@
 <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-10">
+        {{data[0]}}
     <table>
     <tr>
       <th>Name</th><th>Travis-CI</th><th>Error</th>
@@ -10,9 +11,9 @@
     {% for e in data %}
         <tr>
         {% if 'home_page' in e %}
-            <td><a href="{{ e['home_page'] }}">{{ e['title'] }}</a></td>
+            <td><a href="{{ e['home_page'] }}">{{ e['name'] }}</a></td>
         {% else %}
-            <td>{{ e['title'] }}</td>
+            <td>{{ e['name'] }}</td>
         {% endif %}
 
         {% if 'travis_status' in e %}
