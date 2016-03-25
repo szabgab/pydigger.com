@@ -11,6 +11,12 @@ def main():
         data = json.load(f)
 
     return render_template('main.html',
-        title = "Pydigger - Learning about programming in Python",
+        title = "PyDigger - Learning about programming in Python",
         data = data,
+    )
+
+@app.route("/about")
+def about():
+    return render_template('about.html',
+        title = "About PyDigger"
     )
