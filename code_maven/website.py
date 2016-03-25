@@ -10,4 +10,7 @@ def main():
     with open(root + '/recent.json', 'r') as f:
         data = json.load(f)
 
-    return render_template('main.html', data = data)
+    return render_template('main.html',
+        title = "Pydigger - Learning about programming in Python",
+        data = data,
+    )
