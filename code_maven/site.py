@@ -66,5 +66,3 @@ def main():
     fh = open('html/index.html', 'w')
     fh.write(html)
     fh.close
-
-main()
