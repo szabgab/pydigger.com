@@ -1,13 +1,13 @@
 from flask import Flask, render_template, redirect, abort
-import time
-import json
+import time, json, os
 #import re
 
 app = Flask(__name__)
 
 @app.route("/")
 def main():
-    with open('recent.json', 'r') as f:
+    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    with open(root + '/recent.json', 'r') as f:
         data = json.load(f)
 
     return render_template('main.html', data = data)
