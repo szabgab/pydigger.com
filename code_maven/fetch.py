@@ -113,7 +113,7 @@ def main():
         o['version'] = title[1]
         # we might want to later verify from the package_data that these are the real name and version
         o['link'] = item.find('link').text
-        o['short_description'] = item.find('description').text
+        #o['short_description'] = item.find('description').text
         o['pubDate'] = item.find('pubDate').text
 
         url = o['link'] + '/json';
@@ -129,8 +129,6 @@ def main():
             continue
 
         package_data = json.loads(json_data)
-        #if 'description' in package_data['info']:
-        #    del package_data['info']['description'] # its too big and I am not sure what to do with it anyway, or maybe not
         #print(package_data)
 
         #o['package'] = package_data
@@ -139,7 +137,20 @@ def main():
             if 'home_page' in info:
                 o['home_page'] = info['home_page']
 
-            for f in ['maintainer', 'docs_url', 'requires_python']:
+            # package_url  we can deduct this from the name, can't we?
+            # version ???
+            # _pypi_hidden
+            # _pypi_ordering
+            # release_url
+            # downloads - a hash, but as we are monitoring recent uploads, this will be mostly 0
+            # classifiers - an array of stuff
+            # name
+            # releases
+            # urls
+            for f in ['maintainer', 'docs_url', 'requires_python', 'maintainer_email',
+            'cheesecake_code_kwalitee_id', 'cheesecake_documentation_id', 'cheesecake_installability_id',
+            'keywords', 'author', 'author_email', 'download_url', 'platform', 'description', 'bugtrack_url',
+            'license', 'summary']:
                 if f in info:
                     o[f] = info[f]
 

@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, abort
 import time, json, os
 from pymongo import MongoClient
+import pymongo
 #import re
 
 app = Flask(__name__)
@@ -13,10 +14,14 @@ def main():
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     #with open(root + '/recent.json', 'r') as f:
     #    data = json.load(f)
-    data = db.packages.find()
+    total = db.packages.find().count()
+    limit = 20
+    data = db.packages.find().sort([("pubDate", pymongo.DESCENDING)]).limit(limit)
 
     return render_template('main.html',
         title = "PyDigger - Learning about programming in Python",
+        total = total,
+        count = limit,
         data = data,
     )
 
