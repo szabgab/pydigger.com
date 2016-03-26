@@ -8,14 +8,10 @@ app = Flask(__name__)
 
 client = MongoClient()
 db = client.pydigger
+#root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 @app.route("/")
 def main():
-    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    #with open(root + '/recent.json', 'r') as f:
-    #    data = json.load(f)
-
-
     total = db.packages.find().count()
     limit = 20
     query = {}
