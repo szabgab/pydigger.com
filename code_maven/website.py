@@ -17,8 +17,11 @@ def main():
     limit = 20
     query = {}
     q = request.args.get('q', '')
+    no_summary = request.args.get('no_summary', '')
     if q != '':
         query['name'] = { '$regex' : q, '$options' : 'i'}
+    if no_summary:
+        query['summary'] = ''
 
     data = db.packages.find(query).sort([("pubDate", pymongo.DESCENDING)]).limit(limit)
     count = db.packages.find(query).count()
@@ -28,7 +31,10 @@ def main():
         total = total,
         count = min(count, limit),
         data = data,
-        q = q,
+        search = {
+            'q' : q,
+            'no_summary' : no_summary,
+        },
     )
 
 @app.route("/pypi/<name>")
