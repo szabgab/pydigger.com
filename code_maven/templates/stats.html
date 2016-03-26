@@ -1,0 +1,12 @@
+{% include "incl/header.html" %}
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <table class="table">
+            <tr><td>Number of packages indexed</td><td>{{total}}</td>
+            <tr><td>No summary</td><td>{% if no_summary %}<a href="/search?no_summary=on">{{no_summary}}</a>{% else %}0{% endif %}</td>
+        </table>
+    </div>
+    <div class="col-md-1"></div>
+</div>
+{% include "incl/footer.html" %}

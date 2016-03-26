@@ -37,6 +37,17 @@ def main():
         },
     )
 
+@app.route("/stats")
+def stats():
+    total = db.packages.find().count()
+    no_summary = db.packages.find({'summary' : ''}).count()
+    return render_template('stats.html',
+        title = "PyDigger - Statistics",
+        total = total,
+        no_summary = no_summary,
+    )
+
+
 @app.route("/pypi/<name>")
 def pypi(name):
     package = db.packages.find_one({'name' : name})
