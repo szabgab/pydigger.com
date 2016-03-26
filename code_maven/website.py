@@ -10,6 +10,7 @@ client = MongoClient()
 db = client.pydigger
 #root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+@app.route("/search")
 @app.route("/")
 def main():
     total = db.packages.find().count()
@@ -29,9 +30,6 @@ def main():
         data = data,
         q = q,
     )
-@app.route("/search")
-def search():
-    return main()
 
 @app.route("/pypi/<name>")
 def pypi(name):
