@@ -5,36 +5,15 @@
     <div class="col-md-10">
 
     Showing {{count}} of {{total}} packages indexed.
-    
+
     <table>
     <tr>
-      <th>Name</th><th>Repo</th><th>Travis-CI</th><th>Error</th>
+      <th>Name</th><th>Summary</th>
     </tr>
     {% for e in data %}
         <tr>
-        {% if 'home_page' in e %}
             <td><a href="/pypi/{{e['name']}}">{{ e['name'] }}</a></td>
-        {% else %}
-            <td>{{ e['name'] }}</td>
-        {% endif %}
-
-        {% if e.github %}
-            <td><a href="{{ e.home_page }}"><img src="/static/img/github-24-000000.png"></a></td>
-        {% else %}
-            <td></td>
-        {% endif %}
-
-        {% if 'travis_status' in e %}
-            <td><img src="/static/img/build-{{ e['travis_status'] }}.png"></td>
-        {% else %}
-            <td>na</td>
-        {% endif %}
-
-        {% if 'error' in e %}
-            <td>{{ e['error'] }}</td>
-        {% else %}
-            <td>&nbsp;</td>
-        {% endif %}
+            <td>{{e.summary}}</td>
         </tr>
     {% endfor %}
     </table>
