@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, abort
+from flask import Flask, render_template, redirect, abort, request
 import time, json, os
 from pymongo import MongoClient
 import pymongo
@@ -14,17 +14,28 @@ def main():
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     #with open(root + '/recent.json', 'r') as f:
     #    data = json.load(f)
+
+
     total = db.packages.find().count()
     limit = 20
-    data = db.packages.find().sort([("pubDate", pymongo.DESCENDING)]).limit(limit)
+    query = {}
+    q = request.args.get('q', '')
+    if q != '':
+        query['name'] = { '$regex' : q, '$options' : 'i'}
+
+    data = db.packages.find(query).sort([("pubDate", pymongo.DESCENDING)]).limit(limit)
+    count = db.packages.find(query).count()
 
     return render_template('main.html',
         title = "PyDigger - Learning about programming in Python",
         total = total,
-        count = limit,
+        count = min(count, limit),
         data = data,
+        q = q,
     )
-
+@app.route("/search")
+def search():
+    return main()
 
 @app.route("/pypi/<name>")
 def pypi(name):
