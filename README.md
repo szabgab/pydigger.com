@@ -4,13 +4,17 @@ Source code of http://pydigger.com/
 TODO
 ======
 
-* Start using real database to easily hold older information as well
 * We cannot store the data received from Pypi as it is in a MongoDB database as
   it has places where the version number is a key and has . in it which cannot be
   a key in MongoDB.
-* Create page about each package and show more details there
 * Show statistics about each field we show
+* List the packages that don't have a VCS listed
+* Show statistics about the licenses of packages
+* List packages that don't have any license
 * Switch to the GitHub API
+
+* "home_page": "http://pmbio.github.io/limix/",
+* "home_page": "http://ianmiell.github.io/shutit/",
 
 
 

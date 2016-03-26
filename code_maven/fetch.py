@@ -2,13 +2,17 @@ from __future__ import print_function
 import urllib2, json, re, sys
 import xml.etree.ElementTree as ET
 from pymongo import MongoClient
+import logging
 
 
 client = MongoClient()
 db = client.pydigger
+logging.basicConfig(level=logging.WARNING)
+log=logging.getLogger('fetch')
 
 def warn(msg):
-    sys.stderr.write(msg + "\n")
+    #sys.stderr.write("ERROR: %s\n" % msg)
+    log.exception(msg)
 
 #my_entries = []
 def save_entry(e):
@@ -53,7 +57,8 @@ def get_latest():
         rss_data = f.read()
         f.close()
     except urllib2.HTTPError as e:
-        warn(e + ' while fetching ' + latest_url)
+        warn('Error while fetching ' + latest_url)
+        warn(e)
         exit
     #print(rss_data)
     return rss_data
@@ -155,12 +160,12 @@ def main():
                     o[f] = info[f]
 
 
-        if 'home_page' in o:
+        if 'home_page' in o and o['home_page'] != None:
             try:
                 match = re.search(r'^https?://github.com/([^/]+)/([^/]+)/?$', o['home_page'])
             except Exception as e:
+                warn('Error while tying to match home_page:' + o['home_page'])
                 warn(e)
-                warn(o['home_page'])
 
             if match:
                 o['github'] = True
