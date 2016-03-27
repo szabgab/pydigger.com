@@ -17,6 +17,7 @@ def main():
     limit = 20
     query = {}
     q = request.args.get('q', '')
+    license = request.args.get('license', '')
     no_summary = request.args.get('no_summary', '')
     no_license = request.args.get('no_license', '')
     if no_summary:
@@ -29,6 +30,12 @@ def main():
 
     if q != '':
         query['name'] = { '$regex' : q, '$options' : 'i'}
+
+    if license != '':
+        query['license'] = license
+        if license == 'None':
+            query['license'] = None
+
 
     data = db.packages.find(query).sort([("pubDate", pymongo.DESCENDING)]).limit(limit)
     count = db.packages.find(query).count()

@@ -10,7 +10,7 @@
         <h2>Licenses</h2>
         <table>
         {% for l in licenses %}
-           <tr><td>{{l.license}}</td><td>{{l.count}}</td></tr>
+           <tr><td><a href="/search?license={{l.license}}">{{l.license}}</a></td><td>{{l.count}}</td></tr>
         {% endfor %}
         </table>
     </div>
