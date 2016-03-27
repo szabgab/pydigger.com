@@ -18,10 +18,13 @@ def main():
     query = {}
     q = request.args.get('q', '')
     no_summary = request.args.get('no_summary', '')
+    no_license = request.args.get('no_license', '')
     if q != '':
         query['name'] = { '$regex' : q, '$options' : 'i'}
     if no_summary:
         query['summary'] = ''
+    if no_license:
+        query['license'] = ''
 
     data = db.packages.find(query).sort([("pubDate", pymongo.DESCENDING)]).limit(limit)
     count = db.packages.find(query).count()
@@ -41,10 +44,12 @@ def main():
 def stats():
     total = db.packages.find().count()
     no_summary = db.packages.find({'summary' : ''}).count()
+    no_license = db.packages.find({'license' : ''}).count()
     return render_template('stats.html',
         title = "PyDigger - Statistics",
         total = total,
         no_summary = no_summary,
+        no_license = no_license,
     )
 
 

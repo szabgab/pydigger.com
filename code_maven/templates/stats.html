@@ -5,6 +5,7 @@
         <table class="table">
             <tr><td>Number of packages indexed</td><td>{{total}}</td>
             <tr><td>No summary</td><td>{% if no_summary %}<a href="/search?no_summary=on">{{no_summary}}</a>{% else %}0{% endif %}</td>
+            <tr><td>No license</td><td>{% if no_license %}<a href="/search?no_license=on">{{no_license}}</a>{% else %}0{% endif %}</td>
         </table>
     </div>
     <div class="col-md-1"></div>

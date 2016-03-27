@@ -5,8 +5,9 @@
     <div class="col-md-10">
 
     <form action="/search">
-    <input name="q" value="{{search.q}}"><input type="submit" value="Search">
-    <label>No summary</label><input type="checkbox" name="no_summary" {% if search.no_summary %}CHECKED{% endif %}>
+    <input name="q" value="{{search.q}}"><input type="submit" value="Search"><br>
+    <label>No summary</label><input type="checkbox" name="no_summary" {% if search.no_summary %}CHECKED{% endif %}><br>
+    <label>No license</label><input type="checkbox" name="no_license" {% if search.no_license %}CHECKED{% endif %}><br>
     </form>
 
     Showing {{count}} of {{total}} packages indexed.
