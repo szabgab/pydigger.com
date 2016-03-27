@@ -19,12 +19,16 @@ def main():
     q = request.args.get('q', '')
     no_summary = request.args.get('no_summary', '')
     no_license = request.args.get('no_license', '')
-    if q != '':
-        query['name'] = { '$regex' : q, '$options' : 'i'}
     if no_summary:
         query['summary'] = ''
+        q = ''
+
     if no_license:
-        query['license'] = ''
+        query['$or'] = [ { 'license' : ''}, { 'license' : None } ]
+        q = ''
+
+    if q != '':
+        query['name'] = { '$regex' : q, '$options' : 'i'}
 
     data = db.packages.find(query).sort([("pubDate", pymongo.DESCENDING)]).limit(limit)
     count = db.packages.find(query).count()
@@ -37,20 +41,28 @@ def main():
         search = {
             'q' : q,
             'no_summary' : no_summary,
-        },
+            'no_license' : no_license,
+         },
     )
 
 @app.route("/stats")
 def stats():
     total = db.packages.find().count()
     no_summary = db.packages.find({'summary' : ''}).count()
-    no_license = db.packages.find({'license' : ''}).count()
+    no_license = db.packages.find({ '$or' : [{'license' : ''}, {'license' : None}] }).count()
+    #licenses = db.packages.group({ key: {license : 1}, reduce: function (curr, result) { result.count++; }, initial: { count : 0} });
+    licenses = db.packages.group(['license'], {}, { 'count' : 0}, 'function (curr, result) { result.count++; }' );
+    for l in licenses:
+        l['count'] = int(l['count'])
+
     return render_template('stats.html',
         title = "PyDigger - Statistics",
         total = total,
         no_summary = no_summary,
         no_license = no_license,
+        licenses = licenses,
     )
+
 
 
 @app.route("/pypi/<name>")

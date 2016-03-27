@@ -7,6 +7,12 @@
             <tr><td>No summary</td><td>{% if no_summary %}<a href="/search?no_summary=on">{{no_summary}}</a>{% else %}0{% endif %}</td>
             <tr><td>No license</td><td>{% if no_license %}<a href="/search?no_license=on">{{no_license}}</a>{% else %}0{% endif %}</td>
         </table>
+        <h2>Licenses</h2>
+        <table>
+        {% for l in licenses %}
+           <tr><td>{{l.license}}</td><td>{{l.count}}</td></tr>
+        {% endfor %}
+        </table>
     </div>
     <div class="col-md-1"></div>
 </div>
