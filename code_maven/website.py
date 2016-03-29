@@ -20,9 +20,6 @@ def main(word = ''):
     query = {}
     q = request.args.get('q', '')
     license = request.args.get('license', '')
-    no_summary = request.args.get('no_summary', '')
-    no_license = request.args.get('no_license', '')
-    no_github = request.args.get('no_github', '')
     if word == 'no-summary':
         query['$or'] = [ { 'summary' : ''}, { 'summary' : None } ]
         q = ''
@@ -54,10 +51,8 @@ def main(word = ''):
         data = data,
         search = {
             'q' : q,
-            'no_summary' : no_summary,
-            'no_license' : no_license,
-            'no_github' : no_github,
          },
+
     )
 
 @app.route("/stats")
