@@ -11,12 +11,21 @@ client = MongoClient()
 db = client.pydigger
 #root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+def get_int(field, default):
+    value = request.args.get(field, default)
+    try:
+        value = int(value)
+    except Exception:
+        value = default
+    return value
+
 @app.route("/search/<word>")
 @app.route("/search")
 @app.route("/")
 def main(word = ''):
     total = db.packages.find().count()
-    limit = 20
+    limit = get_int('limit', 20)
+    page = get_int('page', 1)
     query = {}
     q = request.args.get('q', '')
     license = request.args.get('license', '')
@@ -41,7 +50,7 @@ def main(word = ''):
             query['license'] = None
 
 
-    data = db.packages.find(query).sort([("pubDate", pymongo.DESCENDING)]).limit(limit)
+    data = db.packages.find(query).sort([("pubDate", pymongo.DESCENDING)]).skip(limit * (page-1)).limit(limit)
     count = db.packages.find(query).count()
 
     return render_template('main.html',
