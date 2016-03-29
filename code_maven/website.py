@@ -1,6 +1,6 @@
 from __future__ import division
 from flask import Flask, render_template, redirect, abort, request
-import time, json, os
+import time, json, os, math
 from pymongo import MongoClient
 import pymongo
 #import re
@@ -58,6 +58,9 @@ def main(word = ''):
         total = total,
         count = min(count, limit),
         data = data,
+        pages = int(math.ceil(total / limit)),
+        page = page,
+        limit = limit,
         search = {
             'q' : q,
          },
