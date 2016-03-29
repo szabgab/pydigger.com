@@ -104,6 +104,10 @@ def pypi(name):
         package = package
     )
 
+@app.route("/robots.txt")
+def robots():
+    return ''
+
 
 @app.route("/about")
 def about():
