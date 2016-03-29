@@ -11,9 +11,10 @@ client = MongoClient()
 db = client.pydigger
 #root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+@app.route("/search/<word>")
 @app.route("/search")
 @app.route("/")
-def main():
+def main(word = ''):
     total = db.packages.find().count()
     limit = 20
     query = {}
@@ -22,15 +23,15 @@ def main():
     no_summary = request.args.get('no_summary', '')
     no_license = request.args.get('no_license', '')
     no_github = request.args.get('no_github', '')
-    if no_summary:
+    if word == 'no-summary':
         query['$or'] = [ { 'summary' : ''}, { 'summary' : None } ]
         q = ''
 
-    if no_github:
+    if word == 'no-github':
         query['github'] = False
         q = ''
 
-    if no_license:
+    if word == 'no-license':
         query['$or'] = [ { 'license' : ''}, { 'license' : None } ]
         q = ''
 
