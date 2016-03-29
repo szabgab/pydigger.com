@@ -1,3 +1,4 @@
+from __future__ import division
 from flask import Flask, render_template, redirect, abort, request
 import time, json, os
 from pymongo import MongoClient
@@ -73,8 +74,11 @@ def stats():
         title = "PyDigger - Statistics",
         total = total,
         no_summary = no_summary,
+        no_summary_perc = 100 * no_summary / total,
         no_license = no_license,
+        no_license_perc = 100 * no_license/ total,
         no_github = no_github,
+        no_github_perc = 100 * no_github / total,
         licenses = licenses,
     )
 

@@ -3,10 +3,10 @@
     <div class="col-md-1"></div>
     <div class="col-md-10">
         <table class="table">
-            <tr><td>Number of packages indexed</td><td>{{total}}</td>
-            <tr><td>No summary</td><td>{% if no_summary %}<a href="/search?no_summary=on">{{no_summary}}</a>{% else %}0{% endif %}</td>
-            <tr><td>No license</td><td>{% if no_license %}<a href="/search?no_license=on">{{no_license}}</a>{% else %}0{% endif %}</td>
-            <tr><td>No GitHub</td><td>{% if no_github %}<a href="/search?no_github=on">{{no_github}}</a>{% else %}0{% endif %}</td>
+            <tr><td>Number of packages indexed</td><td>{{total}}</td><td></td></tr>
+            <tr><td><a href="/search?no_summary=on">No summary</a></td><td>{{no_summary}}</td><td>{{no_summary_perc}}%</td></tr>
+            <tr><td><a href="/search?no_license=on">No license</a></td><td>{{no_license}}</td><td>{{no_license_perc}}%</td></tr>
+            <tr><td><a href="/search?no_github=on">No GitHub</a></td><td>{{no_github}}</td><td>{{no_github_perc}}%</td></tr>
         </table>
         <h2>Licenses</h2>
         <table>
