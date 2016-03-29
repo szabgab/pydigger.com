@@ -20,8 +20,13 @@ def main():
     license = request.args.get('license', '')
     no_summary = request.args.get('no_summary', '')
     no_license = request.args.get('no_license', '')
+    no_github = request.args.get('no_github', '')
     if no_summary:
         query['$or'] = [ { 'summary' : ''}, { 'summary' : None } ]
+        q = ''
+
+    if no_github:
+        query['github'] = False
         q = ''
 
     if no_license:
@@ -49,6 +54,7 @@ def main():
             'q' : q,
             'no_summary' : no_summary,
             'no_license' : no_license,
+            'no_github' : no_github,
          },
     )
 
@@ -57,6 +63,7 @@ def stats():
     total = db.packages.find().count()
     no_summary = db.packages.find({ '$or' : [{'summary' : ''}, {'summary' : None}] }).count()
     no_license = db.packages.find({ '$or' : [{'license' : ''}, {'license' : None}] }).count()
+    no_github = db.packages.find({ 'github' : False }).count()
     #licenses = db.packages.group({ key: {license : 1}, reduce: function (curr, result) { result.count++; }, initial: { count : 0} });
     licenses = db.packages.group(['license'], {}, { 'count' : 0}, 'function (curr, result) { result.count++; }' );
     for l in licenses:
@@ -67,6 +74,7 @@ def stats():
         total = total,
         no_summary = no_summary,
         no_license = no_license,
+        no_github = no_github,
         licenses = licenses,
     )
 
