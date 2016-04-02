@@ -4,15 +4,13 @@ Source code of http://pydigger.com/
 TODO
 ======
 
-* We cannot store the data received from Pypi as it is in a MongoDB database as
-  it has places where the version number is a key and has . in it which cannot be
-  a key in MongoDB.
 * Show statistics about each field we show
 * List the packages that don't have a VCS listed
 * Show statistics about the licenses of packages
 * List packages that don't have any license
 * Switch to the GitHub API
 
+* Statistics about types of "home_page" fields
 * "home_page": "http://pmbio.github.io/limix/",
 * "home_page": "http://ianmiell.github.io/shutit/",
 
@@ -83,3 +81,7 @@ the specific version of the given package. Like this:
 
 We save these two data structures and in addition we try to determine if the package has Git repository and
 if Travis-CI is configured in that repository.
+
+We cannot store the data received from Pypi as it is in a MongoDB database as
+it has places where the version number is a key and has . in it which cannot be
+a key in MongoDB.
