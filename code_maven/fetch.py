@@ -3,6 +3,7 @@ import urllib2, json, re, sys
 import xml.etree.ElementTree as ET
 from pymongo import MongoClient
 import logging
+from datetime import datetime
 
 
 client = MongoClient()
@@ -119,7 +120,8 @@ def main():
         # we might want to later verify from the package_data that these are the real name and version
         o['link'] = item.find('link').text
         #o['short_description'] = item.find('description').text
-        o['pubDate'] = item.find('pubDate').text
+        o['pubDate'] = datetime.strptime(item.find('pubDate').text, "%d %b %Y %H:%M:%S %Z")
+
 
         url = o['link'] + '/json';
         #print(url)
