@@ -1,7 +1,8 @@
 <div class="pagination">
-Total: {{total}} Pages {{pages}}
-{% if page > 1 %}<a href="?page=1&amp;limit={{limit}}">first</a>{% endif %}
-{% if page > 1 %}<a href="?page={{page-1}}&amp;limit={{limit}}">prev</a>{% endif %}
-{% if page < pages %}<a href="?page={{page+1}}&amp;limit={{limit}}">next</a>{% endif %}
-{% if page < pages %}<a href="?page={{pages}}&amp;limit={{limit}}">last</a>{% endif %}
+Found {{page.total_found}} out of {{page.total_indexed}}. Showing {{page.count}} on page {{page.current}}.
+Total pages: {{page.pages}}.
+{% if page.current > 1 %}<a href="?q={{search.q}}&amp;page=1&amp;limit={{page.limit}}">first</a>{% endif %}
+{% if page.current > 1 %}<a href="?q={{search.q}}&amp;page={{page.current-1}}&amp;limit={{page.limit}}">prev</a>{% endif %}
+{% if page.current < page.pages %}<a href="?q={{search.q}}&amp;page={{page.current+1}}&amp;limit={{page.limit}}">next</a>{% endif %}
+{% if page.current < page.pages %}<a href="?q={{search.q}}&amp;page={{page.pages}}&amp;limit={{page.limit}}">last</a>{% endif %}
 </div>

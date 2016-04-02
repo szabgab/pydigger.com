@@ -23,7 +23,7 @@ def get_int(field, default):
 @app.route("/search")
 @app.route("/")
 def main(word = ''):
-    total = db.packages.find().count()
+    total_indexed = db.packages.find().count()
     limit = get_int('limit', 20)
     page = get_int('page', 1)
     query = {}
@@ -51,20 +51,24 @@ def main(word = ''):
 
 
     data = db.packages.find(query).sort([("pubDate", pymongo.DESCENDING)]).skip(limit * (page-1)).limit(limit)
-    count = db.packages.find(query).count()
+#    total_found = db.packages.find(query).count()
+    total_found = data.count(with_limit_and_skip=False)
+    count = data.count(with_limit_and_skip=True)
 
     return render_template('main.html',
         title = "PyDigger - Learning about programming in Python",
-        total = total,
-        count = min(count, limit),
+        page = {
+            'total_indexed' : total_indexed,
+            'total_found' : total_found,
+            'count' : count,
+            'pages' : int(math.ceil(total_found / limit)),
+            'current' : page,
+            'limit' : limit,
+        },
         data = data,
-        pages = int(math.ceil(total / limit)),
-        page = page,
-        limit = limit,
         search = {
             'q' : q,
          },
-
     )
 
 @app.route("/stats")

@@ -6,7 +6,6 @@
         <form action="/search">
             <input name="q" value="{{search.q}}"><input type="submit" value="Search"><br>
         </form>
-
         {% include "incl/pagination.html" %}
 
         <div>{% if search.no_license %}Showing packages that have no <b>license</b> field.{% endif %}</div>
