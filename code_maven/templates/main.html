@@ -3,36 +3,28 @@
 <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-10">
+        <form action="/search">
+            <input name="q" value="{{search.q}}"><input type="submit" value="Search"><br>
+        </form>
 
-    <form action="/search">
-    <input name="q" value="{{search.q}}"><input type="submit" value="Search"><br>
-<!--
-    <label>No summary</label><input type="checkbox" name="no_summary" {% if search.no_summary %}CHECKED{% endif %}><br>
-    <label>No license</label><input type="checkbox" name="no_license" {% if search.no_license %}CHECKED{% endif %}><br>
--->
-    </form>
+        {% include "incl/pagination.html" %}
 
-    <div>Showing {{count}} of {{total}} packages indexed.</div>
+        <div>{% if search.no_license %}Showing packages that have no <b>license</b> field.{% endif %}</div>
 
-    <div>{% if search.no_license %}Showing packages that have no <b>license</b> field.{% endif %}</div>
-
-    <table class="table">
-    <tr>
-      <th>Name</th><th>Summary</th>
-    </tr>
-    {% for e in data %}
+        <table class="table">
         <tr>
-            <td><a href="/pypi/{{e['name']}}">{{ e['name'] }}</a></td>
-            <td>{{e.summary}}</td>
+          <th>Name</th><th>Summary</th><th>pubDate</th>
         </tr>
-    {% endfor %}
-    </table>
+        {% for e in data %}
+            <tr>
+                <td><a href="/pypi/{{e['name']}}">{{ e['name'] }}</a></td>
+                <td>{{e.summary}}</td>
+                <td>{{e.pubDate}}</td>
+            </tr>
+        {% endfor %}
+        </table>
 
-    Total: {{total}} Pages {{pages}}
-    {% if page > 1 %}<a href="?page=1&amp;limit={{limit}}">first</a>{% endif %}
-    {% if page > 1 %}<a href="?page={{page-1}}&amp;limit={{limit}}">prev</a>{% endif %}
-    {% if page < pages %}<a href="?page={{page+1}}&amp;limit={{limit}}">next</a>{% endif %}
-    {% if page < pages %}<a href="?page={{pages}}&amp;limit={{limit}}">last</a>{% endif %}
+        {% include "incl/pagination.html" %}
 
     </div>
     <div class="col-md-1"></div>

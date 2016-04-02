@@ -1,0 +1,7 @@
+<div class="pagination">
+Total: {{total}} Pages {{pages}}
+{% if page > 1 %}<a href="?page=1&amp;limit={{limit}}">first</a>{% endif %}
+{% if page > 1 %}<a href="?page={{page-1}}&amp;limit={{limit}}">prev</a>{% endif %}
+{% if page < pages %}<a href="?page={{page+1}}&amp;limit={{limit}}">next</a>{% endif %}
+{% if page < pages %}<a href="?page={{pages}}&amp;limit={{limit}}">last</a>{% endif %}
+</div>
