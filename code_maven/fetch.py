@@ -1,14 +1,19 @@
 from __future__ import print_function
+import argparse
 import urllib2, json, re, sys
 import xml.etree.ElementTree as ET
 from pymongo import MongoClient
 import logging
 from datetime import datetime
 
+parser = argparse.ArgumentParser()
+parser.add_argument('--verbose', help='Set verbosity level', action='store_true')
+args = parser.parse_args()
+
 
 client = MongoClient()
 db = client.pydigger
-logging.basicConfig(level=logging.WARNING)
+logging.basicConfig(level= logging.DEBUG if args.verbose else logging.WARNING)
 log=logging.getLogger('fetch')
 
 def warn(msg):
@@ -108,6 +113,8 @@ def check_github(o, user, package):
     return()
 
 def main():
+    log.debug("Staring")
+
     rss_data = get_latest()
 
     root = ET.fromstring(rss_data)
@@ -115,13 +122,19 @@ def main():
     for item in root.iter('item'):
         o = {}
         title = item.find('title').text.split(' ')
+        log.debug("Seen {}".format(title))
         o['name'] = title[0]
         o['version'] = title[1]
+
+        doc = db.packages.find_one({'name' : o['name']})
+        if doc:
+            continue
+        log.debug("Processing {}".format(title))
+
         # we might want to later verify from the package_data that these are the real name and version
         o['link'] = item.find('link').text
         #o['short_description'] = item.find('description').text
         o['pubDate'] = datetime.strptime(item.find('pubDate').text, "%d %b %Y %H:%M:%S %Z")
-
 
         url = o['link'] + '/json';
         #print(url)
