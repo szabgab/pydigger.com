@@ -8,13 +8,31 @@ from datetime import datetime
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--verbose', help='Set verbosity level', action='store_true')
+parser.add_argument('--rss', help='fetch the RSS feed', action='store_true')
+parser.add_argument('--update', help='update the entries: new - not yet updated')
 args = parser.parse_args()
+
+# Updated:
+# 1) All the entries that don't have last_update field
+# 2) All the entries that were updated more than N days ago
+# 3) All the entries that were updated in the last N days ??
 
 
 client = MongoClient()
 db = client.pydigger
 logging.basicConfig(level= logging.DEBUG if args.verbose else logging.WARNING)
 log=logging.getLogger('fetch')
+
+def main():
+    log.debug("Staring")
+
+    if args.rss:
+        get_rss()
+
+    if args.update:
+        # fetch names from database
+        pass
+
 
 def warn(msg):
     #sys.stderr.write("ERROR: %s\n" % msg)
@@ -112,81 +130,87 @@ def check_github(o, user, package):
     o['travis_status'] = get_travis_status(travis_data['builds'])
     return()
 
-def main():
-    log.debug("Staring")
-
+def get_rss():
+    log.debug("get_rss")
     rss_data = get_latest()
 
     root = ET.fromstring(rss_data)
 
     for item in root.iter('item'):
-        o = {}
+        entry = {}
         title = item.find('title').text.split(' ')
         log.debug("Seen {}".format(title))
-        o['name'] = title[0]
-        o['version'] = title[1]
+        entry['name'] = title[0]
+        entry['version'] = title[1]
 
-        doc = db.packages.find_one({'name' : o['name']})
+        doc = db.packages.find_one({'name' : entry['name']})
         if doc:
             continue
+        # add package
         log.debug("Processing {}".format(title))
-
         # we might want to later verify from the package_data that these are the real name and version
-        o['link'] = item.find('link').text
-        #o['short_description'] = item.find('description').text
-        o['pubDate'] = datetime.strptime(item.find('pubDate').text, "%d %b %Y %H:%M:%S %Z")
+        entry['link'] = item.find('link').text
+        entry['summary'] = item.find('description').text
+        entry['pubDate'] = datetime.strptime(item.find('pubDate').text, "%d %b %Y %H:%M:%S %Z")
+        save_entry(entry)
+        if args.update:
+            get_details(o)
+    return
 
-        url = o['link'] + '/json';
-        #print(url)
+
+def get_details(entry):
+    log.debug("get_details of " + entry['name'])
+    url = entry['link'] + '/json';
+    #print(url)
+    try:
+        f = urllib2.urlopen(url)
+        json_data = f.read()
+        f.close()
+    except urllib2.HTTPError as e:
+        #print(e, 'while fetching', url)
+        entry['error'] = 'Could not fetch details of PyPi package'
+        save_entry(entry)
+        return
+
+    package_data = json.loads(json_data)
+    #print(package_data)
+
+    #entry['package'] = package_data
+    if 'info' in package_data:
+        info = package_data['info']
+        if 'home_page' in info:
+            entry['home_page'] = info['home_page']
+
+        # package_url  we can deduct this from the name, can't we?
+        # version ???
+        # _pypi_hidden
+        # _pypi_ordering
+        # release_url
+        # downloads - a hash, but as we are monitoring recent uploads, this will be mostly 0
+        # classifiers - an array of stuff
+        # name
+        # releases
+        # urls
+        for f in ['maintainer', 'docs_url', 'requires_python', 'maintainer_email',
+        'cheesecake_code_kwalitee_id', 'cheesecake_documentation_id', 'cheesecake_installability_id',
+        'keywords', 'author', 'author_email', 'download_url', 'platform', 'description', 'bugtrack_url',
+        'license', 'summary']:
+            if f in info:
+                entry[f] = info[f]
+
+
+    if 'home_page' in entry and entry['home_page'] != None:
         try:
-            f = urllib2.urlopen(url)
-            json_data = f.read()
-            f.close()
-        except urllib2.HTTPError as e:
-            #print(e, 'while fetching', url)
-            o['error'] = 'Could not fetch details of PyPi package'
-            save_entry(o)
-            continue
+            match = re.search(r'^https?://github.com/([^/]+)/([^/]+)/?$', entry['home_page'])
+        except Exception as e:
+            warn('Error while tying to match home_page:' + entry['home_page'])
+            warn(e)
 
-        package_data = json.loads(json_data)
-        #print(package_data)
-
-        #o['package'] = package_data
-        if 'info' in package_data:
-            info = package_data['info']
-            if 'home_page' in info:
-                o['home_page'] = info['home_page']
-
-            # package_url  we can deduct this from the name, can't we?
-            # version ???
-            # _pypi_hidden
-            # _pypi_ordering
-            # release_url
-            # downloads - a hash, but as we are monitoring recent uploads, this will be mostly 0
-            # classifiers - an array of stuff
-            # name
-            # releases
-            # urls
-            for f in ['maintainer', 'docs_url', 'requires_python', 'maintainer_email',
-            'cheesecake_code_kwalitee_id', 'cheesecake_documentation_id', 'cheesecake_installability_id',
-            'keywords', 'author', 'author_email', 'download_url', 'platform', 'description', 'bugtrack_url',
-            'license', 'summary']:
-                if f in info:
-                    o[f] = info[f]
-
-
-        if 'home_page' in o and o['home_page'] != None:
-            try:
-                match = re.search(r'^https?://github.com/([^/]+)/([^/]+)/?$', o['home_page'])
-            except Exception as e:
-                warn('Error while tying to match home_page:' + o['home_page'])
-                warn(e)
-
-            if match:
-                o['github'] = True
-                check_github(o, match.group(1), match.group(2))
-            else:
-                o['github'] = False
-                #o['error'] = 'Home page URL is not GitHub'
-            #print(o)
-        save_entry(o)
+        if match:
+            entry['github'] = True
+            check_github(o, match.group(1), match.group(2))
+        else:
+            entry['github'] = False
+            #entry['error'] = 'Home page URL is not GitHub'
+        #print(o)
+    save_entry(entry)
