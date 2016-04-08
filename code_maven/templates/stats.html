@@ -3,7 +3,7 @@
     <div class="col-md-1"></div>
     <div class="col-md-10">
         <table class="table">
-            <tr><td>Number of packages indexed</td><td>{{total}}</td><td></td></tr>
+            <tr><td>Number of packages indexed</td><td>{{"{:,}".format(total)}}</td><td></td></tr>
             <tr><td><a href="/search/no-summary">No summary</a></td><td>{{no_summary}}</td><td>{{no_summary_perc | round(2)}}%</td></tr>
             <tr><td><a href="/search/no-license">No license</a></td><td>{{no_license}}</td><td>{{no_license_perc | round(2)}}%</td></tr>
             <tr><td><a href="/search/no-github">No GitHub</a></td><td>{{no_github}}</td><td>{{no_github_perc | round(2)}}%</td></tr>
