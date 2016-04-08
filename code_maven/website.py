@@ -3,6 +3,7 @@ from flask import Flask, render_template, redirect, abort, request
 import time, json, os, math
 from pymongo import MongoClient
 import pymongo
+import datetime
 #import re
 
 app = Flask(__name__)
@@ -105,7 +106,8 @@ def pypi(name):
             package_name = name), 404
     return render_template('package.html',
         title = name,
-        package = package
+        package = package,
+        raw = json.dumps(package, indent=4, default = json_converter)
     )
 
 @app.route("/robots.txt")
@@ -122,3 +124,7 @@ def about():
 @app.errorhandler(404)
 def not_found(error):
     return render_template('404.html'), 404
+
+def json_converter(o):
+    if isinstance(o, datetime.datetime):
+        return o.__str__()
