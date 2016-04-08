@@ -9,7 +9,7 @@ from datetime import datetime
 parser = argparse.ArgumentParser()
 parser.add_argument('--verbose', help='Set verbosity level', action='store_true')
 parser.add_argument('--rss', help='fetch the RSS feed', action='store_true')
-parser.add_argument('--update', help='update the entries: new - not yet updated')
+parser.add_argument('--update', help='update the entries: new - not yet updated, rss - the once received via rss')
 args = parser.parse_args()
 
 # Updated:
@@ -93,7 +93,7 @@ def save_json():
     f.close()
 
 
-def check_github(o, user, package):
+def check_github(entry, user, package):
     travis_yml_url = 'https://raw.githubusercontent.com/' + user + '/' + package + '/master/.travis.yml'
         #print(travis_yml_url)
     try:
@@ -102,8 +102,8 @@ def check_github(o, user, package):
         f.close()
     except urllib2.HTTPError as e:
         #print(e, 'while fetching', travis_yml_url)
-        #o['cm']['error'] = 'Could not find .travis.yml in the GitHub repository'
-        o['travis_ci'] = False
+        #entry['cm']['error'] = 'Could not find .travis.yml in the GitHub repository'
+        entry['travis_ci'] = False
         return()
 
     # if there is a travis.yml check the status
@@ -117,17 +117,17 @@ def check_github(o, user, package):
         f.close()
     except urllib2.HTTPError as e:
         #print(e, 'while fetching', travis_url)
-        o['error'] = 'Could not get status from Travis-CI API'
+        entry['error'] = 'Could not get status from Travis-CI API'
         return()
 
     travis_data = json.loads(travis_data_json)
     #print(travis_data)
     #return();
     if not travis_data or 'builds' not in travis_data or len(travis_data['builds']) == 0:
-        o['error'] = 'Could not find builds in data received from travis-ci.org'
+        entry['error'] = 'Could not find builds in data received from travis-ci.org'
         return()
 
-    o['travis_status'] = get_travis_status(travis_data['builds'])
+    entry['travis_status'] = get_travis_status(travis_data['builds'])
     return()
 
 def get_rss():
@@ -153,8 +153,8 @@ def get_rss():
         entry['summary'] = item.find('description').text
         entry['pubDate'] = datetime.strptime(item.find('pubDate').text, "%d %b %Y %H:%M:%S %Z")
         save_entry(entry)
-        if args.update:
-            get_details(o)
+        if args.update and args.update == 'rss':
+            get_details(entry)
     return
 
 
@@ -208,9 +208,9 @@ def get_details(entry):
 
         if match:
             entry['github'] = True
-            check_github(o, match.group(1), match.group(2))
+            check_github(entry, match.group(1), match.group(2))
         else:
             entry['github'] = False
             #entry['error'] = 'Home page URL is not GitHub'
-        #print(o)
+        log.debug(entry)
     save_entry(entry)
