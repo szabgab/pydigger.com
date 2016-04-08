@@ -20,6 +20,15 @@ def get_int(field, default):
         value = default
     return value
 
+cases = {
+    'no_summary'   : { '$or' : [{'summary' : ''}, {'summary' : None}] },
+    'no_license'   : { '$or' : [{'license' : ''}, {'license' : None}] },
+    'no_github'    : { 'github' : False },
+    'has_github'   : { 'github' : True },
+    'no_docs_url'  : { '$or' : [ { 'docs_url' : { '$exists' : False} }, { 'docs_url' : None} ] },
+    'has_docs_url' : { 'docs_url' : { '$not' : { '$eq' : None }}},
+}
+
 @app.route("/search/<word>")
 @app.route("/search")
 @app.route("/")
@@ -30,16 +39,10 @@ def main(word = ''):
     query = {}
     q = request.args.get('q', '')
     license = request.args.get('license', '')
-    if word == 'no-summary':
-        query['$or'] = [ { 'summary' : ''}, { 'summary' : None } ]
-        q = ''
 
-    if word == 'no-github':
-        query['github'] = False
-        q = ''
-
-    if word == 'no-license':
-        query['$or'] = [ { 'license' : ''}, { 'license' : None } ]
+    word = word.replace('-', '_')
+    if (word in cases):
+        query = cases[word]
         q = ''
 
     if q != '':
@@ -76,13 +79,9 @@ def main(word = ''):
 def stats():
     stats = {
         'total'        : db.packages.find().count(),
-        'no_summary'   : db.packages.find({ '$or' : [{'summary' : ''}, {'summary' : None}] }).count(),
-        'no_license'   : db.packages.find({ '$or' : [{'license' : ''}, {'license' : None}] }).count(),
-        'no_github'    : db.packages.find({ 'github' : False }).count(),
-        'has_github'   : db.packages.find({ 'github' : True }).count(),
-        'no_docs_url'  : db.packages.find({ '$or' : [ { 'docs_url' : { '$exists' : False} }, { 'docs_url' : None} ] }).count(),
-        'has_docs_url' : db.packages.find({ 'docs_url' : { '$not' : { '$eq' : None }}}).count()
     }
+    for word in cases:
+        stats[word] = db.packages.find(cases[word]).count()
 
     #github_not_exists = db.packages.find({ 'github' : { '$not' : { '$exists': True }}}).count()
 
