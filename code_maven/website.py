@@ -74,13 +74,15 @@ def main(word = ''):
 
 @app.route("/stats")
 def stats():
-    total = db.packages.find().count()
-    no_summary = db.packages.find({ '$or' : [{'summary' : ''}, {'summary' : None}] }).count()
-    no_license = db.packages.find({ '$or' : [{'license' : ''}, {'license' : None}] }).count()
-    no_github = db.packages.find({ 'github' : False }).count()
-    has_github = db.packages.find({ 'github' : True }).count()
-    no_docs_url = db.packages.find({ '$or' : [ { 'docs_url' : { '$exists' : False} }, { 'docs_url' : None} ] }).count()
-    has_docs_url = db.packages.find({ 'docs_url' : { '$not' : { '$eq' : None }}}).count()
+    stats = {
+        'total'        : db.packages.find().count(),
+        'no_summary'   : db.packages.find({ '$or' : [{'summary' : ''}, {'summary' : None}] }).count(),
+        'no_license'   : db.packages.find({ '$or' : [{'license' : ''}, {'license' : None}] }).count(),
+        'no_github'    : db.packages.find({ 'github' : False }).count(),
+        'has_github'   : db.packages.find({ 'github' : True }).count(),
+        'no_docs_url'  : db.packages.find({ '$or' : [ { 'docs_url' : { '$exists' : False} }, { 'docs_url' : None} ] }).count(),
+        'has_docs_url' : db.packages.find({ 'docs_url' : { '$not' : { '$eq' : None }}}).count()
+    }
 
     #github_not_exists = db.packages.find({ 'github' : { '$not' : { '$exists': True }}}).count()
 
@@ -91,14 +93,7 @@ def stats():
 
     return render_template('stats.html',
         title = "PyDigger - Statistics",
-        total = total,
-        no_summary = no_summary,
-        no_license = no_license,
-        no_github = no_github,
-        has_github = has_github,
-
-        no_docs_url = no_docs_url,
-        has_docs_url = has_docs_url,
+        stats = stats,
         licenses = licenses,
     )
 
