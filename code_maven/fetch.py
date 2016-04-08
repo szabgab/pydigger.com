@@ -29,9 +29,9 @@ def main():
     if args.rss:
         get_rss()
 
-    if args.update:
+    #if args.update and (args.update == 'new' or args.update == 'old'):
         # fetch names from database
-        pass
+    #    pass
 
 
 def warn(msg):
