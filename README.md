@@ -4,11 +4,13 @@ Source code of http://pydigger.com/
 TODO
 ======
 
+
 * Why are there maintainers where the value is "" and others where it is null ?
 * Sats: author_email (look for null, "", "UNKNOWN", in the e_mail look for strings that don't look e-mail. e.g. no @)
-
-
 * locate "keywords" fields that are not space separated lists (e.g. pyspotify-connect)
+
+* Find and list dependencies
+
 
 * Code to update items
 * Have a data for "updated" when we last updated the entry
