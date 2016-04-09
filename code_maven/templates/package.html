@@ -18,7 +18,10 @@
             <!-- <tr><td>author_email</td><td>{{package.author_email}}</td></tr> -->
             <tr><td>requires_python</td><td>{{package.requires_python}}</td></tr>
             <tr><td>license</td><td>{{package.license}}</td></tr>
-            <tr><td>keywords</td><td>{{package.keywords}}</td></tr>
+            <tr><td>keywords</td><td>
+                {% for kw in package.split_keywords %}
+                    <button type="button" class="btn btn-default"><a href="/keyword/{{kw}}" style="text-decoration: none">{{kw}}</a></button>
+                {% endfor %}</td></tr>
             <tr><td>VCS</td>
                 {% if package.github %}
                    <td><a href="{{ package.home_page }}"><img src="/static/img/github-24-000000.png"></a></td>

@@ -36,10 +36,11 @@ cases = {
 }
 
 
+@app.route("/keyword/<kw>")
 @app.route("/search/<word>")
 @app.route("/search")
 @app.route("/")
-def main(word = ''):
+def main(word = '', kw = ''):
     total_indexed = db.packages.find().count()
     limit = get_int('limit', 20)
     page = get_int('page', 1)
@@ -50,6 +51,12 @@ def main(word = ''):
     word = word.replace('-', '_')
     if (word in cases):
         query = cases[word]
+        q = ''
+
+    if kw:
+        import re
+        regx = re.compile(kw)
+        query = { 'keywords' : regx}
         q = ''
 
     if q != '':
@@ -112,6 +119,11 @@ def pypi(name):
         return render_template('404.html',
             title = name + " not found",
             package_name = name), 404
+    # if 'keywords' in package and package['keywords']:
+    #     package['keywords'] = package['keywords'].split(' ')
+    # else:
+    #     package['keywords'] = []
+
     return render_template('package.html',
         title = name,
         package = package,

@@ -197,6 +197,10 @@ def get_details(entry):
         'license', 'summary']:
             if f in info:
                 entry[f] = info[f]
+        if 'keywords' in info and info['keywords']:
+            entry['split_keywords'] = info['keywords'].split(' ')
+        else:
+            entry['split_keywords'] = []
 
 
     if 'home_page' in entry and entry['home_page'] != None:

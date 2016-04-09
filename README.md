@@ -4,11 +4,26 @@ Source code of http://pydigger.com/
 TODO
 ======
 
+* Why are there maintainers where the value is "" and others where it is null ?
+* Sats: author_email (look for null, "", "UNKNOWN", in the e_mail look for strings that don't look e-mail. e.g. no @)
+
+
+* locate "keywords" fields that are not space separated lists (e.g. pyspotify-connect)
+
+* Code to update items
+* Have a data for "updated" when we last updated the entry
+
 * Show statistics about each field we show
-* List the packages that don't have a VCS listed
-* Show statistics about the licenses of packages
-* List packages that don't have any license
+* List the packages that don't have a VCS listed, find out if they have VCS listed elsewhere, or if they are using some other VCS
+* Create a list of "known licenses" and the names people use to refer to each license, link to the real license.
+* Show licenses that don't fit in any of the "known licenses"
 * Switch to the GitHub API
+* On the package specific page link to explanations on how to correct where a field is missing.
+* Show Green and red bars for each package on the listing page
+* Find out what other services are used by Python packages
+* Check for common files in Python packages
+* Show which packages have strange version numbers (that cannot be parsed by ) https://www.python.org/dev/peps/pep-0396/
+* Is the cheesecake_code_kwalitee_id still relevant?
 
 * Statistics about types of "home_page" fields
 * "home_page": "http://pmbio.github.io/limix/",
