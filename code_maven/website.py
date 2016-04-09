@@ -74,7 +74,7 @@ def main(word = '', kw = ''):
     count = data.count(with_limit_and_skip=True)
 
     return render_template('main.html',
-        title = "PyDigger - Learning about programming in Python",
+        title = "PyDigger - unearthing stuff about Python",
         page = {
             'total_indexed' : total_indexed,
             'total_found' : total_found,
