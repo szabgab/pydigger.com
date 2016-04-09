@@ -9,7 +9,7 @@ from datetime import datetime
 parser = argparse.ArgumentParser()
 parser.add_argument('--verbose', help='Set verbosity level', action='store_true')
 parser.add_argument('--rss', help='fetch the RSS feed', action='store_true')
-parser.add_argument('--update', help='update the entries: new - not yet updated, rss - the once received via rss')
+parser.add_argument('--update', help='update the entries: new - not yet updated, rss - the ones received via rss')
 args = parser.parse_args()
 
 # Updated:
