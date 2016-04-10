@@ -4,12 +4,22 @@ Source code of http://pydigger.com/
 TODO
 ======
 
+* Switch to the GitHub API
+* Search should also look into keywords
+* How many times each keyword is used?
+* Find and list dependencies
+* Report when the URL provided as GitHub repo is invalid. (e.g. returns 404)
+  Maybe even compare some files?
+
+* Is there a requirements.txt file? and test_requirements.txt ?
+   package==version
+   package>=version
+
 
 * Why are there maintainers where the value is "" and others where it is null ?
 * Sats: author_email (look for null, "", "UNKNOWN", in the e_mail look for strings that don't look e-mail. e.g. no @)
 * locate "keywords" fields that are not space separated lists (e.g. pyspotify-connect)
 
-* Find and list dependencies
 
 
 * Code to update items
@@ -19,7 +29,6 @@ TODO
 * List the packages that don't have a VCS listed, find out if they have VCS listed elsewhere, or if they are using some other VCS
 * Create a list of "known licenses" and the names people use to refer to each license, link to the real license.
 * Show licenses that don't fit in any of the "known licenses"
-* Switch to the GitHub API
 * On the package specific page link to explanations on how to correct where a field is missing.
 * Show Green and red bars for each package on the listing page
 * Find out what other services are used by Python packages

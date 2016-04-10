@@ -1,3 +1,5 @@
 recent.json
 /html
 *.pyc
+/venv/
+/github-token

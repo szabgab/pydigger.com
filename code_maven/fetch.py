@@ -5,6 +5,7 @@ import xml.etree.ElementTree as ET
 from pymongo import MongoClient
 import logging
 from datetime import datetime
+from github3 import login
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--verbose', help='Set verbosity level', action='store_true')
@@ -17,6 +18,9 @@ args = parser.parse_args()
 # 2) All the entries that were updated more than N days ago
 # 3) All the entries that were updated in the last N days ??
 
+with open('github-token') as fh:
+    token = fh.readline().strip()
+github = login(token=token)
 
 client = MongoClient()
 db = client.pydigger
@@ -94,25 +98,52 @@ def save_json():
 
 
 def check_github(entry):
-    travis_yml_url = 'https://raw.githubusercontent.com/' + entry['github_user'] + '/' + entry['github_project'] + '/master/.travis.yml'
-    try:
-        f = urllib2.urlopen(travis_yml_url)
-        travis_yml = f.read()
-        f.close()
-    except urllib2.HTTPError as e:
-        entry['travis_ci'] = False
-        return()
-    entry['travis_ci'] = True
+    log.debug("check_github user='{}', project='{}".format(entry['github_user'], entry['github_project']))
 
-    coveralis_url = 'https://raw.githubusercontent.com/' + entry['github_user'] + '/' + entry['github_project'] + '/master/.coveragerc'
-    try:
-        f = urllib2.urlopen(travis_yml_url)
-        travis_yml = f.read()
-        f.close()
-    except urllib2.HTTPError as e:
-        entry['coveralis'] = False
-        return()
-    entry['coveralis'] = True
+    repo = github.repository(entry['github_user'], entry['github_project'])
+    log.debug("default_branch: ", repo.default_branch)
+
+    # get the last commit of the default branch
+    last_sha = repo.branch(repo.default_branch).commit.sha
+    log.debug("last_sha: ", last_sha)
+    t = repo.tree(last_sha)
+    entry['travis_ci'] = False
+    entry['coveralis'] = False
+    for e in t.tree:
+        if e.path == '.travis.yml':
+                entry['travis_ci'] = True
+        if e.path == '.coveragerc':
+                entry['coveralis'] = True
+
+
+    # travis_yml_url = 'https://raw.githubusercontent.com/' + entry['github_user'] + '/' + entry['github_project'] + '/master/.travis.yml'
+    # try:
+    #     f = urllib2.urlopen(travis_yml_url)
+    #     travis_yml = f.read()
+    #     f.close()
+    # except urllib2.HTTPError as e:
+    #     entry['travis_ci'] = False
+    #     return()
+    # entry['travis_ci'] = True
+    #
+    # coveralis_url = 'https://raw.githubusercontent.com/' + entry['github_user'] + '/' + entry['github_project'] + '/master/.coveragerc'
+    # try:
+    #     f = urllib2.urlopen(travis_yml_url)
+    #     travis_yml = f.read()
+    #     f.close()
+    # except urllib2.HTTPError as e:
+    #     entry['coveralis'] = False
+    #     return()
+    # entry['coveralis'] = True
+
+
+
+#import code
+#code.interact()
+#code.interact(local=locals())
+
+
+
 
     #
 
