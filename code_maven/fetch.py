@@ -202,6 +202,8 @@ def get_details(entry):
         else:
             entry['split_keywords'] = []
 
+    if 'urls' in package_data:
+        entry['urls'] = package_data['urls']
 
     if 'home_page' in entry and entry['home_page'] != None:
         try:
@@ -218,3 +220,8 @@ def get_details(entry):
             #entry['error'] = 'Home page URL is not GitHub'
         log.debug(entry)
     save_entry(entry)
+
+def get_package(entry):
+    log.debug('get_package')
+    if not 'urls' in entry:
+        return
