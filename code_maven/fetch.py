@@ -95,7 +95,6 @@ def save_json():
 
 def check_github(entry):
     travis_yml_url = 'https://raw.githubusercontent.com/' + entry['github_user'] + '/' + entry['github_project'] + '/master/.travis.yml'
-        #print(travis_yml_url)
     try:
         f = urllib2.urlopen(travis_yml_url)
         travis_yml = f.read()
@@ -104,6 +103,18 @@ def check_github(entry):
         entry['travis_ci'] = False
         return()
     entry['travis_ci'] = True
+
+    coveralis_url = 'https://raw.githubusercontent.com/' + entry['github_user'] + '/' + entry['github_project'] + '/master/.coveragerc'
+    try:
+        f = urllib2.urlopen(travis_yml_url)
+        travis_yml = f.read()
+        f.close()
+    except urllib2.HTTPError as e:
+        entry['coveralis'] = False
+        return()
+    entry['coveralis'] = True
+
+    #
 
 
     # # if there is a travis.yml check the status
