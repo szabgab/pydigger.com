@@ -17,7 +17,7 @@
             <tr><td>author</td><td>{{package.author}}</td></tr>
             <!-- <tr><td>author_email</td><td>{{package.author_email}}</td></tr> -->
             <tr><td>requires_python</td><td>{{package.requires_python}}</td></tr>
-            <tr><td>license</td><td>{{package.license}}</td></tr>
+            <tr><td>license</td><td><a href="/search?license={{package.license}}">{{package.license}}</a></td></tr>
             <tr><td>keywords</td><td>
                 {% for kw in package.split_keywords %}
                     <button type="button" class="btn btn-default"><a href="/keyword/{{kw}}" style="text-decoration: none">{{kw}}</a></button>
