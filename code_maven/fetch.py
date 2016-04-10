@@ -93,41 +93,41 @@ def save_json():
     f.close()
 
 
-def check_github(entry, user, package):
-    travis_yml_url = 'https://raw.githubusercontent.com/' + user + '/' + package + '/master/.travis.yml'
+def check_github(entry):
+    travis_yml_url = 'https://raw.githubusercontent.com/' + entry['github_user'] + '/' + entry['github_project'] + '/master/.travis.yml'
         #print(travis_yml_url)
     try:
         f = urllib2.urlopen(travis_yml_url)
         travis_yml = f.read()
         f.close()
     except urllib2.HTTPError as e:
-        #print(e, 'while fetching', travis_yml_url)
-        #entry['cm']['error'] = 'Could not find .travis.yml in the GitHub repository'
         entry['travis_ci'] = False
         return()
+    entry['travis_ci'] = True
 
-    # if there is a travis.yml check the status
-    travis_url = 'https://api.travis-ci.org/repos/' + user + '/' + package + '/builds';
-    #print(travis_url)
-    try:
-        req = urllib2.Request(travis_url)
-        req.add_header('Accept', 'application/vnd.travis-ci.2+json')
-        f = urllib2.urlopen(req)
-        travis_data_json = f.read()
-        f.close()
-    except urllib2.HTTPError as e:
-        #print(e, 'while fetching', travis_url)
-        entry['error'] = 'Could not get status from Travis-CI API'
-        return()
 
-    travis_data = json.loads(travis_data_json)
-    #print(travis_data)
-    #return();
-    if not travis_data or 'builds' not in travis_data or len(travis_data['builds']) == 0:
-        entry['error'] = 'Could not find builds in data received from travis-ci.org'
-        return()
-
-    entry['travis_status'] = get_travis_status(travis_data['builds'])
+    # # if there is a travis.yml check the status
+    # travis_url = 'https://api.travis-ci.org/repos/' + user + '/' + package + '/builds';
+    # #print(travis_url)
+    # try:
+    #     req = urllib2.Request(travis_url)
+    #     req.add_header('Accept', 'application/vnd.travis-ci.2+json')
+    #     f = urllib2.urlopen(req)
+    #     travis_data_json = f.read()
+    #     f.close()
+    # except urllib2.HTTPError as e:
+    #     #print(e, 'while fetching', travis_url)
+    #     entry['error'] = 'Could not get status from Travis-CI API'
+    #     return()
+    #
+    # travis_data = json.loads(travis_data_json)
+    # #print(travis_data)
+    # #return();
+    # if not travis_data or 'builds' not in travis_data or len(travis_data['builds']) == 0:
+    #     entry['error'] = 'Could not find builds in data received from travis-ci.org'
+    #     return()
+    #
+    # entry['travis_status'] = get_travis_status(travis_data['builds'])
     return()
 
 def get_rss():
@@ -214,7 +214,9 @@ def get_details(entry):
 
         if match:
             entry['github'] = True
-            check_github(entry, match.group(1), match.group(2))
+            entry['github_user'] = match.group(1)
+            entry['github_project'] = match.group(2)
+            check_github(entry)
         else:
             entry['github'] = False
             #entry['error'] = 'Home page URL is not GitHub'

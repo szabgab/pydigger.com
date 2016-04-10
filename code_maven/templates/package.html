@@ -30,10 +30,10 @@
                 {% endif %}
             </tr>
             <tr><td>Travis-CI</td><td>
-                {% if package.travis_status %}
-                    <img src="/static/img/build-{{ package.travis_status }}.png">
+                {% if package.travis_ci %}
+                    <a href="https://travis-ci.org/{{package.github_user}}/{{package.github_project}}"><img src="https://travis-ci.org/{{package.github_user}}/{{package.github_project}}.png"></a>
                 {% else %}
-                   na
+                   No Travis
                 {% endif %}
             </td></tr>
         </table>
