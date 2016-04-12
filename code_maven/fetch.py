@@ -77,23 +77,6 @@ def save_entry(e):
         db.packages.remove({'name' : e['name']})
     db.packages.insert(e)
 
-
-def get_travis_status(builds):
-    if not builds:
-        return 'unknown'
-    state = builds[0]['state']
-    #print('state: ' + state)
-
-    if re.search(r'cancel|pend', state):
-        return state
-    if re.search(r'error', state):
-        return 'error'
-    if re.search(r'fail', state):
-        return 'failing'
-    if re.search('pass', state):
-        return 'passing'
-    return 'unknown'
-
 def get_latest():
     latest_url = 'https://pypi.python.org/pypi?%3Aaction=rss'
     #print('Fetching ' + latest_url)
@@ -154,62 +137,6 @@ def check_github(entry):
                     # and MongoDB does not allow . in fieldnames.
                     entry['requirements'].append({ 'name' : req.name, 'specs' : req.specs })
         # test_requirements.txt
-
-
-    # travis_yml_url = 'https://raw.githubusercontent.com/' + entry['github_user'] + '/' + entry['github_project'] + '/master/.travis.yml'
-    # try:
-    #     f = urllib2.urlopen(travis_yml_url)
-    #     travis_yml = f.read()
-    #     f.close()
-    # except urllib2.HTTPError as e:
-    #     entry['travis_ci'] = False
-    #     return()
-    # entry['travis_ci'] = True
-    #
-    # coveralis_url = 'https://raw.githubusercontent.com/' + entry['github_user'] + '/' + entry['github_project'] + '/master/.coveragerc'
-    # try:
-    #     f = urllib2.urlopen(travis_yml_url)
-    #     travis_yml = f.read()
-    #     f.close()
-    # except urllib2.HTTPError as e:
-    #     entry['coveralis'] = False
-    #     return()
-    # entry['coveralis'] = True
-
-
-
-#import code
-#code.interact()
-#code.interact(local=locals())
-
-
-
-
-    #
-
-
-    # # if there is a travis.yml check the status
-    # travis_url = 'https://api.travis-ci.org/repos/' + user + '/' + package + '/builds';
-    # #print(travis_url)
-    # try:
-    #     req = urllib2.Request(travis_url)
-    #     req.add_header('Accept', 'application/vnd.travis-ci.2+json')
-    #     f = urllib2.urlopen(req)
-    #     travis_data_json = f.read()
-    #     f.close()
-    # except urllib2.HTTPError as e:
-    #     #print(e, 'while fetching', travis_url)
-    #     entry['error'] = 'Could not get status from Travis-CI API'
-    #     return()
-    #
-    # travis_data = json.loads(travis_data_json)
-    # #print(travis_data)
-    # #return();
-    # if not travis_data or 'builds' not in travis_data or len(travis_data['builds']) == 0:
-    #     entry['error'] = 'Could not find builds in data received from travis-ci.org'
-    #     return()
-    #
-    # entry['travis_status'] = get_travis_status(travis_data['builds'])
     return()
 
 def get_rss():
