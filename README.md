@@ -4,7 +4,7 @@ Source code of http://pydigger.com/
 TODO
 ======
 
-* Switch to the GitHub API
+* Add bugtrack_url
 * Search should also look into keywords
 * How many times each keyword is used?
 * Find and list dependencies

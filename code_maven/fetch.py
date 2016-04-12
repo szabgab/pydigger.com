@@ -1,11 +1,13 @@
 from __future__ import print_function
 import argparse
+import base64
 import urllib2, json, re, sys
 import xml.etree.ElementTree as ET
 from pymongo import MongoClient
 import logging
 from datetime import datetime
 from github3 import login
+import requirements
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--verbose', help='Set verbosity level', action='store_true')
@@ -37,9 +39,11 @@ def main():
         #args.update == 'new' or args.update == 'old'):
         if args.update == 'all':
             packages = db.packages.find()
+            return
 
         elif re.search(r'^\d+$', args.update):
             packages = db.packages.find().sort([('pubDate', 1)]).limit(int(args.update))
+            return
         else:
             print("Not implemented yet")
             exit()
@@ -138,6 +142,18 @@ def check_github(entry):
                 entry['travis_ci'] = True
         if e.path == '.coveragerc':
                 entry['coveralis'] = True
+        if e.path == 'requirements.txt':
+                entry['requirements'] = []
+                fh = urllib2.urlopen(e.url)
+                as_json = fh.read()
+                file_info = json.loads(as_json)
+                content = base64.b64decode(file_info['content'])
+                for req in requirements.parse(content):
+                    log.debug("requirements: {} {} {}".format(req.name, req.specs, req.extras))
+                    # we cannot use the req.name as a key in the dictionary as some of the package names have a . in them
+                    # and MongoDB does not allow . in fieldnames.
+                    entry['requirements'].append({ 'name' : req.name, 'specs' : req.specs })
+        # test_requirements.txt
 
 
     # travis_yml_url = 'https://raw.githubusercontent.com/' + entry['github_user'] + '/' + entry['github_project'] + '/master/.travis.yml'
@@ -286,7 +302,7 @@ def get_details(entry):
         else:
             entry['github'] = False
             #entry['error'] = 'Home page URL is not GitHub'
-        log.debug(entry)
+        log.debug("entry: ", entry)
     save_entry(entry)
 
 def get_package(entry):
