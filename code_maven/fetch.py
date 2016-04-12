@@ -33,9 +33,22 @@ def main():
     if args.rss:
         get_rss()
 
-    #if args.update and (args.update == 'new' or args.update == 'old'):
-        # fetch names from database
-    #    pass
+    if args.update:
+        #args.update == 'new' or args.update == 'old'):
+        if args.update == 'all':
+            packages = db.packages.find()
+
+        elif re.search(r'^\d+$', args.update):
+            packages = db.packages.find().sort([('pubDate', 1)]).limit(int(args.update))
+        else:
+            print("Not implemented yet")
+            exit()
+
+        for p in packages:
+            log.debug("Updating Package: {} {}".format(p['name'], p['pubDate']) )
+            get_details(p)
+
+
 
 
 def warn(msg):
@@ -101,10 +114,21 @@ def check_github(entry):
     log.debug("check_github user='{}', project='{}".format(entry['github_user'], entry['github_project']))
 
     repo = github.repository(entry['github_user'], entry['github_project'])
+    if not repo:
+        log.error("Could not fetch GitHub repository for {}".format(entry['name']))
+        entry['error'] = "Could not fetch GitHub repository"
+        return
+
     log.debug("default_branch: ", repo.default_branch)
 
     # get the last commit of the default branch
-    last_sha = repo.branch(repo.default_branch).commit.sha
+    branch = repo.branch(repo.default_branch)
+    if not branch:
+        log.error("Could not fetch GitHub branch {} for {}".format(repo.default_branch, entry['name']))
+        entry['error'] = "Could not fetch GitHub branch"
+        return
+
+    last_sha = branch.commit.sha
     log.debug("last_sha: ", last_sha)
     t = repo.tree(last_sha)
     entry['travis_ci'] = False
