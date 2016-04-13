@@ -1,13 +1,16 @@
 from __future__ import print_function
 import argparse
 import base64
-import urllib2, json, re, sys
+import json
+import logging
+import re
+import requirements
+import sys
+import urllib2
 import xml.etree.ElementTree as ET
 from pymongo import MongoClient
-import logging
 from datetime import datetime
 from github3 import login
-import requirements
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--verbose', help='Set verbosity level', action='store_true')
