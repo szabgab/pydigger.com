@@ -52,6 +52,8 @@ def main():
             log.debug("Updating Package: {} {}".format(p['name'], p['pubDate']) )
             get_details(p)
 
+    log.debug("Finished")
+
 
 
 
