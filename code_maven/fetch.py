@@ -39,14 +39,11 @@ def main():
         #args.update == 'new' or args.update == 'old'):
         if args.update == 'all':
             packages = db.packages.find()
-            return
-
         elif re.search(r'^\d+$', args.update):
             packages = db.packages.find().sort([('pubDate', 1)]).limit(int(args.update))
-            return
         else:
             print("Not implemented yet")
-            exit()
+            packages = []
 
         for p in packages:
             log.debug("Updating Package: {} {}".format(p['name'], p['pubDate']) )
