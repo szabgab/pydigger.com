@@ -14,8 +14,7 @@ from github3 import login
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--verbose', help='Set verbosity level', action='store_true')
-parser.add_argument('--rss', help='fetch the RSS feed', action='store_true')
-parser.add_argument('--update', help='update the entries: new - not yet updated, rss - the ones received via rss')
+parser.add_argument('--update', help='update the entries: rss - the ones received via rss; all - all of the packages already in the database')
 args = parser.parse_args()
 
 # Updated:
@@ -35,11 +34,11 @@ log=logging.getLogger('fetch')
 def main():
     log.debug("Staring")
 
-    if args.rss:
-        get_rss()
-    elif args.update:
-        #args.update == 'new' or args.update == 'old'):
-        if args.update == 'all':
+    #args.update == 'new' or args.update == 'old'):
+    if args.update:
+        if args.update == 'rss':
+            packages = get_rss()
+        elif args.update == 'all':
             packages = db.packages.find()
         elif re.search(r'^\d+$', args.update):
             packages = db.packages.find().sort([('pubDate', 1)]).limit(int(args.update))
@@ -143,6 +142,7 @@ def check_github(entry):
 def get_rss():
     log.debug("get_rss")
     rss_data = get_latest()
+    packages = []
 
     root = ET.fromstring(rss_data)
 
@@ -163,9 +163,9 @@ def get_rss():
         entry['summary'] = item.find('description').text
         entry['pubDate'] = datetime.strptime(item.find('pubDate').text, "%d %b %Y %H:%M:%S %Z")
         save_entry(entry)
-        if args.update and args.update == 'rss':
-            get_details(entry)
-    return
+        packages.append(entry)
+
+    return packages
 
 
 def get_details(entry):
