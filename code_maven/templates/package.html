@@ -29,6 +29,15 @@
                    <td></td>
                 {% endif %}
             </tr>
+            <tr><td>requirements</td><td>
+                {% if package.requirements %}
+                   {% for r in package.requirements %}
+                       <a href="/pypi/{{r.name}}" style="text-decoration: none" class="btn btn-default">{{r.name}}</a>
+                   {% endfor %}
+                {% else %}
+                  No requirements were recorded.
+                {% endif %}
+            </td><tr>
             <tr><td>Travis-CI</td><td>
                 {% if package.travis_ci %}
                     <a href="https://travis-ci.org/{{package.github_user}}/{{package.github_project}}"><img src="https://travis-ci.org/{{package.github_user}}/{{package.github_project}}.png"></a>

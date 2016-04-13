@@ -36,6 +36,8 @@ cases = {
     'has_author' : { '$and' : [ {'author' : { '$not' : { '$eq' : None} } }, {'author' : { '$not' : { '$eq' : ''} }}, {'author' : { '$not' : {'$eq' : 'UNKNOWN'}}} ] },
     'no_keywords'    : {'$or' : [ { 'keywords' : "" }, { 'keywords' : None } ] },
     'has_keywords'   : { '$and' : [ { 'keywords' : { '$not' : { '$eq' : "" } } }, { 'keywords' : { '$not' : { '$eq' : None } } } ] },
+    'has_requirements'   : { 'requirements' : { '$exists' : True } },
+    'no_requirements'   : { 'requirements' : { '$exists' : False } },
 }
 
 
