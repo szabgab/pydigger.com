@@ -124,11 +124,17 @@ def check_github(entry):
                 as_json = fh.read()
                 file_info = json.loads(as_json)
                 content = base64.b64decode(file_info['content'])
-                for req in requirements.parse(content):
-                    log.debug("requirements: {} {} {}".format(req.name, req.specs, req.extras))
-                    # we cannot use the req.name as a key in the dictionary as some of the package names have a . in them
-                    # and MongoDB does not allow . in fieldnames.
-                    entry['requirements'].append({ 'name' : req.name, 'specs' : req.specs })
+
+                # https://github.com/ingresso-group/pyticketswitch/blob/master/requirements.txt
+                # contains -r requirements/common.txt  which means we need to fetch that file as well
+                # for now let's just skip this
+                match = re.search(r'^\s*-r', content)
+                if not match:
+                    for req in requirements.parse(content):
+                        log.debug("requirements: {} {} {}".format(req.name, req.specs, req.extras))
+                        # we cannot use the req.name as a key in the dictionary as some of the package names have a . in them
+                        # and MongoDB does not allow . in fieldnames.
+                        entry['requirements'].append({ 'name' : req.name, 'specs' : req.specs })
         # test_requirements.txt
     return()
 
