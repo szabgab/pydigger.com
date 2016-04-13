@@ -91,12 +91,6 @@ def get_latest():
     #print(rss_data)
     return rss_data
 
-def save_json():
-    f = open('recent.json', 'w')
-    f.write(json.dumps(my_entries))
-    f.close()
-
-
 def check_github(entry):
     log.debug("check_github user='{}', project='{}".format(entry['github_user'], entry['github_project']))
 
