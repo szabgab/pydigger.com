@@ -34,8 +34,7 @@ def main():
 
     if args.rss:
         get_rss()
-
-    if args.update:
+    elif args.update:
         #args.update == 'new' or args.update == 'old'):
         if args.update == 'all':
             packages = db.packages.find()
