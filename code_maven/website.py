@@ -7,6 +7,8 @@ import os
 import pymongo
 import time
 
+max_license_length = 50
+
 app = Flask(__name__)
 
 client = pymongo.MongoClient()
@@ -64,7 +66,11 @@ def main(word = '', kw = ''):
         query['name'] = { '$regex' : q, '$options' : 'i'}
 
     if license != '':
-        query['license'] = license
+        if license == '__long__':
+            this_regex = '.{' + str(max_license_length) + '}'
+            query = {'$and' : [ {'license': {'$exists': True} }, { 'license' : { '$regex': this_regex } }] }
+        else:
+            query['license'] = license
         if license == 'None':
             query['license'] = None
 
@@ -104,6 +110,10 @@ def stats():
     licenses = db.packages.group(['license'], {}, { 'count' : 0}, 'function (curr, result) { result.count++; }' );
     for l in licenses:
         l['count'] = int(l['count'])
+        if l['license'] == None:
+            l['license'] = 'None'
+        if len(l['license']) > max_license_length:
+            l['long'] = True
 
     return render_template('stats.html',
         title = "PyDigger - Statistics",
