@@ -1,14 +1,15 @@
 from __future__ import division
 from flask import Flask, render_template, redirect, abort, request
-import time, json, os, math
-from pymongo import MongoClient
-import pymongo
 import datetime
-#import re
+import json
+import math
+import os
+import pymongo
+import time
 
 app = Flask(__name__)
 
-client = MongoClient()
+client = pymongo.MongoClient()
 db = client.pydigger
 #root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
