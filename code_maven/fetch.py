@@ -33,21 +33,35 @@ log=logging.getLogger('fetch')
 
 def main():
     log.debug("Staring")
+    packages = []
 
     #args.update == 'new' or args.update == 'old'):
     if args.update:
         if args.update == 'rss':
             packages = get_rss()
+        elif args.update == 'deps':
+            #packages = db.packages.find()
+            seen = {}
+            packages_with_requirements = db.packages.find({'requirements' : { '$exists' : True }}, { 'requirements' : 1})
+            for p in packages_with_requirements:
+                for r in p['requirements']:
+                    name = r['name']
+                    if not name:
+                        log.error("Requirement found without a name in package ", p)
+                        continue
+                    if name not in seen:
+                        seen[name] = True
+                        p = db.packages.find_one({'name': name})
+                        if not p:
+                            packages.append({'name' : name})
         elif args.update == 'all':
             packages = db.packages.find()
         elif re.search(r'^\d+$', args.update):
             packages = db.packages.find().sort([('pubDate', 1)]).limit(int(args.update))
         else:
             print("Not implemented yet")
-            packages = []
-
         for p in packages:
-            log.debug("Updating Package: {} {}".format(p['name'], p['pubDate']) )
+            log.debug("Updating Package: {}".format(p['name']) )
             get_details(p)
 
     log.debug("Finished")
@@ -121,21 +135,24 @@ def check_github(entry):
                 entry['coveralis'] = True
         if e.path == 'requirements.txt':
                 entry['requirements'] = []
-                fh = urllib2.urlopen(e.url)
-                as_json = fh.read()
-                file_info = json.loads(as_json)
-                content = base64.b64decode(file_info['content'])
+                try:
+                    fh = urllib2.urlopen(e.url)
+                    as_json = fh.read()
+                    file_info = json.loads(as_json)
+                    content = base64.b64decode(file_info['content'])
 
-                # https://github.com/ingresso-group/pyticketswitch/blob/master/requirements.txt
-                # contains -r requirements/common.txt  which means we need to fetch that file as well
-                # for now let's just skip this
-                match = re.search(r'^\s*-r', content)
-                if not match:
-                    for req in requirements.parse(content):
-                        log.debug("requirements: {} {} {}".format(req.name, req.specs, req.extras))
-                        # we cannot use the req.name as a key in the dictionary as some of the package names have a . in them
-                        # and MongoDB does not allow . in fieldnames.
-                        entry['requirements'].append({ 'name' : req.name, 'specs' : req.specs })
+                    # https://github.com/ingresso-group/pyticketswitch/blob/master/requirements.txt
+                    # contains -r requirements/common.txt  which means we need to fetch that file as well
+                    # for now let's just skip this
+                    match = re.search(r'^\s*-r', content)
+                    if not match:
+                        for req in requirements.parse(content):
+                            log.debug("requirements: {} {} {}".format(req.name, req.specs, req.extras))
+                            # we cannot use the req.name as a key in the dictionary as some of the package names have a . in them
+                            # and MongoDB does not allow . in fieldnames.
+                            entry['requirements'].append({ 'name' : req.name, 'specs' : req.specs })
+                except Exception as e:
+                    log.error("Exception when handling the requirements.txt:", e)
         # test_requirements.txt
     return()
 
@@ -170,7 +187,9 @@ def get_rss():
 
 def get_details(entry):
     log.debug("get_details of " + entry['name'])
-    url = entry['link'] + '/json';
+    #url = entry['link'] + '/json';
+    url = 'http://pypi.python.org/pypi/' + entry['name'] + '/json'
+    # TODO update version, upload_time (pubDate)
     #print(url)
     try:
         f = urllib2.urlopen(url)
@@ -191,8 +210,7 @@ def get_details(entry):
         if 'home_page' in info:
             entry['home_page'] = info['home_page']
 
-        # package_url  we can deduct this from the name, can't we?
-        # version ???
+        # package_url  we can deduct this from the name
         # _pypi_hidden
         # _pypi_ordering
         # release_url
@@ -204,7 +222,7 @@ def get_details(entry):
         for f in ['maintainer', 'docs_url', 'requires_python', 'maintainer_email',
         'cheesecake_code_kwalitee_id', 'cheesecake_documentation_id', 'cheesecake_installability_id',
         'keywords', 'author', 'author_email', 'download_url', 'platform', 'description', 'bugtrack_url',
-        'license', 'summary']:
+        'license', 'summary', 'version']:
             if f in info:
                 entry[f] = info[f]
         if 'keywords' in info and info['keywords']:
@@ -212,8 +230,14 @@ def get_details(entry):
         else:
             entry['split_keywords'] = []
 
+    version = entry['version']
     if 'urls' in package_data:
         entry['urls'] = package_data['urls']
+    if 'releases' in package_data and version in package_data['releases']:
+        upload_time = package_data['releases'][version][0]['upload_time']
+        entry['upload_time'] = datetime.strptime(upload_time, "%Y-%m-%dT%H:%M:%S")
+        entry['pubDate'] = entry['upload_time']
+
 
     if 'home_page' in entry and entry['home_page'] != None:
         try:
