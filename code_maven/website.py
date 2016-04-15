@@ -1,5 +1,5 @@
 from __future__ import division
-from flask import Flask, render_template, redirect, abort, request
+from flask import Flask, render_template, redirect, abort, request, url_for
 import datetime
 import hashlib
 import json
@@ -166,11 +166,15 @@ def stats():
 
 @app.route("/pypi/<name>")
 def pypi(name):
-    package = db.packages.find_one({'name' : name})
+    package = db.packages.find_one({'lcname' : name.lower()})
     if not package:
         return render_template('404.html',
             title = name + " not found",
             package_name = name), 404
+
+    if package['name'] != name:
+        return redirect(url_for('pypi', name = package['name']))
+
     # if 'keywords' in package and package['keywords']:
     #     package['keywords'] = package['keywords'].split(' ')
     # else:

@@ -260,4 +260,5 @@ def get_details(name):
         else:
             entry['github'] = False
             #entry['error'] = 'Home page URL is not GitHub'
+    entry['lcname'] = entry['name'].lower()
     save_entry(entry)
