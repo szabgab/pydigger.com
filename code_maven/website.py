@@ -71,6 +71,8 @@ def main(word = '', kw = ''):
         if license == '__long__':
             this_regex = '.{' + str(max_license_length) + '}'
             query = {'$and' : [ {'license': {'$exists': True} }, { 'license' : { '$regex': this_regex } }] }
+        elif license == '__empty__':
+            query = {'$and' : [ {'license': {'$exists': True} }, { 'license' : '' }] }
         else:
             query['license'] = license
         if license == 'None':
@@ -111,7 +113,7 @@ def licenses():
 
     return render_template('licenses.html',
         title = "Licenses of Python packages on PyPI",
-        licenses = licenses,
+        licenses = reversed(sorted(licenses, key=lambda f:f['count'])),
     )
 
 @app.route("/stats")

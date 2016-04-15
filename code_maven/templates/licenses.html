@@ -6,6 +6,8 @@
         {% for l in licenses %}
             {% if l.long %}
                 <tr><td><a href="/search?license=__long__">{{l.license}}</a></td><td>{{l.count}}</td></tr>
+            {% elif l.license == '' %}
+                    <tr><td><a href="/search?license=__empty__">**EMPTY**</a></td><td>{{l.count}}</td></tr>
             {% else %}
                 <tr><td><a href="/search?license={{l.license}}">{{l.license}}</a></td><td>{{l.count}}</td></tr>
             {% endif %}
