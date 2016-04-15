@@ -19,6 +19,8 @@
             <tr><td><a href="/search/has-keywords">Has keywords</a></td><td>{{stats.has_keywords | commafy}}</td><td>{{ (100 * stats.has_keywords / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/has-requirements">Has requirements</a></td><td>{{stats.has_requirements | commafy}}</td><td>{{ (100 * stats.has_requirements / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/no-requirements">No requirements</a></td><td>{{stats.no_requirements | commafy}}</td><td>{{ (100 * stats.no_requirements / stats.total) | round(2)}}%</td></tr>
+            <tr><td><a href="/search/has_bugtrack_url">Has bugtrack_url</a></td><td>{{stats.has_bugtrack_url | commafy}}</td><td>{{ (100 * stats.has_bugtrack_url / stats.total) | round(2)}}%</td></tr>
+            <tr><td><a href="/search/no_bugtrack_url">No bugtrack_url</a></td><td>{{stats.no_bugtrack_url | commafy}}</td><td>{{ (100 * stats.no_bugtrack_url / stats.total) | round(2)}}%</td></tr>
         </table>
         <h2>Details</h2>
         <ul>

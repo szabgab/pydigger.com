@@ -29,6 +29,14 @@
                    <td></td>
                 {% endif %}
             </tr>
+            <tr><td>bugtrack_url</td>
+                {% if package.bugtrack_url %}
+                <td><a href="{{ package.bugtrack_url }}">{{package.bugtrack_url}}</a></td>
+             {% else %}
+                <td></td>
+             {% endif %}
+            </tr>
+
             <tr><td>requirements</td><td>
                 {% if package.requirements %}
                    {% for r in package.requirements %}
