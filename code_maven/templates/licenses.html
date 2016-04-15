@@ -1,0 +1,17 @@
+{% include "incl/header.html" %}
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <table>
+        {% for l in licenses %}
+            {% if l.long %}
+                <tr><td><a href="/search?license=__long__">{{l.license}}</a></td><td>{{l.count}}</td></tr>
+            {% else %}
+                <tr><td><a href="/search?license={{l.license}}">{{l.license}}</a></td><td>{{l.count}}</td></tr>
+            {% endif %}
+        {% endfor %}
+        </table>
+    </div>
+    <div class="col-md-1"></div>
+</div>
+{% include "incl/footer.html" %}

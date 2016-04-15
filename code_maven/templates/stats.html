@@ -19,16 +19,10 @@
             <tr><td><a href="/search/has-requirements">Has requirements</a></td><td>{{stats.has_requirements}}</td><td>{{ (100 * stats.has_requirements / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/no-requirements">No requirements</a></td><td>{{stats.no_requirements}}</td><td>{{ (100 * stats.no_requirements / stats.total) | round(2)}}%</td></tr>
         </table>
-        <h2>Licenses</h2>
-        <table>
-        {% for l in licenses %}
-            {% if l.long %}
-                <tr><td><a href="/search?license=__long__">{{l.license}}</a></td><td>{{l.count}}</td></tr>
-            {% else %}
-                <tr><td><a href="/search?license={{l.license}}">{{l.license}}</a></td><td>{{l.count}}</td></tr>
-            {% endif %}
-        {% endfor %}
-        </table>
+        <h2>Details</h2>
+        <ul>
+            <li><a href="/licenses">Licenses</a></li>
+        </ul>
     </div>
     <div class="col-md-1"></div>
 </div>

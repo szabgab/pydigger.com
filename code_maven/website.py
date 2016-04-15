@@ -98,6 +98,22 @@ def main(word = '', kw = ''):
          },
     )
 
+@app.route("/licenses")
+def licenses():
+    #licenses = db.packages.group({ key: {license : 1}, reduce: function (curr, result) { result.count++; }, initial: { count : 0} });
+    licenses = db.packages.group(['license'], {}, { 'count' : 0}, 'function (curr, result) { result.count++; }' );
+    for l in licenses:
+        l['count'] = int(l['count'])
+        if l['license'] == None:
+            l['license'] = 'None'
+        if len(l['license']) > max_license_length:
+            l['long'] = True
+
+    return render_template('licenses.html',
+        title = "Licenses of Python packages on PyPI",
+        licenses = licenses,
+    )
+
 @app.route("/stats")
 def stats():
     stats = {
@@ -108,19 +124,9 @@ def stats():
 
     #github_not_exists = db.packages.find({ 'github' : { '$not' : { '$exists': True }}}).count()
 
-    #licenses = db.packages.group({ key: {license : 1}, reduce: function (curr, result) { result.count++; }, initial: { count : 0} });
-    licenses = db.packages.group(['license'], {}, { 'count' : 0}, 'function (curr, result) { result.count++; }' );
-    for l in licenses:
-        l['count'] = int(l['count'])
-        if l['license'] == None:
-            l['license'] = 'None'
-        if len(l['license']) > max_license_length:
-            l['long'] = True
-
     return render_template('stats.html',
         title = "PyDigger - Statistics",
         stats = stats,
-        licenses = licenses,
     )
 
 
