@@ -5,15 +5,21 @@ TODO
 ======
 
 * Add bugtrack_url
-* Search should also look into keywords
-* How many times each keyword is used?
-* Find and list dependencies
-* Report when the URL provided as GitHub repo is invalid. (e.g. returns 404)
-  Maybe even compare some files?
-
 * Is there a requirements.txt file? and test_requirements.txt ?
    package==version
    package>=version
+   https://github.com/bitmazk/django-review  and
+   https://github.com/ojarva/python-sshpubkeys
+   were not stored correctly. I am not sure if this was an early version of my code
+   or if my assumption about the requirement-parser is incorrect or if there is
+   some other issue.
+   
+
+* Go over all the packages that have dependencies and add all the dependencies to the database
+
+* Search should also look into keywords
+* How many times each keyword is used?
+* Report when the URL provided as GitHub repo is invalid. (e.g. returns 404)
 
 
 * Why are there maintainers where the value is "" and others where it is null ?
@@ -34,12 +40,11 @@ TODO
 * Find out what other services are used by Python packages
 * Check for common files in Python packages
 * Show which packages have strange version numbers (that cannot be parsed by ) https://www.python.org/dev/peps/pep-0396/
-* Is the cheesecake_code_kwalitee_id still relevant?
+* Is the cheesecake_code_kwalitee_id still relevant? Integrate the old cheescake code.
 
 * Statistics about types of "home_page" fields
 * "home_page": "http://pmbio.github.io/limix/",
 * "home_page": "http://ianmiell.github.io/shutit/",
-
 
 
 Description

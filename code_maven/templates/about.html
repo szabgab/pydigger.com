@@ -2,10 +2,34 @@
 <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-10">
-        <h2>About</h2>
-        Just a place to learn about <a href="https://pypi.python.org/pypi">Pypi</a>
-        and <a href="http://code-maven.com/python">programming in Python</a>.
+        Once upon a time there was service called <a href="https://github.com/griggheo/cheesecake">PyCheesecake</a> that measured
+        certain "kwalitee" metrics of PyPI packages trying to hint at the quality of those packages.
+        The idea was based on the "kwalitee" metrics of the Perl community
+        offered by the <a href="http://cpants.cpanauthors.org/">CPANTS</a> service.
         <p>
+        PyDigger has similarities, but it does not try to say one package is of higher quality than the other.
+        It does not even indicates kwalitee.
+        PyDigger tries to offer a view at the Python packages on <a href="https://pypi.python.org/pypi">PyPI</a>.
+        providing information on "common practices" and also tries to hint which are the better,
+        or the "best practices".
+        <p>
+        So what kind of things do we look at?
+        <p>
+        In the first part of the project we look at the JSON file provided by PyPI and
+        check things there. For example we check if there is a <b>license</b> and what
+        that license is. Then at one point we'll recommend what kind of values should
+        be in that field and what should project developers do with the other values.
+        <p>
+        We also look at the <b>keywords</b> that were supplied with the project.
+        Having these keywords can make it easier for people to find related packages.
+        On the other hand having too many keywords might be spamming the system.
+    </div>
+    <div class="col-md-1"></div>
+</div>
+
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
         Maintained by <a href="http://szabgab.com/">Gabor Szabo</a> in <a href="https://github.com/szabgab/pydigger.com">this GitHub repository</a>.
     </div>
     <div class="col-md-1"></div>
