@@ -36,7 +36,8 @@ def get_int(field, default):
 
 cases = {
     'no_summary'   : { '$or' : [{'summary' : ''}, {'summary' : None}] },
-    'no_license'   : { '$or' : [{'license' : ''}, {'license' : None}] },
+    'no_license'   : { '$or' : [{'license' : None}, {'license' : ''}] },
+    'has_license'  : { '$and' : [{'license' : {'$not' : {'$eq' : None}}}, {'license' : { '$not' : { '$eq' : '' }}}] },
     'no_github'    : { 'github' : False },
     'has_github'   : { 'github' : True },
     'no_docs_url'  : { '$or' : [ { 'docs_url' : { '$exists' : False} }, { 'docs_url' : None} ] },
@@ -136,6 +137,9 @@ def licenses():
 
     return render_template('licenses.html',
         title = "Licenses of Python packages on PyPI",
+        total = db.packages.find().count(),
+        has_license = db.packages.find(cases['has_license']).count(),
+        no_license = db.packages.find(cases['no_license']).count(),
         licenses = licenses,
     )
 

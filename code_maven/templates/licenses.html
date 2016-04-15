@@ -2,6 +2,14 @@
 <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-10">
+
+       <div>
+        Our database currently contains information about {{total|commafy}} Python packages from PyPI. Out of these
+        {{has_license | commafy}} packages have license information in their JSON file
+        (<a href="/search/no-license>">{{no_license | commafy}} have no licenses</a>).
+        Here you can find all the values appearing in <b>license</b> field and their frequency.
+        </div>
+
         <table class="table">
         {% for l in licenses %}
             <tr><td>{{l.count | commafy}}</td><td>
