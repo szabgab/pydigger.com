@@ -48,7 +48,7 @@ def main():
                 for r in p['requirements']:
                     name = r['name']
                     if not name:
-                        log.error("Requirement {} found without a name in package {}".format(r, p['name']))
+                        log.error("Requirement {} found without a name in package {}".format(r, p))
                         continue
                     if name not in seen:
                         seen[name] = True
