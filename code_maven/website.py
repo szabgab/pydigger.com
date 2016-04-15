@@ -99,7 +99,7 @@ def main(word = '', kw = '', name = ''):
         query = {'author': name}
 
 
-    data = db.packages.find(query).sort([("pubDate", pymongo.DESCENDING)]).skip(limit * (page-1)).limit(limit)
+    data = db.packages.find(query).sort([("upload_time", pymongo.DESCENDING)]).skip(limit * (page-1)).limit(limit)
 #    total_found = db.packages.find(query).count()
     total_found = data.count(with_limit_and_skip=False)
     count = data.count(with_limit_and_skip=True)

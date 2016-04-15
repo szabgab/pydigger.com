@@ -94,10 +94,11 @@ def save_entry(e):
     # 3.1.0a12
     # 2.0.0.dev11
 
-    doc = db.packages.find_one({'name' : e['name']})
-    if doc:
+    #doc = db.packages.find_one({'name' : e['name']})
+    #if doc:
         #print(doc)
-        db.packages.remove({'name' : e['name']})
+    db.packages.remove({'name' : e['name']})
+    db.packages.remove({'name' : e['name'].lower()})
     db.packages.insert(e)
 
 def get_latest():
@@ -240,9 +241,11 @@ def get_details(name):
     if 'urls' in package_data:
         entry['urls'] = package_data['urls']
     if 'releases' in package_data and version in package_data['releases']:
-        upload_time = package_data['releases'][version][0]['upload_time']
-        entry['upload_time'] = datetime.strptime(upload_time, "%Y-%m-%dT%H:%M:%S")
-        entry['pubDate'] = entry['upload_time']
+        if len(package_data['releases'][version]) == 0:
+            log.error("There are no releases in package {}  {}".format(name, package_data))
+        else:
+            upload_time = package_data['releases'][version][0]['upload_time']
+            entry['upload_time'] = datetime.strptime(upload_time, "%Y-%m-%dT%H:%M:%S")
 
 
     if 'home_page' in entry and entry['home_page'] != None:

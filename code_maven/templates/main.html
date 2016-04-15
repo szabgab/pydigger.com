@@ -12,14 +12,14 @@
 
         <table class="table">
         <tr>
-          <th>Name</th><th>Version</th><th>Summary</th><th>pubDate</th>
+          <th>Name</th><th>Version</th><th>Summary</th><th>date</th>
         </tr>
         {% for e in data %}
             <tr>
                 <td><a href="/pypi/{{e['name']}}">{{ e['name'] }}</a></td>
                 <td>{{e.version}}</td>
                 <td>{{e.summary}}</td>
-                <td>{{e.pubDate}}</td>
+                <td>{{e.upload_time}}</td>
             </tr>
         {% endfor %}
         </table>
