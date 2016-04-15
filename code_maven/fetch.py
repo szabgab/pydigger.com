@@ -15,6 +15,7 @@ from github3 import login
 parser = argparse.ArgumentParser()
 parser.add_argument('--verbose', help='Set verbosity level', action='store_true')
 parser.add_argument('--update', help='update the entries: rss - the ones received via rss; all - all of the packages already in the database')
+parser.add_argument('--name', help='Name of the package to update')
 args = parser.parse_args()
 
 # Updated:
@@ -32,39 +33,44 @@ logging.basicConfig(level= logging.DEBUG if args.verbose else logging.WARNING)
 log=logging.getLogger('fetch')
 
 def main():
-    log.debug("Staring")
-    packages = []
+    log.info("Staring")
+    names = []
+    packages = None
 
     #args.update == 'new' or args.update == 'old'):
     if args.update:
         if args.update == 'rss':
-            packages = get_rss()
+            names = get_rss()
         elif args.update == 'deps':
-            #packages = db.packages.find()
             seen = {}
-            packages_with_requirements = db.packages.find({'requirements' : { '$exists' : True }}, { 'requirements' : 1})
+            packages_with_requirements = db.packages.find({'requirements' : { '$exists' : True }}, { 'name' : True, 'requirements' : True})
             for p in packages_with_requirements:
                 for r in p['requirements']:
                     name = r['name']
                     if not name:
-                        log.error("Requirement found without a name in package ", p)
+                        log.error("Requirement {} found without a name in package {}".format(r, p['name']))
                         continue
                     if name not in seen:
                         seen[name] = True
                         p = db.packages.find_one({'name': name})
                         if not p:
-                            packages.append({'name' : name})
+                            names.append(name)
         elif args.update == 'all':
-            packages = db.packages.find()
+            packages = db.packages.find({}, {'name': True})
         elif re.search(r'^\d+$', args.update):
             packages = db.packages.find().sort([('pubDate', 1)]).limit(int(args.update))
         else:
-            print("Not implemented yet")
-        for p in packages:
-            log.debug("Updating Package: {}".format(p['name']) )
-            get_details(p)
+            print("The update option '{}' is not implemented yet".format(args.update))
+    elif args.name:
+        names.append(args.name)
 
-    log.debug("Finished")
+    if packages:
+        names = [ p['name'] for p in packages ]
+
+    for name in names:
+        get_details(name)
+
+    log.info("Finished")
 
 
 
@@ -75,6 +81,9 @@ def warn(msg):
 
 #my_entries = []
 def save_entry(e):
+    log.info("save_entry: '{}'".format(e['name']))
+    #log.debug("save_entry: {}".format(e)
+
     #my_entries.append(e)
     #print(e)
     # TODO make sure we only add newer version!
@@ -164,47 +173,45 @@ def get_rss():
     root = ET.fromstring(rss_data)
 
     for item in root.iter('item'):
-        entry = {}
+        #entry = {}
         title = item.find('title').text.split(' ')
         log.debug("Seen {}".format(title))
-        entry['name'] = title[0]
-        entry['version'] = title[1]
+        name = title[0]
+        version = title[1]
 
-        doc = db.packages.find_one({'name' : entry['name']})
+        # TODO case insensitive search!
+        doc = db.packages.find_one({'name' : name})
         if doc:
             continue
         # add package
         log.debug("Processing {}".format(title))
         # we might want to later verify from the package_data that these are the real name and version
-        entry['link'] = item.find('link').text
-        entry['summary'] = item.find('description').text
-        entry['pubDate'] = datetime.strptime(item.find('pubDate').text, "%d %b %Y %H:%M:%S %Z")
-        save_entry(entry)
-        packages.append(entry)
+        #entry['link'] = item.find('link').text
+        #entry['summary'] = item.find('description').text
+        #entry['pubDate'] = datetime.strptime(item.find('pubDate').text, "%d %b %Y %H:%M:%S %Z")
+        #save_entry(entry)
+        packages.append(name)
 
     return packages
 
 
-def get_details(entry):
-    log.debug("get_details of " + entry['name'])
-    #url = entry['link'] + '/json';
-    url = 'http://pypi.python.org/pypi/' + entry['name'] + '/json'
-    # TODO update version, upload_time (pubDate)
-    #print(url)
+def get_details(name):
+    log.debug("get_details of " + name)
+    entry = {}
+
+    url = 'http://pypi.python.org/pypi/' + name + '/json'
+    log.debug("Fetching url {}".format(url))
     try:
         f = urllib2.urlopen(url)
         json_data = f.read()
         f.close()
+        #print(json_data)
     except urllib2.HTTPError as e:
-        #print(e, 'while fetching', url)
-        entry['error'] = 'Could not fetch details of PyPi package'
-        save_entry(entry)
+        log.error("Could not fetch details of PyPi package from '{}'".format(url), e)
         return
-
     package_data = json.loads(json_data)
-    #print(package_data)
+    #log.debug('package_data: {}'.format(package_data))
 
-    #entry['package'] = package_data
     if 'info' in package_data:
         info = package_data['info']
         if 'home_page' in info:
@@ -216,10 +223,9 @@ def get_details(entry):
         # release_url
         # downloads - a hash, but as we are monitoring recent uploads, this will be mostly 0
         # classifiers - an array of stuff
-        # name
         # releases
         # urls
-        for f in ['maintainer', 'docs_url', 'requires_python', 'maintainer_email',
+        for f in ['name', 'maintainer', 'docs_url', 'requires_python', 'maintainer_email',
         'cheesecake_code_kwalitee_id', 'cheesecake_documentation_id', 'cheesecake_installability_id',
         'keywords', 'author', 'author_email', 'download_url', 'platform', 'description', 'bugtrack_url',
         'license', 'summary', 'version']:
@@ -254,10 +260,4 @@ def get_details(entry):
         else:
             entry['github'] = False
             #entry['error'] = 'Home page URL is not GitHub'
-        log.debug("entry: ", entry)
     save_entry(entry)
-
-def get_package(entry):
-    log.debug('get_package')
-    if not 'urls' in entry:
-        return

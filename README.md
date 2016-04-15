@@ -11,8 +11,7 @@ TODO
   When we search for packages we should use a case insensitive search { $strcasecmp: [ <expression1>, <expression2> ] }
   or maybe we should store a lowercase version of each name, in addition to the official spelling.
   URLs in any case should redirect to the canonical spelling.
-  
-
+  I think we can trust the RSS feed to list the names in the proper case, but 
 
 * bugtrack_url (For packages that have a home_dir pointing at github we can already fetch the issue count
     and we don't need to rely on this field but we can check if the bugtrack_url is related to the
@@ -29,23 +28,14 @@ TODO
    some other issue.
 
 
-* Go over all the packages that have dependencies and add all the dependencies to the database
-
 * Search should also look into keywords
 * How many times each keyword is used?
 * Report when the URL provided as GitHub repo is invalid. (e.g. returns 404)
-
-
 * Why are there maintainers where the value is "" and others where it is null ?
 * Sats: author_email (look for null, "", "UNKNOWN", in the e_mail look for strings that don't look e-mail. e.g. no @)
 * locate "keywords" fields that are not space separated lists (e.g. pyspotify-connect)
-
-
-
 * Code to update items
 * Have a data for "updated" when we last updated the entry
-
-* Show statistics about each field we show
 * List the packages that don't have a VCS listed, find out if they have VCS listed elsewhere, or if they are using some other VCS
 * Create a list of "known licenses" and the names people use to refer to each license, link to the real license.
 * Show licenses that don't fit in any of the "known licenses"
@@ -130,3 +120,7 @@ if Travis-CI is configured in that repository.
 We cannot store the data received from Pypi as it is in a MongoDB database as
 it has places where the version number is a key and has . in it which cannot be
 a key in MongoDB.
+
+Show statistics about each field we show on the stats page.
+
+Go over all the packages that have dependencies and add all the dependencies to the database.
