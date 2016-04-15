@@ -4,6 +4,11 @@ Source code of http://pydigger.com/
 TODO
 ======
 
+* Case sensitivity. It seems the package names in the requirements.txt file
+  don't always match the case that was used by the author of the package which currently
+  creates duplicate entries for some of the packages.
+
+  
 * Add bugtrack_url
 * Is there a requirements.txt file? and test_requirements.txt ?
    package==version
@@ -13,7 +18,7 @@ TODO
    were not stored correctly. I am not sure if this was an early version of my code
    or if my assumption about the requirement-parser is incorrect or if there is
    some other issue.
-   
+
 
 * Go over all the packages that have dependencies and add all the dependencies to the database
 

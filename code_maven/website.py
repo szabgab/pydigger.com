@@ -16,6 +16,10 @@ client = pymongo.MongoClient()
 db = client.pydigger
 #root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+@app.template_filter()
+def commafy(value):
+        return '{:,}'.format(value)
+
 def gravatar(email):
     if email == None:
         return ''
