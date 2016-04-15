@@ -128,7 +128,7 @@ def licenses():
     licenses.sort(key=lambda f:f['count'])
     licenses.reverse()
     for l in licenses:
-        l['count'] = "{:,}".format(int(l['count']))
+        l['count'] = int(l['count'])
         if l['license'] == None:
             l['license'] = 'None'
         if len(l['license']) > max_license_length:
