@@ -14,7 +14,7 @@
             <tr><td>maintainer</td><td>{{package.maintainer}}</td></tr>
             <!-- <tr><td>maintainer_email</td><td>{{package.maintainer_email}}</td></tr> -->
             <tr><td>docs_url</td><td>{{package.docs_url}}</td></tr>
-            <tr><td>author</td><td>{{package.author}}</td></tr>
+            <tr><td>author</td><td><a href="/author/{{package.author}}">{{package.author}}</a></td></tr>
             <!-- <tr><td>author_email</td><td>{{package.author_email}}</td></tr> -->
             <tr><td>requires_python</td><td>{{package.requires_python}}</td></tr>
             <tr><td>license</td><td><a href="/search?license={{package.license}}">{{package.license}}</a></td></tr>
@@ -66,7 +66,7 @@
     </div>
     <div class="col-md-1">
         <img src="http://www.gravatar.com/avatar/{{gravatar}}?s=100&d=blank" title="{{package.author}}">
-        {{package.author}}
+        <a href="/author/{{package.author}}">{{package.author}}</a>
     </div>
 </div>
 {% include "incl/footer.html" %}

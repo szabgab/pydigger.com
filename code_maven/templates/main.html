@@ -27,7 +27,12 @@
         {% include "incl/pagination.html" %}
 
     </div>
-    <div class="col-md-1"></div>
+    <div class="col-md-1">
+        {% if author %}
+            <img src="http://www.gravatar.com/avatar/{{gravatar}}?s=100&d=blank" title="{{author}}">
+            {{author}}
+        {% endif %}
+    </div>
 </div>
 
 

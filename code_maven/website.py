@@ -48,11 +48,12 @@ cases = {
 }
 
 
+@app.route("/author/<name>")
 @app.route("/keyword/<kw>")
 @app.route("/search/<word>")
 @app.route("/search")
 @app.route("/")
-def main(word = '', kw = ''):
+def main(word = '', kw = '', name = ''):
     total_indexed = db.packages.find().count()
     limit = get_int('limit', 20)
     page = get_int('page', 1)
@@ -84,12 +85,19 @@ def main(word = '', kw = ''):
             query['license'] = license
         if license == 'None':
             query['license'] = None
+    if name != '':
+        query = {'author': name}
 
 
     data = db.packages.find(query).sort([("pubDate", pymongo.DESCENDING)]).skip(limit * (page-1)).limit(limit)
 #    total_found = db.packages.find(query).count()
     total_found = data.count(with_limit_and_skip=False)
     count = data.count(with_limit_and_skip=True)
+
+    if name and total_found > 0:
+        gravatar_code = gravatar(data[0].get('author_email'))
+    else:
+        gravatar_code = None
 
     return render_template('main.html',
         title = "PyDigger - unearthing stuff about Python",
@@ -104,7 +112,9 @@ def main(word = '', kw = ''):
         data = data,
         search = {
             'q' : q,
-         },
+        },
+        author = name,
+        gravatar = gravatar_code,
     )
 
 @app.route("/licenses")
@@ -139,7 +149,6 @@ def stats():
         title = "PyDigger - Statistics",
         stats = stats,
     )
-
 
 
 @app.route("/pypi/<name>")
