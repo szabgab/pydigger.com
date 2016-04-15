@@ -4,7 +4,7 @@
     <div class="col-md-10">
         <table class="table">
         {% for l in licenses %}
-            <tr><td>{{l.count}}</td><td>
+            <tr><td>{{l.count | commafy}}</td><td>
                 {% if l.long %}
                     <a href="/search?license=__long__">{{l.license}}</a>
                 {% elif l.license == '' %}

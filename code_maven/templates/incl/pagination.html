@@ -1,5 +1,5 @@
 <div class="pagination">
-Found {{"{:,}".format(page.total_found)}} out of {{"{:,}".format(page.total_indexed)}}. Showing {{page.count}} on page {{page.current}}.
+Found {{page.total_found | commafy}} out of {{page.total_indexed | commafy}}. Showing {{page.count}} on page {{page.current}}.
 Total pages: {{page.pages}}.
 {% if page.current > 1 %}<a href="?q={{search.q}}&amp;page=1&amp;limit={{page.limit}}">first</a>{% endif %}
 {% if page.current > 1 %}<a href="?q={{search.q}}&amp;page={{page.current-1}}&amp;limit={{page.limit}}">prev</a>{% endif %}
