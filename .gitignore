@@ -3,3 +3,4 @@ recent.json
 *.pyc
 /venv/
 /github-token
+/log/
