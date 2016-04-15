@@ -51,8 +51,8 @@ cases = {
     'has_author' : { '$and' : [ {'author' : { '$not' : { '$eq' : None} } }, {'author' : { '$not' : { '$eq' : ''} }}, {'author' : { '$not' : {'$eq' : 'UNKNOWN'}}} ] },
     'no_keywords'    : {'$or' : [ { 'keywords' : "" }, { 'keywords' : None } ] },
     'has_keywords'   : { '$and' : [ { 'keywords' : { '$not' : { '$eq' : "" } } }, { 'keywords' : { '$not' : { '$eq' : None } } } ] },
-    'has_requirements'   : { 'requirements' : { '$exists' : True } },
-    'no_requirements'   : { 'requirements' : { '$exists' : False } },
+    'has_requirements'   : { 'requirements' : { '$exists' : True, '$ne' : [] }},
+    'no_requirements'   : {'$or' : [ { 'requirements' : { '$exists' : False } }, { 'requirements' : { '$eq' : [] } } ] },
     'has_bugtrack_url'   : { '$and' : [{ 'bugtrack_url' : { '$exists' : True } }, { 'bugtrack_url' : { '$regex': '.'} }  ] },
     'no_bugtrack_url'   : { '$or' : [{ 'bugtrack_url' : { '$exists' : False } }, { 'bugtrack_url' : None }, { 'bugtrack_url' : '' } ] },
 }
