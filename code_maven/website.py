@@ -1,6 +1,7 @@
 from __future__ import division
 from flask import Flask, render_template, redirect, abort, request
 import datetime
+import hashlib
 import json
 import math
 import os
@@ -14,6 +15,12 @@ app = Flask(__name__)
 client = pymongo.MongoClient()
 db = client.pydigger
 #root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+def gravatar(email):
+    if email == None:
+        return ''
+    return hashlib.md5(email.strip().lower()).hexdigest()
+
 
 def get_int(field, default):
     value = request.args.get(field, default)
@@ -150,6 +157,7 @@ def pypi(name):
     return render_template('package.html',
         title = name,
         package = package,
+        gravatar = gravatar(package.get('author_email')),
         raw = json.dumps(package, indent=4, default = json_converter)
     )
 
