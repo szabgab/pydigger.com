@@ -6,6 +6,7 @@ import logging
 import re
 import requirements
 import sys
+import time
 import urllib2
 import xml.etree.ElementTree as ET
 from pymongo import MongoClient
@@ -16,6 +17,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--verbose', help='Set verbosity level', action='store_true')
 parser.add_argument('--update', help='update the entries: rss - the ones received via rss; all - all of the packages already in the database')
 parser.add_argument('--name', help='Name of the package to update')
+parser.add_argument('--sleep', help='How many seconds to sleep between packages (Help avoiding the GitHub API limit)', type=float)
 args = parser.parse_args()
 
 # Updated:
@@ -69,6 +71,9 @@ def main():
 
     for name in names:
         get_details(name)
+        if args.sleep:
+            print('sleeping', args.sleep)
+            time.sleep(args.sleep)
 
     log.info("Finished")
 
