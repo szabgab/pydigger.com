@@ -1,3 +1,3 @@
-import code_maven.fetch
+import PyDigger.fetch
 
-code_maven.fetch.main()
+PyDigger.fetch.main()
