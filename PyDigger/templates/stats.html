@@ -8,6 +8,8 @@
             <tr><td><a href="/search/no-license">No license</a></td><td>{{stats.no_license | commafy}}</td><td>{{(100 * stats.no_license / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/no-github">No GitHub</a></td><td>{{stats.no_github | commafy}}</td><td>{{(100 * stats.no_github / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/has-github">Has GitHub</a></td><td>{{stats.has_github | commafy}}</td><td>{{(100 * stats.has_github / stats.total) | round(2)}}%</td></tr>
+            <tr><td><a href="/search/has-travis">Has Travis-CI</a></td><td>{{stats.has_travis | commafy}}</td><td>{{(100 * stats.has_travis / stats.total) | round(2)}}%</td></tr>
+            <tr><td><a href="/search/has-coveralis">Has Coveralis</a></td><td>{{stats.has_coveralis | commafy}}</td><td>{{(100 * stats.has_coveralis / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/no-docs-url">No docs_url</a></td><td>{{stats.no_docs_url | commafy}}</td><td>{{(100 * stats.no_docs_url / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/has-docs-url">Has docs_url</a></td><td>{{stats.has_docs_url | commafy}}</td><td>{{ (100 * stats.has_docs_url / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/no-author">No author</a></td><td>{{stats.no_author | commafy}}</td><td>{{(100 * stats.no_author / stats.total) | round(2)}}%</td></tr>
