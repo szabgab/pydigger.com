@@ -4,14 +4,9 @@ Source code of http://pydigger.com/
 TODO
 ======
 
-* Case sensitivity. It seems the package names in the requirements.txt file
-  don't always match the case that was used by the author of the package which currently
-  creates duplicate entries for some of the packages.
-  The JSON file from PyPI contains the name of the package in the proper case.
-  When we search for packages we should use a case insensitive search { $strcasecmp: [ <expression1>, <expression2> ] }
-  or maybe we should store a lowercase version of each name, in addition to the official spelling.
-  URLs in any case should redirect to the canonical spelling.
-  I think we can trust the RSS feed to list the names in the proper case, but 
+* Download zip file of the distribution, unzip it and check for certain files.
+
+
 
 * bugtrack_url (For packages that have a home_dir pointing at github we can already fetch the issue count
     and we don't need to rely on this field but we can check if the bugtrack_url is related to the
@@ -124,3 +119,11 @@ a key in MongoDB.
 Show statistics about each field we show on the stats page.
 
 Go over all the packages that have dependencies and add all the dependencies to the database.
+
+Case sensitivity. It seems the package names in the requirements.txt file
+don't always match the case that was used by the author of the package which currently
+creates duplicate entries for some of the packages.
+The JSON file from PyPI contains the name of the package in the proper case.
+When we search for packages we should use a case insensitive search { $strcasecmp: [ <expression1>, <expression2> ] }
+or maybe we should store a lowercase version of each name, in addition to the official spelling.
+URLs in any case should redirect to the canonical spelling.

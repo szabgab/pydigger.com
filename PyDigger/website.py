@@ -1,6 +1,6 @@
 from __future__ import division
-from flask import Flask, render_template, redirect, abort, request, url_for
-import datetime
+from flask import Flask, render_template, redirect, abort, request, url_for, Response
+from datetime import datetime
 import hashlib
 import json
 import math
@@ -189,7 +189,26 @@ def pypi(name):
 
 @app.route("/robots.txt")
 def robots():
-    return ''
+    #robots = '''Sitemap: http://pydigger.com/sitemap.xml
+    robots = '''Disallow: /static/*
+'''
+    return Response(robots, mimetype='text/plain')
+
+# @app.route("/sitemap.xml")
+# def sitemap():
+#     xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
+#     xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+#     today = datetime.now().strftime("%Y-%m-%d")
+#
+#     for page in ('', 'stats', 'about'):
+#         xml += '  <url>\n'
+#         xml += '    <loc>http://pydigger.com/{}</loc>\n'.format(page)
+#         xml += '    <lastmod>{}</lastmod>\n'.format(today)
+#         xml += '  </url>\n'
+#
+#     # fetch all
+#     xml += '</urlset>\n'
+#     return Response(xml, mimetype='aplication/xml')
 
 
 @app.route("/about")
@@ -203,5 +222,5 @@ def not_found(error):
     return render_template('404.html'), 404
 
 def json_converter(o):
-    if isinstance(o, datetime.datetime):
+    if isinstance(o, datetime):
         return o.__str__()
