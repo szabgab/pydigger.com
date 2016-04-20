@@ -4,9 +4,13 @@
     <div class="col-md-10">
 
        <div>
-        Our database currently contains information about {{total|commafy}} Python packages from PyPI. Out of these
-        {{has_license | commafy}} packages have license information in their JSON file
+        Our database currently contains information about {{total|commafy}} Python packages from PyPI. Out of these,
+        only {{has_license | commafy}} packages have license information in their JSON file
         (<a href="/search/no-license>">{{no_license | commafy}} have no licenses</a>).
+        Among those that have a <b>license</b> field, there are many where the actual value is either <hl>none</hl>,
+        the empty string, or the string <b>UNKNOWN</b>. There are several packages where the <b>license</b>
+        field include the text of the whole license instead of just a few letters indicating the given license.
+        <p>
         Here you can find all the values appearing in <b>license</b> field and their frequency.
         </div>
 
