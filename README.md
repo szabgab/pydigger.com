@@ -6,6 +6,16 @@ TODO
 
 * Download zip file of the distribution, unzip it and check for certain files.
 
+Write the log to a file or to the database and allow the web user to see the log. (Just make sure it does not include local path-es. Or maybe that does not matter?)
+Specifically Write how many new packages were added (and which ones).
+That way we will be able to see that the system is working properly.
+
+Compute the stats from the command line and save them in the database to make it
+faster to show the stats page. Use the --stats flag for that.
+
+Convert the code to OOP
+
+Check for various files that would indicate what testing framework each one of the projects use.
 
 
 * bugtrack_url (For packages that have a home_dir pointing at github we can already fetch the issue count
