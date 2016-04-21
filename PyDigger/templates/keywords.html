@@ -1,0 +1,18 @@
+{% include "incl/header.html" %}
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+
+       <div>
+           Total number of keywords: {{total | commafy}}.
+           Number of unique keywords: {{unique | commafy}} 
+        </div>
+        <table class="table">
+        {% for k in words %}
+            <tr><td>{{k[1] | commafy}}</td><td><a href="/search?keyword={{k[0]}}">{{k[0]}}</a></td></tr>
+        {% endfor %}
+        </table>
+    </div>
+    <div class="col-md-1"></div>
+</div>
+{% include "incl/footer.html" %}

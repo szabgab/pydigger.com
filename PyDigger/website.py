@@ -80,9 +80,15 @@ def main(word = '', kw = '', name = ''):
     q = request.args.get('q', '')
     license = request.args.get('license', '')
 
+    keyword = request.args.get('keyword', '')
+
     word = word.replace('-', '_')
     if (word in cases):
         query = cases[word]
+        q = ''
+
+    if (keyword):
+        query = { 'split_keywords' : keyword }
         q = ''
 
     if kw:
@@ -136,10 +142,33 @@ def main(word = '', kw = '', name = ''):
         gravatar = gravatar_code,
     )
 
+@app.route("/keywords")
+def keywords():
+    packages = db.packages.find({ 'split_keywords': {'$not' : { '$size' : 0}}}, {'split_keywords': True})
+    # TODO: tshis should be really improved
+    keywords = {}
+    total = 0
+    unique = 0
+    for p in packages:
+        for k in p['split_keywords']:
+            if k not in keywords:
+                keywords[k] = 0
+            keywords[k] += 1
+            total += 1
+    words = [ (k, keywords[k]) for k in keywords.keys() ]
+    words.sort(key=lambda f:f[1])
+    words.reverse()
+
+    return render_template('keywords.html',
+        title = "Keywords of Python packages on PyPI",
+        words = words,
+        total = total,
+        unique = len(words),
+    )
+
 @app.route("/licenses")
 def licenses():
-    #licenses = db.packages.group({ key: {license : 1}, reduce: function (curr, result) { result.count++; }, initial: { count : 0} });
-    licenses = db.packages.group(['license'], {}, { 'count' : 0}, 'function (curr, result) { result.count++; }' );
+    licenses = db.packages.group(['license'], {}, { 'count' : 0}, 'function (curr, result) { result.count++; }' )
     licenses.sort(key=lambda f:f['count'])
     licenses.reverse()
     for l in licenses:
