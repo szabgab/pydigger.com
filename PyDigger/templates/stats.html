@@ -25,6 +25,8 @@
             <tr><td><a href="/search/no-cheesecake-documentation-id">No cheesecake_documentation_id</a></td><td>{{stats.no_cheesecake_documentation_id | commafy}}</td><td>{{ (100 * stats.no_cheesecake_documentation_id / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/no-keywords">No keywords</a></td><td>{{stats.no_keywords | commafy}}</td><td>{{(100 * stats.no_keywords / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/has-keywords">Has keywords</a></td><td>{{stats.has_keywords | commafy}}</td><td>{{ (100 * stats.has_keywords / stats.total) | round(2)}}%</td></tr>
+            <tr><td><a href="/search/has-comma-separated-keywords">Has comma separated keywords</a></td><td>{{stats.has_comma_separated_keywords | commafy}}</td><td>{{ (100 * stats.has_comma_separated_keywords / stats.total) | round(2)}}%</td></tr>
+            <tr><td><a href="/search/has-no-comma-keywords">Has keywords without comma</a></td><td>{{stats.has_no_comma_keywords | commafy}}</td><td>{{ (100 * stats.has_no_comma_keywords / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/has-requirements">Has requirements</a></td><td>{{stats.has_requirements | commafy}}</td><td>{{ (100 * stats.has_requirements / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/no-requirements">No requirements</a></td><td>{{stats.no_requirements | commafy}}</td><td>{{ (100 * stats.no_requirements / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/has_bugtrack_url">Has bugtrack_url</a></td><td>{{stats.has_bugtrack_url | commafy}}</td><td>{{ (100 * stats.has_bugtrack_url / stats.total) | round(2)}}%</td></tr>

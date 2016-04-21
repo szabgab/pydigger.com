@@ -6,6 +6,7 @@ import json
 import math
 import os
 import pymongo
+import re
 import time
 
 max_license_length = 50
@@ -51,6 +52,8 @@ cases = {
     'has_author' : { '$and' : [ {'author' : { '$not' : { '$eq' : None} } }, {'author' : { '$not' : { '$eq' : ''} }}, {'author' : { '$not' : {'$eq' : 'UNKNOWN'}}} ] },
     'no_keywords'    : {'$or' : [ { 'keywords' : "" }, { 'keywords' : None } ] },
     'has_keywords'   : { '$and' : [ { 'keywords' : { '$not' : { '$eq' : "" } } }, { 'keywords' : { '$not' : { '$eq' : None } } } ] },
+    'has_comma_separated_keywords'   : { 'keywords' : { '$regex' : ',' } },
+    'has_no_comma_keywords'   : { '$and' : [ { 'keywords' : { '$not' : { '$eq' : "" } } }, { 'keywords' : { '$not' : { '$eq' : None } } }, {'keywords' : {'$not' : re.compile(',')}} ] },
     'has_requirements'   : { 'requirements' : { '$exists' : True, '$ne' : [] }},
     'no_requirements'   : {'$or' : [ { 'requirements' : { '$exists' : False } }, { 'requirements' : { '$eq' : [] } } ] },
     'has_bugtrack_url'   : { '$and' : [{ 'bugtrack_url' : { '$exists' : True } }, { 'bugtrack_url' : { '$regex': '.'} }  ] },
