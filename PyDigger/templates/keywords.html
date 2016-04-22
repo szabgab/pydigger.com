@@ -4,8 +4,21 @@
     <div class="col-md-10">
 
        <div>
+           There are a total of {{ stats.total | commafy }} packages in our database.
+           {{stats.no_keywords | commafy}} ({{(100 * stats.no_keywords / stats.total) | round(2)}}%) of them have <a href="/search/no-keywords">no keywords</a>.
+           The {{stats.has_keywords | commafy}} ({{ (100 * stats.has_keywords / stats.total) | round(2)}}%) that <a href="/search/has-keywords">have keywords</a>
+           are split as follows:
+           There are {{stats.has_comma_separated_keywords | commafy}} ({{ (100 * stats.has_comma_separated_keywords / stats.has_keywords) | round(2)}}%)
+           packages with <a href="/search/has-comma-separated-keywords">comma separated keywords</a> and there are
+           {{stats.has_no_comma_keywords | commafy}} ({{ (100 * stats.has_no_comma_keywords / stats.has_keywords) | round(2)}}%)
+           packages with <a href="/search/has-no-comma-keywords">keywords without comma</a> which are probably
+           space separated keywords.
+           <p>
+           Some of the keywords appear in more than one case. For example there are packages with "JSON" and other packages with "json" as a keyword. In our statistics
+           we have merged these keywords to be always lowercase.
+           <p>
            Total number of keywords: {{total | commafy}}.
-           Number of unique keywords: {{unique | commafy}} 
+           Number of unique keywords: {{unique | commafy}}
         </div>
         <table class="table">
         {% for k in words %}

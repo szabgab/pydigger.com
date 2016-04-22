@@ -164,6 +164,7 @@ def keywords():
         words = words,
         total = total,
         unique = len(words),
+        stats = get_stats(),
     )
 
 @app.route("/licenses")
@@ -188,6 +189,14 @@ def licenses():
 
 @app.route("/stats")
 def stats():
+    stats = get_stats()
+
+    return render_template('stats.html',
+        title = "PyDigger - Statistics",
+        stats = stats,
+    )
+
+def get_stats():
     stats = {
         'total'        : db.packages.find().count(),
     }
@@ -195,12 +204,7 @@ def stats():
         stats[word] = db.packages.find(cases[word]).count()
 
     #github_not_exists = db.packages.find({ 'github' : { '$not' : { '$exists': True }}}).count()
-
-    return render_template('stats.html',
-        title = "PyDigger - Statistics",
-        stats = stats,
-    )
-
+    return stats
 
 @app.route("/pypi/<name>")
 def pypi(name):
