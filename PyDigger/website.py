@@ -77,8 +77,8 @@ def main(word = '', keyword = '', name = ''):
     limit = get_int('limit', 20)
     page = get_int('page', 1)
     query = {}
-    q = request.args.get('q', '')
-    license = request.args.get('license', '')
+    q = request.args.get('q', '').strip()
+    license = request.args.get('license', '').strip()
 
 #    keyword = request.args.get('keyword', '')
 
