@@ -4,8 +4,6 @@ Source code of http://pydigger.com/
 TODO
 ======
 
-* Split up the keywords that have comma in them
-* Convert all keywords to lower case
 * Search should also look into keywords
 
 
@@ -140,3 +138,8 @@ The JSON file from PyPI contains the name of the package in the proper case.
 When we search for packages we should use a case insensitive search { $strcasecmp: [ <expression1>, <expression2> ] }
 or maybe we should store a lowercase version of each name, in addition to the official spelling.
 URLs in any case should redirect to the canonical spelling.
+
+Keywords:
+Split up the keywords that have comma in them based on the comma.
+If there is no comma in the keywords we assume space to be the separator ad split based on space.
+We convert all keywords to lower case to avoid "JSON" and "json" being different.

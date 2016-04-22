@@ -3,12 +3,7 @@
 <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-10">
-        <form action="/search">
-            <input name="q" value="{{search.q}}"><input type="submit" value="Search"><br>
-        </form>
         {% include "incl/pagination.html" %}
-
-        <div>{% if search.no_license %}Showing packages that have no <b>license</b> field.{% endif %}</div>
 
         <table class="table">
         <tr>

@@ -135,9 +135,7 @@ def main(word = '', kw = '', name = ''):
             'limit' : limit,
         },
         data = data,
-        search = {
-            'q' : q,
-        },
+        search_q = q,
         author = name,
         gravatar = gravatar_code,
     )
