@@ -144,7 +144,7 @@ def main(word = '', kw = '', name = ''):
 
 @app.route("/keywords")
 def keywords():
-    packages = db.packages.find({ 'split_keywords': {'$not' : { '$size' : 0}}}, {'split_keywords': True})
+    packages = db.packages.find({'$and' : [{'split_keywords' : { '$exists' : True }}, { 'split_keywords': {'$not' : { '$size' : 0}}}] }, {'split_keywords': True})
     # TODO: tshis should be really improved
     keywords = {}
     total = 0
