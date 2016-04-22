@@ -1,5 +1,6 @@
 from __future__ import print_function
 from pymongo import MongoClient
+import re
 
 # stop the cron job
 # upload new code
@@ -12,14 +13,19 @@ all = db.packages.find()
 for p in all:
     #print(p)
     print(p['name'])
-    kws = []
+    split_keywords = []
     if 'keywords' in p:
         print("  ", p['keywords'])
         kw = p['keywords']
         if kw != None and kw != "":
-            kws = kw.split(' ')
-    print("  ", kws)
-    db.packages.update({'_id' : p['_id']}, {'$set' : {'split_keywords' : kws}})
+            kw = kw.lower()
+            if re.search(',', kw):
+                split_keywords = kw.split(',')
+            else:
+                split_keywords = kw.split(' ')
+
+    print("  ", split_keywords)
+    db.packages.update({'_id' : p['_id']}, {'$set' : {'split_keywords' : split_keywords}})
     #print(db.packages.find_one({'_id' : p['_id']}))
     #print(d)
 #    break

@@ -4,6 +4,12 @@ Source code of http://pydigger.com/
 TODO
 ======
 
+* Split up the keywords that have comma in them
+* Convert all keywords to lower case
+* Search should also look into keywords
+
+
+
 * Download zip file of the distribution, unzip it and check for certain files.
 
 Write the log to a file or to the database and allow the web user to see the log. (Just make sure it does not include local path-es. Or maybe that does not matter?)
@@ -33,12 +39,9 @@ Check for various files that would indicate what testing framework each one of t
    some other issue.
 
 
-* Search should also look into keywords
-* How many times each keyword is used?
 * Report when the URL provided as GitHub repo is invalid. (e.g. returns 404)
 * Why are there maintainers where the value is "" and others where it is null ?
-* Sats: author_email (look for null, "", "UNKNOWN", in the e_mail look for strings that don't look e-mail. e.g. no @)
-* locate "keywords" fields that are not space separated lists (e.g. pyspotify-connect)
+* Stats: author_email (look for null, "", "UNKNOWN", in the e_mail look for strings that don't look e-mail. e.g. no @)
 * Code to update items
 * Have a data for "updated" when we last updated the entry
 * List the packages that don't have a VCS listed, find out if they have VCS listed elsewhere, or if they are using some other VCS

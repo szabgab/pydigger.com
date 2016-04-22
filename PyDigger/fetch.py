@@ -237,10 +237,16 @@ def get_details(name):
         'license', 'summary', 'version']:
             if f in info:
                 entry[f] = info[f]
-        if 'keywords' in info and info['keywords']:
-            entry['split_keywords'] = info['keywords'].split(' ')
-        else:
-            entry['split_keywords'] = []
+
+        entry['split_keywords'] = []
+        if 'keywords' in info:
+            keywords = info['keywords']
+            if keywords != None and keywords != "":
+                keywords = keywords.lower()
+                if re.search(',', keywords):
+                    entry['split_keywords'] = keywords.split(',')
+                else:
+                    entry['split_keywords'] = keywords.split(' ')
 
     version = entry['version']
     if 'urls' in package_data:
