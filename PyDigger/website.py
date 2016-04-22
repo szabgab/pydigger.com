@@ -68,11 +68,11 @@ cases = {
 
 
 @app.route("/author/<name>")
-@app.route("/keyword/<kw>")
+@app.route("/keyword/<keyword>")
 @app.route("/search/<word>")
 @app.route("/search")
 @app.route("/")
-def main(word = '', kw = '', name = ''):
+def main(word = '', keyword = '', name = ''):
     total_indexed = db.packages.find().count()
     limit = get_int('limit', 20)
     page = get_int('page', 1)
@@ -80,25 +80,24 @@ def main(word = '', kw = '', name = ''):
     q = request.args.get('q', '')
     license = request.args.get('license', '')
 
-    keyword = request.args.get('keyword', '')
+#    keyword = request.args.get('keyword', '')
 
     word = word.replace('-', '_')
     if (word in cases):
         query = cases[word]
         q = ''
 
-    if (keyword):
+    if keyword:
         query = { 'split_keywords' : keyword }
         q = ''
 
-    if kw:
-        import re
-        regx = re.compile(kw)
-        query = { 'keywords' : regx}
+    if name != '':
+        query = {'author': name}
         q = ''
 
+
     if q != '':
-        query['name'] = { '$regex' : q, '$options' : 'i'}
+        query = {'$or' : [ {'name' : { '$regex' : q, '$options' : 'i'}}, { 'split_keywords' : q.lower() } ] }
 
     if license != '':
         if license == '__long__':
@@ -107,12 +106,9 @@ def main(word = '', kw = '', name = ''):
         elif license == '__empty__':
             query = {'$and' : [ {'license': {'$exists': True} }, { 'license' : '' }] }
         else:
-            query['license'] = license
+            query = {'license' : license}
         if license == 'None':
-            query['license'] = None
-    if name != '':
-        query = {'author': name}
-
+            query = {'license' : None}
 
     data = db.packages.find(query).sort([("upload_time", pymongo.DESCENDING)]).skip(limit * (page-1)).limit(limit)
 #    total_found = db.packages.find(query).count()

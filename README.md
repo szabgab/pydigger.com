@@ -4,10 +4,6 @@ Source code of http://pydigger.com/
 TODO
 ======
 
-* Search should also look into keywords
-
-
-
 * Download zip file of the distribution, unzip it and check for certain files.
 
 Write the log to a file or to the database and allow the web user to see the log. (Just make sure it does not include local path-es. Or maybe that does not matter?)
@@ -143,3 +139,7 @@ Keywords:
 Split up the keywords that have comma in them based on the comma.
 If there is no comma in the keywords we assume space to be the separator ad split based on space.
 We convert all keywords to lower case to avoid "JSON" and "json" being different.
+
+Search
+  For matching name
+  Exactly same keywords

@@ -20,7 +20,7 @@
             <tr><td>license</td><td><a href="/search?license={{package.license}}">{{package.license}}</a></td></tr>
             <tr><td>keywords</td><td>
                 {% for kw in package.split_keywords %}
-                    <a href="/search?keyword={{kw}}" style="text-decoration: none" class="btn btn-default">{{kw}}</a>
+                    <a href="/keyword/{{kw}}" style="text-decoration: none" class="btn btn-default">{{kw}}</a>
                 {% endfor %}</td></tr>
             <tr><td>VCS</td>
                 {% if package.github %}

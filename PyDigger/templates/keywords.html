@@ -22,7 +22,7 @@
         </div>
         <table class="table">
         {% for k in words %}
-            <tr><td>{{k[1] | commafy}}</td><td><a href="/search?keyword={{k[0]}}">{{k[0]}}</a></td></tr>
+            <tr><td>{{k[1] | commafy}}</td><td><a href="/keyword/{{k[0]}}">{{k[0]}}</a></td></tr>
         {% endfor %}
         </table>
     </div>
