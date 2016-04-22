@@ -15,9 +15,10 @@ for p in all:
     print(p['name'])
     split_keywords = []
     if 'keywords' in p:
-        print("  ", p['keywords'])
         kw = p['keywords']
         if kw != None and kw != "":
+            kw = kw.encode('utf-8')
+            print("  ", kw)
             kw = kw.lower()
             if re.search(',', kw):
                 split_keywords = kw.split(',')

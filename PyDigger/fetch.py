@@ -242,6 +242,7 @@ def get_details(name):
         if 'keywords' in info:
             keywords = info['keywords']
             if keywords != None and keywords != "":
+                keywords = keywords.encode('utf-8')
                 keywords = keywords.lower()
                 if re.search(',', keywords):
                     entry['split_keywords'] = keywords.split(',')
