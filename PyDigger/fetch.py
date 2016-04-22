@@ -252,12 +252,17 @@ def get_details(name):
     version = entry['version']
     if 'urls' in package_data:
         entry['urls'] = package_data['urls']
-    if 'releases' in package_data and version in package_data['releases']:
-        if len(package_data['releases'][version]) == 0:
-            log.error("There are no releases in package {}  {}".format(name, package_data))
-        else:
-            upload_time = package_data['releases'][version][0]['upload_time']
-            entry['upload_time'] = datetime.strptime(upload_time, "%Y-%m-%dT%H:%M:%S")
+    if not 'releases' in package_data:
+        log.error("There are no releases in package {} --- {}".format(name, package_data))
+    elif not version in package_data['releases']:
+        log.error("Version {} is not in the releases of package {} --- {}".format(version, name, package_data))
+    elif len(package_data['releases'][version]) == 0:
+        log.error("Version {} has 0 elements in the releases of package {} --- {}".format(version, name, package_data))
+    elif not 'upload_time' in package_data['releases'][version][0]:
+        log.error("upload_time is missing from version {} has 0 length in the releases of package {} --- {}".format(version, name, package_data))
+    else:
+        upload_time = package_data['releases'][version][0]['upload_time']
+        entry['upload_time'] = datetime.strptime(upload_time, "%Y-%m-%dT%H:%M:%S")
 
 
     if 'home_page' in entry and entry['home_page'] != None:
