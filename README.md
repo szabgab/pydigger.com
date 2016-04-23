@@ -1,10 +1,11 @@
 Source code of http://pydigger.com/
 
+See the about page on the web site http://pydigger.com/about for some explanation.
+
 
 TODO
 ======
 
-* Check what are all the errors of packages without releases?
 * Download zip file of the distribution, unzip it and check for certain files.
   Save the unzipped file and show the raw version of these file
 * Parse the requirements after downloading the file
@@ -13,6 +14,7 @@ TODO
   (They won't have an 'upload_time' either.) Maybe the entry should be included, using the PubDate as upload_time and then there should be a separate run that will
   go over all the entries with recent upload_time and if they don't have a 'download_url' then check them again.
 
+* Check what are all the errors of packages without releases?
 
 When we process the RSS feed at first we only have name/version/description/pubDate, but even after fetching the JSON file we still might have only partial data.
 This might be due to PyPI not processing the rest of the information yet (I think), or that the information included with this newer version of the
@@ -20,8 +22,6 @@ package lack some of the information. If we save either of these in the database
 less data than we had earlier. If we want to notify people about lack of information we should be more patient and not rush this as some of that data might
 arrive later, but then I wonder if we should already include this in the database. After all, someone might look at the database and see the package is missing some
 vital information (e.g. download_url or the upload_time).
-
-
 
 
 For when we will want to include all the packages from PyPI:

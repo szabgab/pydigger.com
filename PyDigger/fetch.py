@@ -42,7 +42,7 @@ def main():
     #args.update == 'new' or args.update == 'old'):
     if args.update:
         if args.update == 'rss':
-            names = get_from_rss()
+            packages = get_from_rss()
         elif args.update == 'deps':
             seen = {}
             packages_with_requirements = db.packages.find({'requirements' : { '$exists' : True }}, { 'name' : True, 'requirements' : True})
@@ -173,24 +173,31 @@ def get_from_rss():
         if lcname in names:
             continue
 
+        entry = {
+            'name'        : name,
+            'lcname'      : lcname,
+            'summary'     : item.find('description').text,
+            'upload_time' : datetime.strptime(item.find('pubDate').text, "%d %b %Y %H:%M:%S %Z"),
+        }
+
         # If this package is already in the database we only need to process if
         # the one coming in the RSS feed has a different (hopefully newer) version
-        # number
+        # number but if it is not in the database we can already save it
+        # This still does not solve the problem of packages that have no upload_time
+        # in their JSON file. Especially if we try to add such a package by name
+        # and not from the RSS feed
         doc = db.packages.find_one({'lcname' : lcname})
+        if not doc:
+            save_entry(entry)
+
         if doc and version == doc.get('version', ''):
             log.debug("Skipping '{}'. It is already in the database with this version".format(title))
             continue
 
         log.debug("Processing {}".format(title))
-        # entry = {
-        #     'link'    : item.find('link').text,
-        #     'summary' : item.find('description').text,
-        #     'pubDate' : datetime.strptime(item.find('pubDate').text, "%d %b %Y %H:%M:%S %Z"),
-        #save_entry(entry)
         names.append(lcname)
-        # packages.append((lcname, ))
-
-    return names
+        packages.append(entry)
+    return packages
 
 def get_rss():
     latest_url = 'https://pypi.python.org/pypi?%3Aaction=rss'
