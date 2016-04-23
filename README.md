@@ -4,7 +4,30 @@ Source code of http://pydigger.com/
 TODO
 ======
 
+* Check what are all the errors of packages without releases?
 * Download zip file of the distribution, unzip it and check for certain files.
+  Save the unzipped file and show the raw version of these file
+* Parse the requirements after downloading the file
+* Show the reverse dependencies, that is modules that depend on the current module
+* It seems sometimes we have entries in the RSS feed that don't have the 'releases' field updated yet. I wonder if I should include them in the database anyway?
+  (They won't have an 'upload_time' either.) Maybe the entry should be included, using the PubDate as upload_time and then there should be a separate run that will
+  go over all the entries with recent upload_time and if they don't have a 'download_url' then check them again.
+
+
+When we process the RSS feed at first we only have name/version/description/pubDate, but even after fetching the JSON file we still might have only partial data.
+This might be due to PyPI not processing the rest of the information yet (I think), or that the information included with this newer version of the
+package lack some of the information. If we save either of these in the database we'll have packages with partial information, that might have
+less data than we had earlier. If we want to notify people about lack of information we should be more patient and not rush this as some of that data might
+arrive later, but then I wonder if we should already include this in the database. After all, someone might look at the database and see the package is missing some
+vital information (e.g. download_url or the upload_time).
+
+
+
+
+For when we will want to include all the packages from PyPI:
+https://pypi.python.org/simple/  returns an HTML file listing all the packages on PyPI with entries looking like this:
+<a href='2gis'>2gis</a><br/>
+See also https://wiki.python.org/moin/PyPISimple
 
 Write the log to a file or to the database and allow the web user to see the log. (Just make sure it does not include local path-es. Or maybe that does not matter?)
 Specifically Write how many new packages were added (and which ones).
@@ -51,6 +74,55 @@ Check for various files that would indicate what testing framework each one of t
 * Statistics about types of "home_page" fields
 * "home_page": "http://pmbio.github.io/limix/",
 * "home_page": "http://ianmiell.github.io/shutit/",
+
+
+
+Some of the packages have not a lot of details:
+
+https://pypi.python.org/pypi/best_friends/json
+
+This was the whole JSON: on
+
+{
+    "info": {
+        "maintainer": null,
+        "docs_url": null,
+        "requires_python": null,
+        "maintainer_email": null,
+        "cheesecake_code_kwalitee_id": null,
+        "keywords": null,
+        "package_url": "http://pypi.python.org/pypi/best_friends",
+        "author": "Joaish_fan",
+        "author_email": "xianyunjianke@icloud.com",
+        "download_url": "UNKNOWN",
+        "platform": "UNKNOWN",
+        "version": "1.0.0",
+        "cheesecake_documentation_id": null,
+        "_pypi_hidden": false,
+        "description": "UNKNOWN",
+        "release_url": "http://pypi.python.org/pypi/best_friends/1.0.0",
+        "downloads": {
+            "last_month": 0,
+            "last_week": 0,
+            "last_day": 0
+        },
+        "_pypi_ordering": 0,
+        "classifiers": [],
+        "bugtrack_url": null,
+        "name": "best_friends",
+        "license": "UNKNOWN",
+        "summary": "A simple app for testing",
+        "home_page": "http://www.xianyunjianke.com",
+        "cheesecake_installability_id": null
+    },
+    "releases": {
+        "1.0.0": []
+    },
+    "urls": []
+}
+
+
+
 
 
 Description

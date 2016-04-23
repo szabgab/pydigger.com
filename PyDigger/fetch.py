@@ -42,7 +42,7 @@ def main():
     #args.update == 'new' or args.update == 'old'):
     if args.update:
         if args.update == 'rss':
-            names = get_rss()
+            names = get_from_rss()
         elif args.update == 'deps':
             seen = {}
             packages_with_requirements = db.packages.find({'requirements' : { '$exists' : True }}, { 'name' : True, 'requirements' : True})
@@ -69,6 +69,7 @@ def main():
     if packages:
         names = [ p['name'] for p in packages ]
 
+    log.info("Start updating packages")
     for name in names:
         get_details(name)
         if args.sleep:
@@ -76,13 +77,6 @@ def main():
             time.sleep(args.sleep)
 
     log.info("Finished")
-
-
-
-
-def warn(msg):
-    #sys.stderr.write("ERROR: %s\n" % msg)
-    log.exception(msg)
 
 #my_entries = []
 def save_entry(e):
@@ -106,19 +100,6 @@ def save_entry(e):
     db.packages.remove({'name' : e['name'].lower()})
     db.packages.insert(e)
 
-def get_latest():
-    latest_url = 'https://pypi.python.org/pypi?%3Aaction=rss'
-    #print('Fetching ' + latest_url)
-    try:
-        f = urllib2.urlopen(latest_url)
-        rss_data = f.read()
-        f.close()
-    except urllib2.HTTPError as e:
-        warn('Error while fetching ' + latest_url)
-        warn(e)
-        exit
-    #print(rss_data)
-    return rss_data
 
 def check_github(entry):
     log.debug("check_github user='{}', project='{}".format(entry['github_user'], entry['github_project']))
@@ -171,34 +152,59 @@ def check_github(entry):
         # test_requirements.txt
     return()
 
-def get_rss():
-    log.debug("get_rss")
-    rss_data = get_latest()
+# going over the RSS feed most recent first
+def get_from_rss():
+    log.debug("get_from_rss")
+    rss_data = get_rss()
     packages = []
+    names = []
 
     root = ET.fromstring(rss_data)
 
     for item in root.iter('item'):
-        #entry = {}
         title = item.find('title').text.split(' ')
         log.debug("Seen {}".format(title))
         name = title[0]
         version = title[1]
 
-        # TODO case insensitive search!
-        doc = db.packages.find_one({'name' : name})
-        if doc:
-            continue
-        # add package
-        log.debug("Processing {}".format(title))
-        # we might want to later verify from the package_data that these are the real name and version
-        #entry['link'] = item.find('link').text
-        #entry['summary'] = item.find('description').text
-        #entry['pubDate'] = datetime.strptime(item.find('pubDate').text, "%d %b %Y %H:%M:%S %Z")
-        #save_entry(entry)
-        packages.append(name)
+        lcname = name.lower()
 
-    return packages
+        # The same package can appear in the RSS feed twice. We only need to process it once.
+        if lcname in names:
+            continue
+
+        # If this package is already in the database we only need to process if
+        # the one coming in the RSS feed has a different (hopefully newer) version
+        # number
+        doc = db.packages.find_one({'lcname' : lcname})
+        if doc and version == doc.get('version', ''):
+            log.debug("Skipping '{}'. It is already in the database with this version".format(title))
+            continue
+
+        log.debug("Processing {}".format(title))
+        # entry = {
+        #     'link'    : item.find('link').text,
+        #     'summary' : item.find('description').text,
+        #     'pubDate' : datetime.strptime(item.find('pubDate').text, "%d %b %Y %H:%M:%S %Z"),
+        #save_entry(entry)
+        names.append(lcname)
+        # packages.append((lcname, ))
+
+    return names
+
+def get_rss():
+    latest_url = 'https://pypi.python.org/pypi?%3Aaction=rss'
+    log.debug('get_rss from ' + latest_url)
+    try:
+        f = urllib2.urlopen(latest_url)
+        rss_data = f.read()
+        f.close()
+        #raise Exception("hello")
+    except (urllib2.HTTPError, urllib2.URLError):
+        log.exception('Error while fetching ' + latest_url)
+        raise Exception('Could not fetch RSS feed ' + latest_url)
+    #log.debug(rss_data)
+    return rss_data
 
 
 def get_details(name):
@@ -212,8 +218,8 @@ def get_details(name):
         json_data = f.read()
         f.close()
         #print(json_data)
-    except urllib2.HTTPError as e:
-        log.error("Could not fetch details of PyPi package from '{}'".format(url), e)
+    except (urllib2.HTTPError, urllib2.URLError):
+        log.exeception("Could not fetch details of PyPI package from '{}'".format(url))
         return
     package_data = json.loads(json_data)
     #log.debug('package_data: {}'.format(package_data))
@@ -254,9 +260,8 @@ def get_details(name):
     if 'home_page' in entry and entry['home_page'] != None:
         try:
             match = re.search(r'^https?://github.com/([^/]+)/([^/]+)/?$', entry['home_page'])
-        except Exception as e:
-            warn('Error while tying to match home_page:' + entry['home_page'])
-            warn(e)
+        except Exception:
+            log.exception('Error while tying to match home_page:' + entry['home_page'])
 
         if match:
             entry['github'] = True
