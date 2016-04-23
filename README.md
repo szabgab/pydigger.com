@@ -8,6 +8,14 @@ TODO
 
 * Download zip file of the distribution, unzip it and check for certain files.
   Save the unzipped file and show the raw version of these file
+  We have a central directory for all the unzipped source trees. We check the database, if the package has a
+  "source_dir" we skip it.
+  If it has no "source_dir" we check for "download_url" If there is a download_url we figure out what
+  the "source_dir" should be. The same as the filename at the end of the download_url sans the extension.
+  If that directory actually exists, we can check which other distribution had it. That should never happen, right?
+  Download the zip file to a temp directory try to unzip the file and move it to the central directory.
+
+
 * Parse the requirements after downloading the file
 * Show the reverse dependencies, that is modules that depend on the current module
 * It seems sometimes we have entries in the RSS feed that don't have the 'releases' field updated yet. I wonder if I should include them in the database anyway?
@@ -15,6 +23,15 @@ TODO
   go over all the entries with recent upload_time and if they don't have a 'download_url' then check them again.
 
 * Check what are all the errors of packages without releases?
+
+
+* We might need to change the processing and update strategy so we won't rewrite the whole document every time, but we will update it.
+This will allow us to process "just the JSON from PyPI" or "just the data from GitHub" or "just the data from the zip file".
+
+
+* Shall we also store data about earlier versions of the packages?
+
+
 
 When we process the RSS feed at first we only have name/version/description/pubDate, but even after fetching the JSON file we still might have only partial data.
 This might be due to PyPI not processing the rest of the information yet (I think), or that the information included with this newer version of the
