@@ -28,13 +28,13 @@ args = parser.parse_args()
 
 class PyPackage(object):
     def __init__(self, name):
-        self.name = name
+        self.lcname = name.lower()
         self.entry = {}
 
     def get_details(self):
-        log.debug("get_details of " + self.name)
+        log.debug("get_details of " + self.lcname)
 
-        url = 'http://pypi.python.org/pypi/' + self.name + '/json'
+        url = 'http://pypi.python.org/pypi/' + self.lcname + '/json'
         log.debug("Fetching url {}".format(url))
         try:
             f = urllib2.urlopen(url)
