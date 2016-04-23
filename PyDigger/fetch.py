@@ -249,21 +249,7 @@ def get_details(name):
                 else:
                     entry['split_keywords'] = keywords.split(' ')
 
-    version = entry['version']
-    if 'urls' in package_data:
-        entry['urls'] = package_data['urls']
-    if not 'releases' in package_data:
-        log.error("There are no releases in package {} --- {}".format(name, package_data))
-    elif not version in package_data['releases']:
-        log.error("Version {} is not in the releases of package {} --- {}".format(version, name, package_data))
-    elif len(package_data['releases'][version]) == 0:
-        log.error("Version {} has 0 elements in the releases of package {} --- {}".format(version, name, package_data))
-    elif not 'upload_time' in package_data['releases'][version][0]:
-        log.error("upload_time is missing from version {} has 0 length in the releases of package {} --- {}".format(version, name, package_data))
-    else:
-        upload_time = package_data['releases'][version][0]['upload_time']
-        entry['upload_time'] = datetime.strptime(upload_time, "%Y-%m-%dT%H:%M:%S")
-
+    process_release(name, entry, package_data)
 
     if 'home_page' in entry and entry['home_page'] != None:
         try:
@@ -282,3 +268,38 @@ def get_details(name):
             #entry['error'] = 'Home page URL is not GitHub'
     entry['lcname'] = entry['name'].lower()
     save_entry(entry)
+
+
+def process_release(name, entry, package_data):
+    version = entry['version']
+    if 'urls' in package_data:
+        entry['urls'] = package_data['urls']
+    if not 'releases' in package_data:
+        log.error("There are no releases in package {} --- {}".format(name, package_data))
+    elif not version in package_data['releases']:
+        log.error("Version {} is not in the releases of package {} --- {}".format(version, name, package_data))
+    elif len(package_data['releases'][version]) == 0:
+        log.error("Version {} has no elements in the releases of package {} --- {}".format(version, name, package_data))
+    else:
+        # find the one that has python_version: "source",
+        # actually we find the first one that has python_version: source
+        # maybe there are more?
+        source = package_data['releases'][version][0]
+        for version_pack in package_data['releases'][version]:
+            if 'python_version' in version_pack and version_pack['python_version'] == 'source':
+                if 'url' in version_pack:
+                    entry['download_url'] = version_pack['url']
+                else:
+                    log.error("Version {} has no download_url in the releases of package {} --- {}".format(version, name, package_data))
+                source = version_pack
+                break
+
+            #url: https://pypi.python.org/packages/ce/c7/6431a8ba802bf93d611bfd53c05abcc078165b8aad3603d66c02a847af7d/codacy-coverage-1.2.10.tar.gz
+            #filename: codacy-coverage-1.2.10.tar.gz
+            #url: https://pypi.python.org/packages/84/85/5ce28077fbf455ddf0ba2506cdfdc2e5caa0822b8a4a2747da41b683fad8/purepng-0.1.3.zip
+
+        if not 'upload_time' in source:
+            log.error("upload_time is missing from version {} in the releases of package {} --- {}".format(version, name, package_data))
+        else:
+            upload_time = source['upload_time']
+            entry['upload_time'] = datetime.strptime(upload_time, "%Y-%m-%dT%H:%M:%S")
