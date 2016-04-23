@@ -9,12 +9,14 @@ import pymongo
 import re
 import time
 
+import PyDigger.common
+
 max_license_length = 50
 
 app = Flask(__name__)
 
-client = pymongo.MongoClient()
-db = client.pydigger
+db = PyDigger.common.get_db()
+
 #root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 @app.template_filter()

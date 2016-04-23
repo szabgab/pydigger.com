@@ -10,9 +10,11 @@ import time
 import urllib
 import urllib2
 import xml.etree.ElementTree as ET
-from pymongo import MongoClient
 from datetime import datetime
 from github3 import login
+
+import PyDigger.common
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--verbose', help='Set verbosity level', action='store_true')
@@ -319,7 +321,6 @@ with open('github-token') as fh:
     token = fh.readline().strip()
 github = login(token=token)
 
-client = MongoClient()
-db = client.pydigger
+db = PyDigger.common.get_db()
 logging.basicConfig(level= logging.DEBUG if args.verbose else logging.WARNING)
 log=logging.getLogger('fetch')
