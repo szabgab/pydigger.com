@@ -79,6 +79,8 @@ def main(word = '', keyword = '', name = ''):
     query = {}
     q = request.args.get('q', '').strip()
     license = request.args.get('license', '').strip()
+    if limit == 0:
+        limit = 20
 
 #    keyword = request.args.get('keyword', '')
 
@@ -110,7 +112,8 @@ def main(word = '', keyword = '', name = ''):
         if license == 'None':
             query = {'license' : None}
 
-    data = db.packages.find(query).sort([("upload_time", pymongo.DESCENDING)]).skip(limit * (page-1)).limit(limit)
+    skip = max(limit * (page-1), 0)
+    data = db.packages.find(query).sort([("upload_time", pymongo.DESCENDING)]).skip(skip).limit(limit)
 #    total_found = db.packages.find(query).count()
     total_found = data.count(with_limit_and_skip=False)
     count = data.count(with_limit_and_skip=True)
