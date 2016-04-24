@@ -92,7 +92,7 @@ class PyPackage(object):
                 self.entry['github'] = True
                 self.entry['github_user'] = match.group(1)
                 self.entry['github_project'] = match.group(2)
-                check_github(entry)
+                self.check_github()
             else:
                 self.entry['github'] = False
                 #entry['error'] = 'Home page URL is not GitHub'
@@ -105,11 +105,11 @@ class PyPackage(object):
         if 'urls' in package_data:
             self.entry['urls'] = package_data['urls']
         if not 'releases' in package_data:
-            log.error("There are no releases in package {} --- {}".format(self.name, package_data))
+            log.error("There are no releases in package {} --- {}".format(self.lcname, package_data))
         elif not version in package_data['releases']:
-            log.error("Version {} is not in the releases of package {} --- {}".format(version, self.name, package_data))
+            log.error("Version {} is not in the releases of package {} --- {}".format(version, self.lcname, package_data))
         elif len(package_data['releases'][version]) == 0:
-            log.error("Version {} has no elements in the releases of package {} --- {}".format(version, self.name, package_data))
+            log.error("Version {} has no elements in the releases of package {} --- {}".format(version, self.lcname, package_data))
         else:
             # find the one that has python_version: "source",
             # actually we find the first one that has python_version: source
@@ -120,7 +120,7 @@ class PyPackage(object):
                     if 'url' in version_pack:
                         self.entry['download_url'] = version_pack['url']
                     else:
-                        log.error("Version {} has no download_url in the releases of package {} --- {}".format(version, self.name, package_data))
+                        log.error("Version {} has no download_url in the releases of package {} --- {}".format(version, self.lcname, package_data))
                     source = version_pack
                     break
 
@@ -211,15 +211,15 @@ def main():
     log.info("Staring")
     src_dir = PyDigger.common.get_source_dir()
     log.info("Source directory: {}".format(src_dir))
-    exit()
     names = []
     packages = None
 
-    #args.update == 'new' or args.update == 'old'):
     if args.update:
+        log.debug("update: {}".format(args.update))
         if args.update == 'rss':
             packages = get_from_rss()
         elif args.update == 'deps':
+            log.info("Listing dependencies")
             seen = {}
             packages_with_requirements = db.packages.find({'requirements' : { '$exists' : True }}, { 'name' : True, 'requirements' : True})
             for p in packages_with_requirements:
@@ -230,7 +230,7 @@ def main():
                         continue
                     if name not in seen:
                         seen[name] = True
-                        p = db.packages.find_one({'name': name})
+                        p = db.packages.find_one({'lcname': name.lower()})
                         if not p:
                             names.append(name)
         elif args.update == 'all':
@@ -250,7 +250,7 @@ def main():
         package = PyPackage(name)
         package.get_details()
         if args.sleep:
-            print('sleeping', args.sleep)
+            #log.debug('sleeping {}'.format(args.sleep))
             time.sleep(args.sleep)
 
     log.info("Finished")
