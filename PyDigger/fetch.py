@@ -164,6 +164,8 @@ class PyPackage(object):
                     self.entry['travis_ci'] = True
             if e.path == '.coveragerc':
                     self.entry['coveralis'] = True
+            if e.path == 'tox.ini':
+                    self.entry['tox'] = True
             for field in requirements_fields:
                 if e.path == field + '.txt':
                     self.entry[field] = []
