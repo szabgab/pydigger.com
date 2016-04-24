@@ -17,8 +17,6 @@ app = Flask(__name__)
 
 db = PyDigger.common.get_db()
 
-#root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 @app.template_filter()
 def commafy(value):
         return '{:,}'.format(value)

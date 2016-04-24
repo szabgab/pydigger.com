@@ -209,6 +209,9 @@ class PyPackage(object):
 
 def main():
     log.info("Staring")
+    src_dir = PyDigger.common.get_source_dir()
+    log.info("Source directory: {}".format(src_dir))
+    exit()
     names = []
     packages = None
 

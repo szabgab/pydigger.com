@@ -1,3 +1,3 @@
-import PyDigger
+import PyDigger.fetch
 
 PyDigger.fetch.main()
