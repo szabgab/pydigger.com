@@ -165,7 +165,9 @@ class PyPackage(object):
             if e.path == '.coveragerc':
                     self.entry['coveralis'] = True
             if e.path == 'tox.ini':
-                    self.entry['tox'] = True
+                    self.entry['tox'] = True # http://codespeak.net/tox/
+            if e.path == 'appveyor.yml':
+                    self.entry['appveyor'] = True # https://www.appveyor.com/
             for field in requirements_fields:
                 if e.path == field + '.txt':
                     self.entry[field] = []
