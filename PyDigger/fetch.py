@@ -44,7 +44,7 @@ class PyPackage(object):
             f.close()
             #print(json_data)
         except (urllib2.HTTPError, urllib2.URLError):
-            log.exeception("Could not fetch details of PyPI package from '{}'".format(url))
+            log.exception("Could not fetch details of PyPI package from '{}'".format(url))
             return
         package_data = json.loads(json_data)
         #log.debug('package_data: {}'.format(package_data))
