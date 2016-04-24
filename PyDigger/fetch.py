@@ -170,6 +170,10 @@ class PyPackage(object):
                     self.entry['appveyor'] = True # https://www.appveyor.com/
             if e.path == '.editconfig':
                     self.entry['editconfig'] = True # http://editorconfig.org/
+            if e.path == 'dockbot.json':
+                    self.entry['dockbot'] = True # https://github.com/CauldronDevelopmentLLC/dockbot
+            if e.path == '.landscape.yml':
+                    self.entry['landscape'] = True # https://help.ubuntu.com/lts/clouddocs/en/Installing-Landscape.html
             for field in requirements_fields:
                 if e.path == field + '.txt':
                     self.entry[field] = []
