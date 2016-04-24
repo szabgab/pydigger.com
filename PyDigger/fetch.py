@@ -23,6 +23,8 @@ parser.add_argument('--name', help='Name of the package to update')
 parser.add_argument('--sleep', help='How many seconds to sleep between packages (Help avoiding the GitHub API limit)', type=float)
 args = parser.parse_args()
 
+requirements_fields = ['requirements', 'test_requirements']
+
 # Updated:
 # 1) All the entries that don't have last_update field
 # 2) All the entries that were updated more than N days ago
@@ -162,8 +164,9 @@ class PyPackage(object):
                     self.entry['travis_ci'] = True
             if e.path == '.coveragerc':
                     self.entry['coveralis'] = True
-            if e.path == 'requirements.txt':
-                    self.entry['requirements'] = []
+            for field in requirements_fields:
+                if e.path == field + '.txt':
+                    self.entry[field] = []
                     try:
                         fh = urllib2.urlopen(e.url)
                         as_json = fh.read()
@@ -176,13 +179,12 @@ class PyPackage(object):
                         match = re.search(r'^\s*-r', content)
                         if not match:
                             for req in requirements.parse(content):
-                                log.debug("requirements: {} {} {}".format(req.name, req.specs, req.extras))
+                                log.debug("{}: {} {} {}".format(field, req.name, req.specs, req.extras))
                                 # we cannot use the req.name as a key in the dictionary as some of the package names have a . in them
                                 # and MongoDB does not allow . in fieldnames.
-                                self.entry['requirements'].append({ 'name' : req.name, 'specs' : req.specs })
-                    except Exception as e:
-                        log.error("Exception when handling the requirements.txt:", e)
-            # test_requirements.txt
+                                self.entry[field].append({ 'name' : req.name, 'specs' : req.specs })
+                    except Exception:
+                        log.exception("Exception when handling the {}.txt".format(field))
         return()
 
     def save(self):
@@ -221,18 +223,19 @@ def main():
         elif args.update == 'deps':
             log.info("Listing dependencies")
             seen = {}
-            packages_with_requirements = db.packages.find({'requirements' : { '$exists' : True }}, { 'name' : True, 'requirements' : True})
-            for p in packages_with_requirements:
-                for r in p['requirements']:
-                    name = r['name']
-                    if not name:
-                        log.error("Requirement {} found without a name in package {}".format(r, p))
-                        continue
-                    if name not in seen:
-                        seen[name] = True
-                        p = db.packages.find_one({'lcname': name.lower()})
-                        if not p:
-                            names.append(name)
+            for field in requirements_fields:
+                packages_with_requirements = db.packages.find({field : { '$exists' : True }}, { 'name' : True, field : True})
+                for p in packages_with_requirements:
+                    for r in p[field]:
+                        name = r['name']
+                        if not name:
+                            log.info("{} {} found without a name in package {}".format(field, r, p))
+                            continue
+                        if name not in seen:
+                            seen[name] = True
+                            p = db.packages.find_one({'lcname': name.lower()})
+                            if not p:
+                                names.append(name)
         elif args.update == 'all':
             packages = db.packages.find({}, {'name': True})
         elif re.search(r'^\d+$', args.update):
