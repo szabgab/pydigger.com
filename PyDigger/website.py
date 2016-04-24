@@ -74,13 +74,14 @@ cases = {
     'no_requirements'   : {'$or' : [ { 'requirements' : { '$exists' : False } }, { 'requirements' : { '$eq' : [] } } ] },
     'has_bugtrack_url'   : { '$and' : [{ 'bugtrack_url' : { '$exists' : True } }, { 'bugtrack_url' : { '$regex': '.'} }  ] },
     'no_bugtrack_url'   : { '$or' : [{ 'bugtrack_url' : { '$exists' : False } }, { 'bugtrack_url' : None }, { 'bugtrack_url' : '' } ] },
-    'has_travis' : { 'travis_ci' : True},
-    'no_travis' : {'$or' : [ { 'travis_ci' : { '$exists' : False } }, { 'travis_ci' : False}] },
-    'has_github_no_travis' : { '$and' : [ { 'github' : True }, {'$or' : [ { 'travis_ci' : { '$exists' : False } }, { 'travis_ci' : False}] }] },
-    'has_coveralis' : { 'coveralis' : True},
+    'has_github_no_travis_ci' : { '$and' : [ { 'github' : True }, {'$or' : [ { 'travis_ci' : { '$exists' : False } }, { 'travis_ci' : False}] }] },
     'has_github_no_coveralis' : { '$and' : [ { 'github' : True }, {'$or' : [ { 'coveralis' : { '$exists' : False } }, { 'coveralis' : False}] }] },
-    'no_coveralis' : {'$or' : [ { 'coveralis' : { '$exists' : False } }, { 'coveralis' : False}] },
 }
+
+for field in ['tox', 'appveyor', 'editconfig', 'dockbot', 'landscape', 'coveralis', 'travis_ci']:
+    cases['has_' + field] = { field : True}
+    cases['no_' + field] = {'$or' : [ { field : { '$exists' : False } }, { field : False}] }
+
 
 
 @app.route("/author/<name>")
