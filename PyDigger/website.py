@@ -3,6 +3,7 @@ from flask import Flask, render_template, redirect, abort, request, url_for, Res
 from datetime import datetime
 import hashlib
 import json
+import logging
 import math
 import os
 import pymongo
@@ -11,11 +12,23 @@ import time
 
 import PyDigger.common
 
+
+
 max_license_length = 50
 
 app = Flask(__name__)
 
 db = PyDigger.common.get_db()
+
+# set up logging
+root = PyDigger.common.get_root()
+logdir = root + '/log'
+if not os.path.exists(logdir):
+    os.mkdir(logdir)
+handler = logging.FileHandler(logdir + '/app.log')
+handler.setLevel(logging.ERROR)
+app.logger.addHandler(handler)
+
 
 @app.template_filter()
 def commafy(value):
