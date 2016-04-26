@@ -11,6 +11,7 @@
             {% if 'error' in e %}
             <tr><td>Error:</td><td class="danger">{{ e['error'] }}</td></tr>
             {% endif %}
+            <tr><td></td><td><a href="{{package.download_url}}">download</a> </td>
             <tr><td>home_page</td><td><a href="{{package.home_page}}">{{package.home_page}}</a> </td>
             <tr><td>Summary</td><td>{{package.summary}}</td></tr>
             <tr><td>upload_time</td><td>{{package.upload_time}}</td></tr>
