@@ -98,6 +98,7 @@ class PyPackage(object):
                 log.exception('Error while tying to get data from GitHub:' + self.entry['home_page'])
 
         self.entry['lcname'] = self.entry['name'].lower()
+        self.download_pkg()
         self.save()
 
 
@@ -144,7 +145,7 @@ class PyPackage(object):
             self.entry['error'] = "Could not fetch GitHub repository"
             return
 
-        log.debug("default_branch: ", repo.default_branch)
+        log.debug("default_branch: {}".format(repo.default_branch))
 
         # get the last commit of the default branch
         branch = repo.branch(repo.default_branch)
@@ -154,7 +155,7 @@ class PyPackage(object):
             return
 
         last_sha = branch.commit.sha
-        log.debug("last_sha: ", last_sha)
+        log.debug("last_sha: {}".format(last_sha))
         t = repo.tree(last_sha)
         self.entry['travis_ci'] = False
         self.entry['coveralis'] = False
@@ -194,7 +195,41 @@ class PyPackage(object):
                                 self.entry[field].append({ 'name' : req.name, 'specs' : req.specs })
                     except Exception:
                         log.exception("Exception when handling the {}.txt".format(field))
-        return()
+        log.debug("github finished")
+        return
+
+    # In the database have a mark that says if the package was already
+    #    downloaded (or not)
+    #    extracted (or not)
+    def download_pkg(self):
+        """Use ``urllib2.urlretrieve`` to download package to file in sandbox
+           dir.
+        """
+        if not 'download_url' in self.entry:
+            log.info("No download_url")
+            return()
+
+        log.info('doanload_url {}'.format(self.entry['download_url']))
+
+        #if 'local_dir' in self.entry:
+        #    log.info('')
+        match = re.search(r'/([^/]+)(\.tar\.gz)$', self.entry['download_url'])
+        if match:
+            # local_dir is the name of the file that should be the name of the local directory
+            local_dir = match.group(1)
+            extension = match.group(2)
+        else:
+            log.warn("Unsupported download file format: {}".format(self.entry['download_url']))
+            return()
+
+        log.info("local_dir '{}' extension '{}'".format(local_dir, extension))
+
+        src_dir = PyDigger.common.get_source_dir()
+        log.info("Source directory: {}".format(src_dir))
+
+        # TODO use the requests module to download the zipfile
+
+        # self.downloaded_from_url = True
 
     def save(self):
         entry = self.entry
@@ -335,7 +370,7 @@ def get_rss():
 db = PyDigger.common.get_db()
 logging.basicConfig(
     level  = logging.DEBUG if args.verbose else logging.WARNING,
-    format ='%(asctime)s %(levelname)8s %(message)s'
+    format ='%(asctime)s %(name)s %(levelname)8s %(message)s'
 )
 log=logging.getLogger('fetch')
 
