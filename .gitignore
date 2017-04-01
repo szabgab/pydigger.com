@@ -2,6 +2,9 @@ recent.json
 /html
 *.pyc
 /venv/
+/venv2_*
+/venv3_*
+/.idea/
 /host/
 /github-token
 /log/
