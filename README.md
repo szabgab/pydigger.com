@@ -2,6 +2,30 @@ Source code of http://pydigger.com/
 
 See the about page on the web site http://pydigger.com/about for some explanation.
 
+SETUP
+========
+
+```
+virtualenv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+Install and launch MongoDB server.
+
+Sign up to GitHub, get a "Personal access token" from https://github.com/settings/tokens and save it
+in the github-token file in the root of the project.
+
+
+Run on the server in crontab:
+
+```
+source venv/bin/activate
+python fetch_recent.py --update rss
+python fetch_recent.py --update deps
+```
+
+
 
 TODO
 ======
@@ -108,6 +132,7 @@ https://pypi.python.org/pypi/best_friends/json
 
 This was the whole JSON: on
 
+```
 {
     "info": {
         "maintainer": null,
@@ -145,9 +170,7 @@ This was the whole JSON: on
     },
     "urls": []
 }
-
-
-
+```
 
 
 Description
