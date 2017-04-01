@@ -26,6 +26,12 @@ python fetch_recent.py --update deps
 ```
 
 
+Cleaning up database (during development)
+```
+$ mongodb
+> use pydigger
+> db.dropDatabase()
+```
 
 TODO
 ======
