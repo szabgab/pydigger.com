@@ -5,9 +5,7 @@ import json
 import logging
 import re
 import requirements
-import sys
 import time
-import urllib
 import urllib2
 import xml.etree.ElementTree as ET
 from datetime import datetime
