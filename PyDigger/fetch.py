@@ -221,7 +221,7 @@ class PyPackage(object):
         db.packages.insert(entry)
 
 def main():
-    log.info("Staring")
+    log.info("Staring main")
     src_dir = PyDigger.common.get_source_dir()
     log.info("Source directory: {}".format(src_dir))
     names = []
@@ -334,10 +334,20 @@ def get_rss():
     return rss_data
 
 
+db = PyDigger.common.get_db()
+logging.basicConfig(
+    level  = logging.DEBUG if args.verbose else logging.WARNING,
+    format ='%(asctime)s %(levelname)8s %(message)s'
+)
+log=logging.getLogger('fetch')
+
+log.info("Starting")
 with open('github-token') as fh:
     token = fh.readline().strip()
+
+if not token:
+    log.error("No github token found")
+    exit()
 github = login(token=token)
 
-db = PyDigger.common.get_db()
-logging.basicConfig(level= logging.DEBUG if args.verbose else logging.WARNING)
-log=logging.getLogger('fetch')
+
