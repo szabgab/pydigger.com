@@ -6,6 +6,14 @@ See the about page on the web site http://pydigger.com/about for some explanatio
 TODO
 ======
 
+* Delete entries that were remove from pypi.
+* Be able to delete entries manually (and maybe even to set them to "not-to-index"
+  if they might violate copyright or in some way might be illegal.
+  mongo
+  > use pydigger
+  > db.packages.find({ "name" : "NAME-OF-THE-PAKAGE" })
+  > db.packages.remove({ "name" : "NAME-OF-THE-PAKAGE" })
+
 * Download zip file of the distribution, unzip it and check for certain files.
   Save the unzipped file and show the raw version of these file
   We have a central directory for all the unzipped source trees. We check the database, if the package has a
