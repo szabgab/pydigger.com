@@ -75,10 +75,10 @@ cases = {
     'has_bugtrack_url'   : { '$and' : [{ 'bugtrack_url' : { '$exists' : True } }, { 'bugtrack_url' : { '$regex': '.'} }  ] },
     'no_bugtrack_url'   : { '$or' : [{ 'bugtrack_url' : { '$exists' : False } }, { 'bugtrack_url' : None }, { 'bugtrack_url' : '' } ] },
     'has_github_no_travis_ci' : { '$and' : [ { 'github' : True }, {'$or' : [ { 'travis_ci' : { '$exists' : False } }, { 'travis_ci' : False}] }] },
-    'has_github_no_coveralis' : { '$and' : [ { 'github' : True }, {'$or' : [ { 'coveralis' : { '$exists' : False } }, { 'coveralis' : False}] }] },
+    'has_github_no_coveralls' : { '$and' : [ { 'github' : True }, {'$or' : [ { 'coveralls' : { '$exists' : False } }, { 'coveralls' : False}] }] },
 }
 
-for field in ['tox', 'appveyor', 'editconfig', 'dockbot', 'landscape', 'coveralis', 'travis_ci']:
+for field in ['tox', 'appveyor', 'editconfig', 'dockbot', 'landscape', 'coveralls', 'travis_ci']:
     cases['has_' + field] = { field : True}
     cases['no_' + field] = {'$or' : [ { field : { '$exists' : False } }, { field : False}] }
 
