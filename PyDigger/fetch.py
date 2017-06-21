@@ -158,12 +158,12 @@ class PyPackage(object):
         log.debug("last_sha: {}".format(last_sha))
         t = repo.tree(last_sha)
         self.entry['travis_ci'] = False
-        self.entry['coveralis'] = False
+        self.entry['coveralls'] = False
         for e in t.tree:
             if e.path == '.travis.yml':
                     self.entry['travis_ci'] = True
             if e.path == '.coveragerc':
-                    self.entry['coveralis'] = True
+                    self.entry['coveralls'] = True
             if e.path == 'tox.ini':
                     self.entry['tox'] = True # http://codespeak.net/tox/
             if e.path == 'appveyor.yml':

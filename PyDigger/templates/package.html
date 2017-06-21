@@ -57,11 +57,11 @@
                    No Travis.
                 {% endif %}
             </td></tr>
-            <tr><td>Coveralis test coverage</td><td>
-                {% if package.coveralis %}
+            <tr><td>coveralls test coverage</td><td>
+                {% if package.coveralls %}
                     <a href="https://coveralls.io/r/{{package.github_user}}/{{package.github_project}}?branch=master"><img src="https://img.shields.io/coveralls/{{package.github_user}}/{{package.github_project}}/master.svg?style=flat"></a>
                 {% else %}
-                   No Coveralis.
+                   No coveralls.
                 {% endif %}
             </td></tr>
         </table>
