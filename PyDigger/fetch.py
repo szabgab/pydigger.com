@@ -166,6 +166,8 @@ class PyPackage(object):
                     self.entry['coveralls'] = True
             if e.path == 'tox.ini':
                     self.entry['tox'] = True # http://codespeak.net/tox/
+            if e.path == 'circle.yml':
+                    self.entry['circle'] = True # https://circleci.com/
             if e.path == 'appveyor.yml':
                     self.entry['appveyor'] = True # https://www.appveyor.com/
             if e.path == '.appveyor.yml':
