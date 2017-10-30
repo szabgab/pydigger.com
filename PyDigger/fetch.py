@@ -168,6 +168,8 @@ class PyPackage(object):
                     self.entry['tox'] = True # http://codespeak.net/tox/
             if e.path == 'appveyor.yml':
                     self.entry['appveyor'] = True # https://www.appveyor.com/
+            if e.path == '.appveyor.yml':
+                    self.entry['appveyor'] = True # https://www.appveyor.com/
             if e.path == '.editconfig':
                     self.entry['editconfig'] = True # http://editorconfig.org/
             if e.path == 'dockbot.json':
