@@ -1,0 +1,4 @@
+--ignore-directory=venv/
+--ignore-directory=venv2_mac/
+--ignore-directory=venv3_mac/
+--ignore-directory=venv2_vagrant/
