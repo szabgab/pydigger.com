@@ -83,17 +83,18 @@ class PyPackage(object):
         self.process_release(package_data)
 
         if 'home_page' in self.entry and self.entry['home_page'] != None:
-            try:
-                match = re.search(r'^https?://github.com/([^/]+)/([^/]+)/?$', self.entry['home_page'])
-                if match:
-                    self.entry['github'] = True
-                    self.entry['github_user'] = match.group(1)
-                    self.entry['github_project'] = match.group(2)
-                    self.check_github()
-                else:
-                    self.entry['github'] = False
-                    #entry['error'] = 'Home page URL is not GitHub'
+            match = re.search(r'^https?://github.com/([^/]+)/([^/]+)/?$', self.entry['home_page'])
+            if match:
+                self.entry['github'] = True
+                self.entry['github_user'] = match.group(1)
+                self.entry['github_project'] = match.group(2)
+            else:
+                self.entry['github'] = False
+                #entry['error'] = 'Home page URL is not GitHub'
 
+        if self.entry['github']:
+            try:
+                self.check_github()
             except Exception:
                 log.exception('Error while tying to get data from GitHub:' + self.entry['home_page'])
 
