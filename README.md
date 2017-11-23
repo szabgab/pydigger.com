@@ -269,3 +269,15 @@ We convert all keywords to lower case to avoid "JSON" and "json" being different
 Search
   For matching name
   Exactly same keywords
+
+
+Manual research
+
+```
+$ mongodb
+> use pydigger
+> db.packages.find().count();
+> db.packages.find({ "home_page" : /gitlab/ }).count();
+> db.packages.find({ $and: [{ "home_page" : { $not : /gitlab|github|bitbucket/ } } , { "home_page" : { $not : /^(UNKNOWN|)$/ } }] }, { home_page: 1 });
+```
+
