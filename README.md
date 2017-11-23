@@ -116,7 +116,6 @@ Check for various files that would indicate what testing framework each one of t
 * Stats: author_email (look for null, "", "UNKNOWN", in the e_mail look for strings that don't look e-mail. e.g. no @)
 * Code to update items
 * Have a data for "updated" when we last updated the entry
-* List the packages that don't have a VCS listed, find out if they have VCS listed elsewhere, or if they are using some other VCS
 * Create a list of "known licenses" and the names people use to refer to each license, link to the real license.
 * Show licenses that don't fit in any of the "known licenses"
 * On the package specific page link to explanations on how to correct where a field is missing.
