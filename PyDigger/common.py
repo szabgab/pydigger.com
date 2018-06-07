@@ -3,7 +3,10 @@ import os
 import yaml
 
 def get_db():
-    with open("config.yml") as fh:
+    root = os.path.dirname(os.path.dirname(__file__))
+    config_file = os.path.join(root, "config.yml")
+    print(config_file)
+    with open(config_file) as fh:
         config = yaml.load(fh)
     if config["username"] and config["password"]:
         connector = "mongodb://{}:{}@{}".format(config["username"], config["password"], config["server"])
