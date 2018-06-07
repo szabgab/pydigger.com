@@ -5,7 +5,10 @@ import yaml
 def get_db():
     with open("config.yml") as fh:
         config = yaml.load(fh)
-    connector = "mongodb://{}:{}@{}".format(config["username"], config["password"], config["server"])
+    if config["username"] and config["password"]:
+        connector = "mongodb://{}:{}@{}".format(config["username"], config["password"], config["server"])
+    else:
+        connector = "mongodb://{}".format(config["server"])
     client = MongoClient(connector)
     return(client.pydigger)
 
