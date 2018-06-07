@@ -1,8 +1,11 @@
 from pymongo import MongoClient
 import os
+import yaml
 
 def get_db():
-    client = MongoClient()
+    config = yaml.load("config.yml")
+    connector = "mongodb://{}:{}@{}".format(config["username"], config["password"], config["server"])
+    client = MongoClient(connector)
     return(client.pydigger)
 
 def remove_db():
