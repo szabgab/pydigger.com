@@ -33,3 +33,9 @@ def remove_package(name):
     res = db.packages.remove({'name' : name})
     print(res)
 
+def show_package(name):
+    db = get_db()
+    doc = db.packages.find_one({'name' : name})
+    if not doc:
+        exit("Could not find package {}".format(name))
+    print(doc)
