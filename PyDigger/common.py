@@ -3,7 +3,8 @@ import os
 import yaml
 
 def get_db():
-    config = yaml.load("config.yml")
+    with open("config.yml") as fh:
+        config = yaml.load(fh)
     connector = "mongodb://{}:{}@{}".format(config["username"], config["password"], config["server"])
     client = MongoClient(connector)
     return(client.pydigger)
