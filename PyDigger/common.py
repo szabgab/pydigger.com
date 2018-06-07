@@ -14,3 +14,12 @@ def get_root():
 
 def get_source_dir():
     return get_root() + "/src"
+
+def remove_package(name):
+    db = get_db()
+    doc = db.packages.find_one({'name' : name})
+    if not doc:
+        exit("Could not find package {}".format(name))
+    res = db.packages.remove({'name' : name})
+    print(res)
+
