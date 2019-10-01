@@ -6,7 +6,7 @@ import logging
 import re
 import requirements
 import time
-import urllib2
+import urllib.request
 import xml.etree.ElementTree as ET
 from datetime import datetime
 from github3 import login
@@ -36,14 +36,14 @@ class PyPackage(object):
     def get_details(self):
         log.debug("get_details of " + self.lcname)
 
-        url = 'http://pypi.python.org/pypi/' + self.lcname + '/json'
+        url = 'https://pypi.python.org/pypi/' + self.lcname + '/json'
         log.debug("Fetching url {}".format(url))
         try:
-            f = urllib2.urlopen(url)
+            f = urllib.request.urlopen(url)
             json_data = f.read()
             f.close()
             #print(json_data)
-        except (urllib2.HTTPError, urllib2.URLError):
+        except (urllib.request.HTTPError, urllib.request.URLError):
             log.exception("Could not fetch details of PyPI package from '{}'".format(url))
             return
         package_data = json.loads(json_data)
@@ -183,7 +183,7 @@ class PyPackage(object):
                 if e.path == field + '.txt':
                     self.entry[field] = []
                     try:
-                        fh = urllib2.urlopen(e.url)
+                        fh = urllib.request.urlopen(e.url)
                         as_json = fh.read()
                         file_info = json.loads(as_json)
                         content = base64.b64decode(file_info['content'])
@@ -207,7 +207,7 @@ class PyPackage(object):
     #    downloaded (or not)
     #    extracted (or not)
     def download_pkg(self):
-        """Use ``urllib2.urlretrieve`` to download package to file in sandbox
+        """Use ``urllib.request.urlretrieve`` to download package to file in sandbox
            dir.
         """
         if not 'download_url' in self.entry:
@@ -324,18 +324,33 @@ def get_from_rss():
         log.debug("Seen {}".format(title))
         name = title[0]
         version = title[1]
-
         lcname = name.lower()
+
+
 
         # The same package can appear in the RSS feed twice. We only need to process it once.
         if lcname in names:
+            continue
+        description = item.find('description').text
+        pubDate = item.find('pubDate').text
+        log.debug("Description {}".format(description))
+        log.debug("pubDate {}".format(pubDate))
+
+        # Tue, 01 Oct 2019 18:14:51 GMT
+        try:
+            if pubDate[-4:] == ' GMT':
+                upload_time = datetime.strptime(pubDate[0:-4], "%a, %d %b %Y %H:%M:%S")
+            else:
+                upload_time = datetime.strptime(pubDate, "%d %b %Y %H:%M:%S %Z")
+        except Exception as ex:
+            log.error("Could not parse time '{}'\n{}".format(pubDate, ex))
             continue
 
         entry = {
             'name'        : name,
             'lcname'      : lcname,
-            'summary'     : item.find('description').text,
-            'upload_time' : datetime.strptime(item.find('pubDate').text, "%d %b %Y %H:%M:%S %Z"),
+            'summary'     : description,
+            'upload_time' : upload_time,
         }
 
         # If this package is already in the database we only need to process if
@@ -361,11 +376,11 @@ def get_rss():
     latest_url = 'https://pypi.python.org/pypi?%3Aaction=rss'
     log.debug('get_rss from ' + latest_url)
     try:
-        f = urllib2.urlopen(latest_url)
+        f = urllib.request.urlopen(latest_url)
         rss_data = f.read()
         f.close()
         #raise Exception("hello")
-    except (urllib2.HTTPError, urllib2.URLError):
+    except (urllib.reques.HTTPError, urllib.request.URLError):
         log.exception('Error while fetching ' + latest_url)
         raise Exception('Could not fetch RSS feed ' + latest_url)
     #log.debug(rss_data)
