@@ -73,7 +73,12 @@ class PyPackage(object):
             if 'keywords' in info:
                 keywords = info['keywords']
                 if keywords != None and keywords != "":
-                    keywords = keywords.encode('utf-8')
+                    log.debug("keywords '{}'".format(keywords))
+                    log.debug("keywords type '{}'".format(keywords.__class__.__name__))
+                    #if keywords.__class__.__name__ == 'bytes':
+                    #    keywords = keywords.decode('utf8')
+
+                    #keywords = keywords.encode('utf-8')
                     keywords = keywords.lower()
                     if re.search(',', keywords):
                         self.entry['split_keywords'] = keywords.split(',')
@@ -187,6 +192,10 @@ class PyPackage(object):
                         as_json = fh.read()
                         file_info = json.loads(as_json)
                         content = base64.b64decode(file_info['content'])
+                        log.debug("content type: {}".format(content.__class__.__name__))
+                        log.debug("content: {}".format(content))
+                        if content.__class__.__name__ == 'bytes':
+                            content = content.decode('utf8')
 
                         # https://github.com/ingresso-group/pyticketswitch/blob/master/requirements.txt
                         # contains -r requirements/common.txt  which means we need to fetch that file as well
