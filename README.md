@@ -17,6 +17,15 @@ Install and launch MongoDB server.
 Sign up to GitHub, get a "Personal access token" from https://github.com/settings/tokens and save it
 in the github-token file in the root of the project.
 
+```
+repo
+   x public_repo
+
+user
+   x read:user
+   x user:email
+```
+
 
 Create config.yml that looks like this:
 
