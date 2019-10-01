@@ -5,6 +5,7 @@ See the about page on the web site http://pydigger.com/about for some explanatio
 SETUP
 ========
 
+
 ```
 virtualenv venv
 source venv/bin/activate
@@ -15,6 +16,16 @@ Install and launch MongoDB server.
 
 Sign up to GitHub, get a "Personal access token" from https://github.com/settings/tokens and save it
 in the github-token file in the root of the project.
+
+
+Create config.yml that looks like this:
+
+```
+---
+username: ""
+password: ""
+server: "localhost:27017"
+```
 
 
 Run on the server in crontab:
@@ -28,7 +39,8 @@ python fetch_recent.py --update deps
 
 Cleaning up database (during development)
 ```
-$ mongodb
+$ mongodb      (On Ubuntu 2019.04 the client is called mongo)
+> show dbs
 > use pydigger
 > db.dropDatabase()
 ```
