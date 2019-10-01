@@ -4,4 +4,5 @@ before_script:
     pip install pymongo
 python:
   - "3.6"
+  - "3.7"
 script: python -m pytest PyDigger/test.py
