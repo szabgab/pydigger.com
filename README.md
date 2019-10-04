@@ -63,6 +63,10 @@ FLASK_APP=PyDigger.website FLASK_DEBUG=1 flask run  --port 5000 --host 127.0.0.1
 TODO
 ======
 
+* Merge the github-token in the configuration file
+* Allow Travis to use a GitHub token for tests
+
+* Remove print statements where we don't need them, use logging module instead
 * Delete entries that were remove from pypi.
 * Be able to delete entries manually (and maybe even to set them to "not-to-index"
   if they might violate copyright or in some way might be illegal.
