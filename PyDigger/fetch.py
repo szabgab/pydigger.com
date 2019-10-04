@@ -14,7 +14,7 @@ import PyDigger.common
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--verbose', help='Set logging level to DEBUG', action='store_true')
+parser.add_argument('--log', help='Set logging level to DEBUG or INFO (or keep it at the default WARNING)')
 parser.add_argument('--update', help='update the entries: rss - the ones received via rss; all - all of the packages already in the database')
 parser.add_argument('--name', help='Name of the package to update')
 parser.add_argument('--sleep', help='How many seconds to sleep between packages (Help avoiding the GitHub API limit)', type=float)
@@ -232,7 +232,7 @@ class PyPackage(object):
             local_dir = match.group(1)
             extension = match.group(2)
         else:
-            log.warn("Unsupported download file format: {}".format(self.entry['download_url']))
+            log.warn("Unsupported download file format: '{}'".format(self.entry['download_url']))
             return()
 
         log.info("local_dir '{}' extension '{}'".format(local_dir, extension))
@@ -396,10 +396,17 @@ def get_rss():
 
 
 db = PyDigger.common.get_db()
+
+if args.log and args.log.upper() in ['DEBUG', 'INFO']:
+    log_level = getattr(logging, args.log.upper())
+else:
+    log_level = logging.WARNING
+
 logging.basicConfig(
-    level  = logging.DEBUG if args.verbose else logging.WARNING,
-    format ='%(asctime)s %(name)s %(levelname)8s %(message)s'
+    format = '%(asctime)s %(name)s %(levelname)8s %(message)s',
+    level = log_level,
 )
+
 log=logging.getLogger('fetch')
 
 log.info("Starting")
