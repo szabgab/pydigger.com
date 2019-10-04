@@ -54,6 +54,12 @@ $ mongodb      (On Ubuntu 2019.04 the client is called mongo)
 > db.dropDatabase()
 ```
 
+Run the web server in development mode.
+
+```
+FLASK_APP=PyDigger.website FLASK_DEBUG=1 flask run  --port 5000 --host 127.0.0.1
+```
+
 TODO
 ======
 
