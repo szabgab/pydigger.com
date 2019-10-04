@@ -20,4 +20,17 @@ class TestWeb(object):
         #print(rv.data)
         assert b'<title>PyDigger - unearthing stuff about Python</title>' in rv.data
 
+    def test_stats(self):
+        rv = self.app.get('/stats')
+        assert rv.status == '200 OK'
+        #print(rv.data)
+        assert b'<title>PyDigger - Statistics</title>' in rv.data
+
+
+    def test_about(self):
+        rv = self.app.get('/about')
+        assert rv.status == '200 OK'
+        #print(rv.data)
+        assert b'<title>About PyDigger</title>' in rv.data
+
 
