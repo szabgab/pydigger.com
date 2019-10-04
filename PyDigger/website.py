@@ -1,4 +1,3 @@
-from __future__ import division
 from flask import Flask, render_template, redirect, abort, request, url_for, Response
 from datetime import datetime
 import hashlib
