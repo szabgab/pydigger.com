@@ -4,6 +4,7 @@
     <div class="col-md-10">
         <table class="table">
             <tr><td>Number of packages indexed</td><td>{{ stats.total | commafy }}</td><td></td></tr>
+            {% if stats.total %}
             <tr><td><a href="/search/no-summary">No summary</a></td><td>{{stats.no_summary | commafy}}</td><td>{{(100 * stats.no_summary / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/no-license">No license</a></td><td>{{stats.no_license | commafy}}</td><td>{{(100 * stats.no_license / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/no-github">No GitHub</a></td><td>{{stats.no_github | commafy}}</td><td>{{(100 * stats.no_github / stats.total) | round(2)}}%</td></tr>
@@ -44,7 +45,7 @@
             <tr><td><a href="/search/has-dockbot">Has dockbot</a></td><td>{{stats.has_dockbot | commafy}}</td><td>{{(100 * stats.has_dockbot / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/no-landscape">No landscape</a></td><td>{{stats.no_landscape | commafy}}</td><td>{{(100 * stats.no_landscape / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/has-landscape">Has landscape</a></td><td>{{stats.has_landscape | commafy}}</td><td>{{(100 * stats.has_landscape / stats.total) | round(2)}}%</td></tr>
-
+            {% endif %}
         </table>
         <h2>Details</h2>
         <ul>
