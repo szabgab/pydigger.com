@@ -111,7 +111,7 @@ vital information (e.g. download_url or the upload_time).
 
 
 For when we will want to include all the packages from PyPI:
-https://pypi.python.org/simple/  returns an HTML file listing all the packages on PyPI with entries looking like this:
+https://pypi.org/simple/  returns an HTML file listing all the packages on PyPI with entries looking like this:
 <a href='2gis'>2gis</a><br/>
 See also https://wiki.python.org/moin/PyPISimple
 
@@ -164,7 +164,7 @@ Check for various files that would indicate what testing framework each one of t
 
 Some of the packages have not a lot of details:
 
-https://pypi.python.org/pypi/best_friends/json
+https://pypi.org/pypi/best_friends/json
 
 This was the whole JSON: on
 
@@ -177,7 +177,7 @@ This was the whole JSON: on
         "maintainer_email": null,
         "cheesecake_code_kwalitee_id": null,
         "keywords": null,
-        "package_url": "http://pypi.python.org/pypi/best_friends",
+        "package_url": "http://pypi.org/pypi/best_friends",
         "author": "Joaish_fan",
         "author_email": "xianyunjianke@icloud.com",
         "download_url": "UNKNOWN",
@@ -186,7 +186,7 @@ This was the whole JSON: on
         "cheesecake_documentation_id": null,
         "_pypi_hidden": false,
         "description": "UNKNOWN",
-        "release_url": "http://pypi.python.org/pypi/best_friends/1.0.0",
+        "release_url": "http://pypi.org/pypi/best_friends/1.0.0",
         "downloads": {
             "last_month": 0,
             "last_week": 0,
@@ -211,13 +211,13 @@ This was the whole JSON: on
 
 Description
 ==============
-Fetching RSS feed of recently uploaded packages https://pypi.python.org/pypi?%3Aaction=rss
+Fetching RSS feed of recently uploaded packages https://pypi.org/rss/updates.xml
 
 Each entry in the RSS feed looks like this
 
   <item>
     <title>package-name 0.2.1</title>
-    <link>http://pypi.python.org/pypi/package-name/0.2.1</link>
+    <link>http://pypi.org/pypi/package-name/0.2.1</link>
     <description>short description</description>
     <pubDate>25 Mar 2016 12:36:38 GMT</pubDate>
   </item>
@@ -233,7 +233,7 @@ the specific version of the given package. Like this:
         "maintainer_email": null,
         "cheesecake_code_kwalitee_id": null,
         "keywords": null,
-        "package_url": "http://pypi.python.org/pypi/PACKAGE",
+        "package_url": "http://pypi.org/pypi/PACKAGE",
         "author": "Person Name",
         "author_email": "user@domain",
         "download_url": "UNKNOWN",
@@ -242,7 +242,7 @@ the specific version of the given package. Like this:
         "cheesecake_documentation_id": null,
         "_pypi_hidden": false,
         "description": "Some long description....",
-        "release_url": "http://pypi.python.org/pypi/PACKAGE/1.0.0",
+        "release_url": "http://pypi.org/pypi/PACKAGE/1.0.0",
         "downloads": {
             "last_month": 0,
             "last_week": 0,
