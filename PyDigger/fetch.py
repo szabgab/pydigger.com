@@ -35,7 +35,7 @@ class PyPackage(object):
     def get_details(self):
         log.debug("get_details of " + self.lcname)
 
-        url = 'https://pypi.python.org/pypi/' + self.lcname + '/json'
+        url = 'https://pypi.org/pypi/' + self.lcname + '/json'
         log.debug("Fetching url {}".format(url))
         try:
             f = urllib.request.urlopen(url)
@@ -131,9 +131,9 @@ class PyPackage(object):
                     source = version_pack
                     break
 
-                #url: https://pypi.python.org/packages/ce/c7/6431a8ba802bf93d611bfd53c05abcc078165b8aad3603d66c02a847af7d/codacy-coverage-1.2.10.tar.gz
+                #url: https://pypi.org/packages/ce/c7/6431a8ba802bf93d611bfd53c05abcc078165b8aad3603d66c02a847af7d/codacy-coverage-1.2.10.tar.gz
                 #filename: codacy-coverage-1.2.10.tar.gz
-                #url: https://pypi.python.org/packages/84/85/5ce28077fbf455ddf0ba2506cdfdc2e5caa0822b8a4a2747da41b683fad8/purepng-0.1.3.zip
+                #url: https://pypi.org/packages/84/85/5ce28077fbf455ddf0ba2506cdfdc2e5caa0822b8a4a2747da41b683fad8/purepng-0.1.3.zip
 
             if not 'upload_time' in source:
                 log.error("upload_time is missing from version {} in the releases of package {} --- {}".format(version, self.name, package_data))
@@ -381,7 +381,7 @@ def get_from_rss():
     return packages
 
 def get_rss():
-    latest_url = 'https://pypi.python.org/pypi?%3Aaction=rss'
+    latest_url = 'https://pypi.org/rss/updates.xml'
     log.debug('get_rss from ' + latest_url)
     try:
         f = urllib.request.urlopen(latest_url)

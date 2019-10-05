@@ -51,7 +51,7 @@ class TestWeb(object):
         assert b'<title>About PyDigger</title>' in rv.data
 
     def test_data(self):
-        os.system("{} fetch_recent.py --update rss".format(sys.executable))
+        os.system("{} fetch_recent.py --update rss --log debug".format(sys.executable))
 
 
 
