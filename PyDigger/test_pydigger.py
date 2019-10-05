@@ -20,7 +20,7 @@ class TestDigger(object):
 # TODO: Make sure the web site can be loaded even if the configuration files are missing and there is no access to the
 # databse. Report this properly in the log or on the generate web page.
 
-class TestWeb(object):
+class TestEmptyWeb(object):
     def setup_class(self):
         create_config_files()
         import PyDigger.website
@@ -50,9 +50,44 @@ class TestWeb(object):
         #print(rv.data)
         assert b'<title>About PyDigger</title>' in rv.data
 
-    def test_data(self):
-        os.system("{} fetch_recent.py --update rss --log debug".format(sys.executable))
+    def test_404(self):
+        rv = self.app.get('/other-page')
+        assert rv.status == '404 NOT FOUND'
+        #print('----------------------------')
+        #print(rv.data)
+        #print('----------------------------')
+        assert b'<title></title>' in rv.data  # TODO make 404 page look nicer and have some title and body
 
+    def test_api_recent(self):
+        rv = self.app.get('/api/0/recent')
+        assert rv.status == '200 OK'
+        assert rv.headers['Content-Type'] == 'application/json'
+        assert rv.json == []
+
+class TestWeb(object):
+    def setup_class(self):
+        create_config_files()
+        import PyDigger.website
+        self.app = PyDigger.website.app.test_client()
+        os.system("{} fetch_recent.py --update rss --log debug --limit 5".format(sys.executable))
+
+    # TODO: look at the log and if there are any warnings, errors, or exceptions report them or even fail the tests
+    recent = []
+    def test_recent(self):
+        rv = self.app.get('/api/0/recent')
+        assert rv.status == '200 OK'
+        assert rv.headers['Content-Type'] == 'application/json'
+        recent = rv.json
+        #print(recent)
+        assert len(recent) == 20
+        for entry in recent:
+            assert 'name' in entry
+            assert 'home_page' in entry
+
+        rv = self.app.get('/pypi/{}'.format(recent[0]['name']))
+        assert rv.status == '200 OK'
+        assert rv.headers['Content-Type'] == 'text/html; charset=utf-8'
+        assert '<h1>{}</h1>'.format(recent[0]['name']) in rv.data.decode('utf8')
 
 
 def create_config_files():

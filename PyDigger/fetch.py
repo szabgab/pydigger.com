@@ -18,6 +18,7 @@ parser.add_argument('--log', help='Set logging level to DEBUG or INFO (or keep i
 parser.add_argument('--update', help='update the entries: rss - the ones received via rss; all - all of the packages already in the database')
 parser.add_argument('--name', help='Name of the package to update')
 parser.add_argument('--sleep', help='How many seconds to sleep between packages (Help avoiding the GitHub API limit)', type=float)
+parser.add_argument('--limit', help='Max number of packages to investigate. (Used during testing and development)', type=int)
 args = parser.parse_args()
 
 requirements_fields = ['requirements', 'test_requirements']
@@ -305,8 +306,13 @@ def main():
     if packages:
         names = [ p['name'] for p in packages ]
 
+    count = 0
     log.info("Start updating packages")
     for name in names:
+        count += 1
+        if args.limit and count > args.limit:
+            break
+
         package = PyPackage(name)
         package.get_details()
         if args.sleep:

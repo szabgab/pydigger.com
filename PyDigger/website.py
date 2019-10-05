@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, abort, request, url_for, Response
+from flask import Flask, render_template, redirect, abort, request, url_for, Response, jsonify
 from datetime import datetime
 import hashlib
 import json
@@ -39,7 +39,7 @@ def commafy(value):
 def gravatar(email):
     if email == None:
         return ''
-    return hashlib.md5(email.strip().lower()).hexdigest()
+    return hashlib.md5(email.strip().lower().encode('utf8')).hexdigest()
 
 
 def get_int(field, default):
@@ -81,7 +81,21 @@ for field in ['tox', 'appveyor', 'editconfig', 'dockbot', 'landscape', 'coverall
     cases['has_' + field] = { field : True}
     cases['no_' + field] = {'$or' : [ { field : { '$exists' : False } }, { field : False}] }
 
-
+@app.route("/api/0/recent")
+def api_recent():
+    query = {}
+    skip = 0
+    limit = 20
+    data = db.packages.find(query).sort([("upload_time", pymongo.DESCENDING)]).skip(skip).limit(limit)
+    my = []
+    for entry in data:
+        my.append({
+            'home_page': entry.get('home_page'),
+            'name': entry['name'],
+        })
+    app.logger.debug(list(data))
+    #return "OK"
+    return jsonify(my)
 
 @app.route("/author/<name>")
 @app.route("/keyword/<keyword>")
