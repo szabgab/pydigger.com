@@ -2,6 +2,8 @@ Source code of http://pydigger.com/
 
 See the about page on the web site http://pydigger.com/about for some explanation.
 
+[![Build Status](https://travis-ci.org/szabgab/pydigger.com.png)](https://travis-ci.org/szabgab/pydigger.com)
+
 SETUP
 ========
 
