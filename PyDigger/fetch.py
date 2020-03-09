@@ -267,7 +267,38 @@ class PyPackage(object):
         db.packages.remove({'name' : entry['name'].lower()})
         db.packages.insert(entry)
 
+def setup():
+    global log
+    global db
+    global github
+
+    db = PyDigger.common.get_db()
+
+    if args.log and args.log.upper() in ['DEBUG', 'INFO']:
+        log_level = getattr(logging, args.log.upper())
+    else:
+        log_level = logging.WARNING
+
+    logging.basicConfig(
+        format = '%(asctime)s %(name)s %(levelname)8s %(message)s',
+        level = log_level,
+    )
+
+    log = logging.getLogger('fetch')
+
+    log.info("Starting")
+    with open('github-token') as fh:
+        token = fh.readline().strip()
+
+    if not token:
+        log.error("No github token found")
+        exit()
+    github = login(token=token)
+
+
 def main():
+    setup()
+
     log.info("Staring main")
     src_dir = PyDigger.common.get_source_dir()
     log.info("Source directory: {}".format(src_dir))
@@ -400,28 +431,5 @@ def get_rss():
     #log.debug(rss_data)
     return rss_data
 
-
-db = PyDigger.common.get_db()
-
-if args.log and args.log.upper() in ['DEBUG', 'INFO']:
-    log_level = getattr(logging, args.log.upper())
-else:
-    log_level = logging.WARNING
-
-logging.basicConfig(
-    format = '%(asctime)s %(name)s %(levelname)8s %(message)s',
-    level = log_level,
-)
-
-log=logging.getLogger('fetch')
-
-log.info("Starting")
-with open('github-token') as fh:
-    token = fh.readline().strip()
-
-if not token:
-    log.error("No github token found")
-    exit()
-github = login(token=token)
 
 
