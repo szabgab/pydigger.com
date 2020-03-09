@@ -16,9 +16,6 @@ sys.path.insert(0, root)
 
 
 class TestDigger:
-    def test_fix(self):
-        assert 1 == 1
-
     def test_common(self):
         root = PyDigger.common.get_root()
         source_dir = PyDigger.common.get_source_dir()
