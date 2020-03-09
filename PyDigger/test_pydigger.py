@@ -4,6 +4,10 @@ import sys
 import yaml
 import time
 import pytest
+import tempfile
+
+# TODO: remove config file after test
+# TODO: remove database after test
 
 root = os.path.dirname(os.path.dirname(__file__))
 sys.path.insert(0, root)
@@ -65,7 +69,6 @@ class TestEmptyWeb(object):
         assert rv.headers['Content-Type'] == 'application/json'
         assert rv.json == []
 
-@pytest.mark.skip("failing")
 class TestWeb(object):
     def setup_class(self):
         create_config_files()
@@ -81,7 +84,7 @@ class TestWeb(object):
         assert rv.headers['Content-Type'] == 'application/json'
         recent = rv.json
         #print(recent)
-        assert len(recent) == 20
+        assert len(recent) == 5
         for entry in recent:
             assert 'name' in entry
             assert 'home_page' in entry
@@ -93,7 +96,8 @@ class TestWeb(object):
 
 
 def create_config_files():
-    config_file = os.path.join(root, 'test_config.yml')
+    tmpdir = tempfile.mkdtemp()
+    config_file = os.path.join(tmpdir, 'test_config.yml')
     os.environ['PYDIGGER_CONFIG'] = config_file
 
     if not os.path.exists(config_file):
