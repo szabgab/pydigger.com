@@ -1,10 +1,12 @@
-import PyDigger.common
 import os
 import sys
 import yaml
 import time
 import pytest
 import tempfile
+
+import PyDigger.common
+import PyDigger.website
 
 # TODO: remove config file after test
 # TODO: remove database after test
@@ -13,7 +15,7 @@ root = os.path.dirname(os.path.dirname(__file__))
 sys.path.insert(0, root)
 
 
-class TestDigger(object):
+class TestDigger:
     def test_fix(self):
         assert 1 == 1
 
@@ -25,17 +27,35 @@ class TestDigger(object):
 # TODO: Make sure the web site can be loaded even if the configuration files are missing and there is no access to the
 # databse. Report this properly in the log or on the generate web page.
 
-class TestEmptyWeb(object):
+def create_config_files():
+    tmpdir = tempfile.mkdtemp()
+    config_file = os.path.join(tmpdir, 'test_config.yml')
+    os.environ['PYDIGGER_CONFIG'] = config_file
+
+    if not os.path.exists(config_file):
+        config = {
+            "username": "",
+            "password": "",
+            "server": "localhost:27017",
+            "dbname": "test_pydigger_{}".format(str(time.time()).replace('.', '_')),
+        }
+        with open(config_file, 'w') as outfile:
+            yaml.dump(config, outfile, default_flow_style=False)
+    return tmpdir
+
+class Tools():
     def setup_class(self):
-        create_config_files()
-        import PyDigger.website
+        self.tmpdir = create_config_files()
         self.app = PyDigger.website.app.test_client()
 
     def teardown_class(self):
         config_file = os.environ.get('PYDIGGER_CONFIG')
+        PyDigger.common.remove_db()
         if config_file is not None:
             os.unlink(config_file)
 
+
+class TestEmptyWeb(Tools):
     def test_main(self):
         rv = self.app.get('/')
         assert rv.status == '200 OK'
@@ -69,11 +89,9 @@ class TestEmptyWeb(object):
         assert rv.headers['Content-Type'] == 'application/json'
         assert rv.json == []
 
-class TestWeb(object):
+class TestWeb(Tools):
     def setup_class(self):
-        create_config_files()
-        import PyDigger.website
-        self.app = PyDigger.website.app.test_client()
+        super().setup_class(self)
         os.system("{} fetch_recent.py --update rss --log debug --limit 5".format(sys.executable))
 
     # TODO: look at the log and if there are any warnings, errors, or exceptions report them or even fail the tests
@@ -95,18 +113,4 @@ class TestWeb(object):
         assert '<h1>{}</h1>'.format(recent[0]['name']) in rv.data.decode('utf8')
 
 
-def create_config_files():
-    tmpdir = tempfile.mkdtemp()
-    config_file = os.path.join(tmpdir, 'test_config.yml')
-    os.environ['PYDIGGER_CONFIG'] = config_file
-
-    if not os.path.exists(config_file):
-        config = {
-            "username": "",
-            "password": "",
-            "server": "localhost:27017",
-            "dbname": "test_pydigger_{}".format(int(time.time())),
-        }
-        with open(config_file, 'w') as outfile:
-            yaml.dump(config, outfile, default_flow_style=False)
 
