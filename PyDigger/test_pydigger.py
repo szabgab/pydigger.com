@@ -41,11 +41,14 @@ def create_config_files():
 class Tools():
     def setup_class(self):
         self.tmpdir = create_config_files()
+        PyDigger.website.setup()
         self.app = PyDigger.website.app.test_client()
 
     def teardown_class(self):
-        PyDigger.common.remove_db()
-        shutil.rmtree(self.tmpdir)
+        if not os.environ.get('KEEP_DB'):
+            print(self.tmpdir)
+            PyDigger.common.remove_db()
+            shutil.rmtree(self.tmpdir)
 
 
 class TestEmptyWeb(Tools):
@@ -77,6 +80,7 @@ class TestEmptyWeb(Tools):
         assert b'<title></title>' in rv.data  # TODO make 404 page look nicer and have some title and body
 
     def test_api_recent(self):
+        print('/api/0/recent')
         rv = self.app.get('/api/0/recent')
         assert rv.status == '200 OK'
         assert rv.headers['Content-Type'] == 'application/json'
@@ -90,6 +94,7 @@ class TestWeb(Tools):
     # TODO: look at the log and if there are any warnings, errors, or exceptions report them or even fail the tests
     recent = []
     def test_recent(self):
+        print('/api/0/recent')
         rv = self.app.get('/api/0/recent')
         assert rv.status == '200 OK'
         assert rv.headers['Content-Type'] == 'application/json'

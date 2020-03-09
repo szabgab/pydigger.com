@@ -265,7 +265,8 @@ class PyPackage(object):
             #print(doc)
         db.packages.remove({'name' : entry['name']})
         db.packages.remove({'name' : entry['name'].lower()})
-        db.packages.insert(entry)
+        res = db.packages.insert(entry)
+        log.info("INSERT res='{}'".format(res))
 
 def setup():
     global log
@@ -330,7 +331,7 @@ def main():
         elif re.search(r'^\d+$', args.update):
             packages = db.packages.find().sort([('pubDate', 1)]).limit(int(args.update))
         else:
-            print("The update option '{}' is not implemented yet".format(args.update))
+            log.error("The update option '{}' is not implemented yet".format(args.update))
     elif args.name:
         names.append(args.name)
 

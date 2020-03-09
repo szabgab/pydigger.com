@@ -15,21 +15,28 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import PyDigger.common
 
 
-
 max_license_length = 50
 
 app = Flask(__name__)
 
-db = PyDigger.common.get_db()
 
-# set up logging
-root = PyDigger.common.get_root()
-logdir = root + '/log'
-if not os.path.exists(logdir):
-    os.mkdir(logdir)
-handler = logging.FileHandler(logdir + '/app.log')
-handler.setLevel(logging.ERROR)
-app.logger.addHandler(handler)
+def setup():
+    global db
+    db = PyDigger.common.get_db()
+
+    # set up logging
+    if os.environ.get('TEST'):
+        app.logger.setLevel(logging.DEBUG)
+    else:
+        root = PyDigger.common.get_root()
+        logdir = root + '/log'
+        if not os.path.exists(logdir):
+            os.mkdir(logdir)
+        handler = logging.FileHandler(logdir + '/app.log')
+        handler.setLevel(logging.ERROR)
+        app.logger.addHandler(handler)
+
+setup()
 
 
 @app.template_filter()
@@ -93,7 +100,8 @@ def api_recent():
             'home_page': entry.get('home_page'),
             'name': entry['name'],
         })
-    app.logger.debug(list(data))
+    app.logger.info("api_recent")
+    app.logger.info(list(data))
     #return "OK"
     return jsonify(my)
 
