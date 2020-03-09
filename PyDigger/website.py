@@ -19,22 +19,22 @@ max_license_length = 50
 
 app = Flask(__name__)
 
-
 def setup():
     global db
     db = PyDigger.common.get_db()
 
     # set up logging
-    if os.environ.get('TEST'):
+    if os.environ.get('PYDIGGER_TEST'):
         app.logger.setLevel(logging.DEBUG)
-    else:
-        root = PyDigger.common.get_root()
-        logdir = root + '/log'
-        if not os.path.exists(logdir):
-            os.mkdir(logdir)
-        handler = logging.FileHandler(logdir + '/app.log')
-        handler.setLevel(logging.ERROR)
-        app.logger.addHandler(handler)
+    root = PyDigger.common.get_root()
+    logdir = root + '/log'
+    if not os.path.exists(logdir):
+        os.mkdir(logdir)
+    handler = logging.FileHandler(logdir + '/app.log')
+    handler.setLevel(logging.ERROR)
+    app.logger.addHandler(handler)
+    app.logger.info("setup")
+
 
 setup()
 
@@ -101,7 +101,7 @@ def api_recent():
             'name': entry['name'],
         })
     app.logger.info("api_recent")
-    app.logger.info(list(data))
+    app.logger.info(my)
     #return "OK"
     return jsonify(my)
 

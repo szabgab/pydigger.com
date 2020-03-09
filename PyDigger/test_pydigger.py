@@ -11,6 +11,7 @@ import PyDigger.website
 
 root = os.path.dirname(os.path.dirname(__file__))
 sys.path.insert(0, root)
+os.environ['PYDIGGER_TEST'] = 'oh yeah'
 
 
 class TestDigger:
