@@ -36,7 +36,8 @@ def setup():
     app.logger.info("setup")
 
 
-setup()
+if not os.environ.get('PYDIGGER_SKIP_SETUP'):
+    setup()
 
 
 @app.template_filter()

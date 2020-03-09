@@ -6,12 +6,16 @@ import pytest
 import tempfile
 import shutil
 
+os.environ['PYDIGGER_SKIP_SETUP'] = 'oh yeah'
+os.environ['PYDIGGER_TEST'] = 'oh yeah'
+
 import PyDigger.common
 import PyDigger.website
 
+os.environ['PYDIGGER_SKIP_SETUP'] = ''
+
 root = os.path.dirname(os.path.dirname(__file__))
 sys.path.insert(0, root)
-os.environ['PYDIGGER_TEST'] = 'oh yeah'
 
 
 class TestDigger:
