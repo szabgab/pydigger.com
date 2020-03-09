@@ -38,7 +38,6 @@ class TestEmptyWeb(object):
         #print(rv.data)
         assert b'<title>PyDigger - unearthing stuff about Python</title>' in rv.data
 
-    @pytest.mark.skip("noisy")
     def test_stats(self):
         rv = self.app.get('/stats')
         assert rv.status == '200 OK'

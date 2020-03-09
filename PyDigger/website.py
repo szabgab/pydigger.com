@@ -225,10 +225,10 @@ def stats():
 
 def get_stats():
     stats = {
-        'total'        : db.packages.find().count(),
+        'total'        : db.packages.count_documents({}),
     }
     for word in cases:
-        stats[word] = db.packages.find(cases[word]).count()
+        stats[word] = db.packages.count_documents(cases[word])
 
     #github_not_exists = db.packages.find({ 'github' : { '$not' : { '$exists': True }}}).count()
     return stats
