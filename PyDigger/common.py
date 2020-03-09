@@ -45,5 +45,5 @@ def read_config():
 
     print(config_file)
     with open(config_file) as fh:
-        config = yaml.load(fh)
+        config = yaml.load(fh, Loader=yaml.BaseLoader)
     return config
