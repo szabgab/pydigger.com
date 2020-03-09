@@ -103,7 +103,7 @@ def api_recent():
 @app.route("/search")
 @app.route("/")
 def main(word = '', keyword = '', name = ''):
-    total_indexed = db.packages.find().count()
+    total_indexed = db.packages.count_documents({})
     limit = get_int('limit', 20)
     page = get_int('page', 1)
     query = {}
@@ -145,8 +145,8 @@ def main(word = '', keyword = '', name = ''):
     skip = max(limit * (page-1), 0)
     data = db.packages.find(query).sort([("upload_time", pymongo.DESCENDING)]).skip(skip).limit(limit)
 #    total_found = db.packages.find(query).count()
-    total_found = data.count(with_limit_and_skip=False)
-    count = data.count(with_limit_and_skip=True)
+    total_found = db.packages.count_documents(query)
+    count = db.packages.count_documents(query, limit=limit)
 
     if name and total_found > 0:
         gravatar_code = gravatar(data[0].get('author_email'))
