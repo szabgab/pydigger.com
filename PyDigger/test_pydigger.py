@@ -4,12 +4,10 @@ import yaml
 import time
 import pytest
 import tempfile
+import shutil
 
 import PyDigger.common
 import PyDigger.website
-
-# TODO: remove config file after test
-# TODO: remove database after test
 
 root = os.path.dirname(os.path.dirname(__file__))
 sys.path.insert(0, root)
@@ -46,10 +44,8 @@ class Tools():
         self.app = PyDigger.website.app.test_client()
 
     def teardown_class(self):
-        config_file = os.environ.get('PYDIGGER_CONFIG')
         PyDigger.common.remove_db()
-        if config_file is not None:
-            os.unlink(config_file)
+        shutil.rmtree(self.tmpdir)
 
 
 class TestEmptyWeb(Tools):
