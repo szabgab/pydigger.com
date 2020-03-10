@@ -288,8 +288,10 @@ def setup():
     log = logging.getLogger('fetch')
 
     log.info("Starting")
-    with open('github-token') as fh:
-        token = fh.readline().strip()
+    token = os.environ.get('GITHUB_TOKEN')
+    if not token:
+        with open('github-token') as fh:
+            token = fh.readline().strip()
 
     if not token:
         log.error("No github token found")
