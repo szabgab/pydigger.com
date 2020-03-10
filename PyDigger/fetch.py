@@ -7,6 +7,7 @@ import requirements
 import time
 import urllib.request
 import xml.etree.ElementTree as ET
+import os
 from datetime import datetime
 from github3 import login
 
