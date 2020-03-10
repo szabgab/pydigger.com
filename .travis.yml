@@ -1,8 +1,10 @@
 language: python
 services: mongodb
-before_script:
-    pip install pymongo
+before_script: pip install pymongo
 python:
-  - "3.6"
-  - "3.7"
+- '3.6'
+- '3.7'
 script: pytest -sv
+env:
+  global:
+    secure: SMq/7bO5N/bK/TufM51XtvFJLSPERKoi5W3MnQkIGuo8EVrrOxP257ssTDor5HW5xLzk0AzbqzcfW5csp63RRA6JEefuoMV0EZgaikejUb1UvEfdDTkg+5b1Ozabuslma+86pjnEYGxZGLTujoxhbb6i+RTtcOPcuAS52x9St4/QkjLpKI2AewjmGbcGXnNGa0sIjlAWfjM5XZbKJUVAaMfayajliqCK+5LfL5UMco/CugRPrdbl1YQHTTMabqD3yT1m69CMjHobFM8B5kLVOACupeu9O1Awk7sT3ecnYF5fgHTxfzYIgTwZQvXPML36u01VCcfiiLavsB3kcKPNCo88XqYjbLgDxrvF0JpjibG5SzknVnfNqOPK6srWPHY3rDe53LHkuJWKEGA5lgGi/4liiq9wQRBGGMIIXN1nTzLkL3kXSYyiVWGZe1YjLkRqJDQRsLiOHbN9wnTmdgxD0w1O5ze2Tg9TU/VE2yND0pr5sgcArIZWLIpXio1jTiLpKSeEkbhNOu5seI+oS4dP4e+NfO2pcPA4eLE2CMlW7TWXnDA4BejyO60SQ17ZBpJNih1SvibQWdtSwg+3gYin5QK/vJYde5EmNtHdaqvD9l6GRgoO0y5D/4+dl/U1LLqqRQqbci3aHeEoFGhdnuVG6qDmnbWtfnIEU4UjgQcJI9s=
