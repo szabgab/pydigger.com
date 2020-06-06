@@ -1,6 +1,6 @@
-Source code of http://pydigger.com/
+Source code of https://pydigger.com/
 
-See the about page on the web site http://pydigger.com/about for some explanation.
+See the about page on the web site https://pydigger.com/about for some explanation.
 
 [![Build Status](https://travis-ci.org/szabgab/pydigger.com.png)](https://travis-ci.org/szabgab/pydigger.com)
 
@@ -36,6 +36,7 @@ Create config.yml that looks like this:
 username: ""
 password: ""
 server: "localhost:27017"
+dbname: "pydigger"
 ```
 
 
