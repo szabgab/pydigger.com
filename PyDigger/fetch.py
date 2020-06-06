@@ -13,21 +13,23 @@ from github3 import login
 
 import PyDigger.common
 
-
-parser = argparse.ArgumentParser()
-parser.add_argument('--log', help='Set logging level to DEBUG or INFO (or keep it at the default WARNING)')
-parser.add_argument('--update', help='update the entries: rss - the ones received via rss; all - all of the packages already in the database')
-parser.add_argument('--name', help='Name of the package to update')
-parser.add_argument('--sleep', help='How many seconds to sleep between packages (Help avoiding the GitHub API limit)', type=float)
-parser.add_argument('--limit', help='Max number of packages to investigate. (Used during testing and development)', type=int)
-args = parser.parse_args()
-
 requirements_fields = ['requirements', 'test_requirements']
 
 # Updated:
 # 1) All the entries that don't have last_update field
 # 2) All the entries that were updated more than N days ago
 # 3) All the entries that were updated in the last N days ??
+
+def get_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--log', help='Set logging level to DEBUG or INFO (or keep it at the default WARNING)')
+    parser.add_argument('--update', help='update the entries: rss - the ones received via rss; all - all of the packages already in the database')
+    parser.add_argument('--name', help='Name of the package to update')
+    parser.add_argument('--sleep', help='How many seconds to sleep between packages (Help avoiding the GitHub API limit)', type=float)
+    parser.add_argument('--limit', help='Max number of packages to investigate. (Used during testing and development)', type=int)
+    args = parser.parse_args()
+    return args
+
 
 class PyPackage(object):
     def __init__(self, name):
@@ -269,7 +271,7 @@ class PyPackage(object):
         res = db.packages.insert(entry)
         log.info("INSERT res='{}'".format(res))
 
-def setup():
+def setup(args):
     global log
     global db
     global github
@@ -301,7 +303,8 @@ def setup():
 
 
 def main():
-    setup()
+    args = get_args()
+    setup(args)
 
     log.info("Staring main")
     src_dir = PyDigger.common.get_source_dir()
