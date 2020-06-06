@@ -2,6 +2,7 @@ import argparse
 import base64
 import json
 import logging
+import logging.handlers
 import re
 import requirements
 import time
@@ -37,20 +38,21 @@ class PyPackage(object):
         self.entry = {}
 
     def get_details(self):
-        log.debug("get_details of " + self.lcname)
+        logger = logging.getLogger(__name__)
+        logger.debug("get_details of " + self.lcname)
 
         url = 'https://pypi.org/pypi/' + self.lcname + '/json'
-        log.debug("Fetching url {}".format(url))
+        logger.debug("Fetching url {}".format(url))
         try:
             f = urllib.request.urlopen(url)
             json_data = f.read()
             f.close()
             #print(json_data)
         except (urllib.request.HTTPError, urllib.request.URLError):
-            log.exception("Could not fetch details of PyPI package from '{}'".format(url))
+            logger.exception("Could not fetch details of PyPI package from '{}'".format(url))
             return
         package_data = json.loads(json_data)
-        #log.debug('package_data: {}'.format(package_data))
+        #logger.debug('package_data: {}'.format(package_data))
 
         if 'info' in package_data:
             info = package_data['info']
@@ -76,8 +78,8 @@ class PyPackage(object):
             if 'keywords' in info:
                 keywords = info['keywords']
                 if keywords != None and keywords != "":
-                    log.debug("keywords '{}'".format(keywords))
-                    log.debug("keywords type '{}'".format(keywords.__class__.__name__))
+                    logger.debug("keywords '{}'".format(keywords))
+                    logger.debug("keywords type '{}'".format(keywords.__class__.__name__))
                     #if keywords.__class__.__name__ == 'bytes':
                     #    keywords = keywords.decode('utf8')
 
@@ -104,7 +106,7 @@ class PyPackage(object):
             try:
                 self.check_github()
             except Exception:
-                log.exception('Error while tying to get data from GitHub:' + self.entry['home_page'])
+                logger.exception('Error while tying to get data from GitHub:' + self.entry['home_page'])
 
         self.entry['lcname'] = self.entry['name'].lower()
         self.download_pkg()
@@ -112,15 +114,16 @@ class PyPackage(object):
 
 
     def process_release(self, package_data):
+        logger = logging.getLogger(__name__)
         version = self.entry['version']
         if 'urls' in package_data:
             self.entry['urls'] = package_data['urls']
         if not 'releases' in package_data:
-            log.error("There are no releases in package {} --- {}".format(self.lcname, package_data))
+            logger.error("There are no releases in package {} --- {}".format(self.lcname, package_data))
         elif not version in package_data['releases']:
-            log.error("Version {} is not in the releases of package {} --- {}".format(version, self.lcname, package_data))
+            logger.error("Version {} is not in the releases of package {} --- {}".format(version, self.lcname, package_data))
         elif len(package_data['releases'][version]) == 0:
-            log.error("Version {} has no elements in the releases of package {} --- {}".format(version, self.lcname, package_data))
+            logger.error("Version {} has no elements in the releases of package {} --- {}".format(version, self.lcname, package_data))
         else:
             # find the one that has python_version: "source",
             # actually we find the first one that has python_version: source
@@ -131,7 +134,7 @@ class PyPackage(object):
                     if 'url' in version_pack:
                         self.entry['download_url'] = version_pack['url']
                     else:
-                        log.error("Version {} has no download_url in the releases of package {} --- {}".format(version, self.lcname, package_data))
+                        logger.error("Version {} has no download_url in the releases of package {} --- {}".format(version, self.lcname, package_data))
                     source = version_pack
                     break
 
@@ -140,31 +143,32 @@ class PyPackage(object):
                 #url: https://pypi.org/packages/84/85/5ce28077fbf455ddf0ba2506cdfdc2e5caa0822b8a4a2747da41b683fad8/purepng-0.1.3.zip
 
             if not 'upload_time' in source:
-                log.error("upload_time is missing from version {} in the releases of package {} --- {}".format(version, self.name, package_data))
+                logger.error("upload_time is missing from version {} in the releases of package {} --- {}".format(version, self.name, package_data))
             else:
                 upload_time = source['upload_time']
                 self.entry['upload_time'] = datetime.strptime(upload_time, "%Y-%m-%dT%H:%M:%S")
 
     def check_github(self):
-        log.debug("check_github user='{}', project='{}".format(self.entry['github_user'], self.entry['github_project']))
+        logger = logging.getLogger(__name__)
+        logger.debug("check_github user='{}', project='{}".format(self.entry['github_user'], self.entry['github_project']))
 
         repo = github.repository(self.entry['github_user'], self.entry['github_project'])
         if not repo:
-            log.error("Could not fetch GitHub repository for {}".format(self.entry['name']))
+            logger.error("Could not fetch GitHub repository for {}".format(self.entry['name']))
             self.entry['error'] = "Could not fetch GitHub repository"
             return
 
-        log.debug("default_branch: {}".format(repo.default_branch))
+        logger.debug("default_branch: {}".format(repo.default_branch))
 
         # get the last commit of the default branch
         branch = repo.branch(repo.default_branch)
         if not branch:
-            log.error("Could not fetch GitHub branch {} for {}".format(repo.default_branch, self.entry['name']))
+            logger.error("Could not fetch GitHub branch {} for {}".format(repo.default_branch, self.entry['name']))
             self.entry['error'] = "Could not fetch GitHub branch"
             return
 
         last_sha = branch.commit.sha
-        log.debug("last_sha: {}".format(last_sha))
+        logger.debug("last_sha: {}".format(last_sha))
         t = repo.tree(last_sha)
         self.entry['travis_ci'] = False
         self.entry['coveralls'] = False
@@ -195,8 +199,8 @@ class PyPackage(object):
                         as_json = fh.read()
                         file_info = json.loads(as_json)
                         content = base64.b64decode(file_info['content'])
-                        log.debug("content type: {}".format(content.__class__.__name__))
-                        log.debug("content: {}".format(content))
+                        logger.debug("content type: {}".format(content.__class__.__name__))
+                        logger.debug("content: {}".format(content))
                         if content.__class__.__name__ == 'bytes':
                             content = content.decode('utf8')
 
@@ -206,13 +210,13 @@ class PyPackage(object):
                         match = re.search(r'^\s*-r', content)
                         if not match:
                             for req in requirements.parse(content):
-                                log.debug("{}: {} {} {}".format(field, req.name, req.specs, req.extras))
+                                logger.debug("{}: {} {} {}".format(field, req.name, req.specs, req.extras))
                                 # we cannot use the req.name as a key in the dictionary as some of the package names have a . in them
                                 # and MongoDB does not allow . in fieldnames.
                                 self.entry[field].append({ 'name' : req.name, 'specs' : req.specs })
                     except Exception:
-                        log.exception("Exception when handling the {}.txt".format(field))
-        log.debug("github finished")
+                        logger.exception("Exception when handling the {}.txt".format(field))
+        logger.debug("github finished")
         return
 
     # In the database have a mark that says if the package was already
@@ -222,36 +226,38 @@ class PyPackage(object):
         """Use ``urllib.request.urlretrieve`` to download package to file in sandbox
            dir.
         """
+        logger = logging.getLogger(__name__)
         if not 'download_url' in self.entry:
-            log.info("No download_url")
+            logger.info("No download_url")
             return()
 
-        log.info('doanload_url {}'.format(self.entry['download_url']))
+        logger.info('doanload_url {}'.format(self.entry['download_url']))
 
         #if 'local_dir' in self.entry:
-        #    log.info('')
+        #    logger.info('')
         match = re.search(r'/([^/]+)(\.tar\.gz)$', self.entry['download_url'])
         if match:
             # local_dir is the name of the file that should be the name of the local directory
             local_dir = match.group(1)
             extension = match.group(2)
         else:
-            log.warn("Unsupported download file format: '{}'".format(self.entry['download_url']))
+            logger.warn("Unsupported download file format: '{}'".format(self.entry['download_url']))
             return()
 
-        log.info("local_dir '{}' extension '{}'".format(local_dir, extension))
+        logger.info("local_dir '{}' extension '{}'".format(local_dir, extension))
 
         src_dir = PyDigger.common.get_source_dir()
-        log.info("Source directory: {}".format(src_dir))
+        logger.info("Source directory: {}".format(src_dir))
 
         # TODO use the requests module to download the zipfile
 
         # self.downloaded_from_url = True
 
     def save(self):
+        logger = logging.getLogger(__name__)
         entry = self.entry
-        log.info("save_entry: '{}'".format(entry['name']))
-        #log.debug("save_entry: {}".format(e)
+        logger.info("save_entry: '{}'".format(entry['name']))
+        #logger.debug("save_entry: {}".format(e)
 
         #my_entries.append(e)
         #print(e)
@@ -269,10 +275,9 @@ class PyPackage(object):
         db.packages.remove({'name' : entry['name']})
         db.packages.remove({'name' : entry['name'].lower()})
         res = db.packages.insert(entry)
-        log.info("INSERT res='{}'".format(res))
+        logger.info("INSERT res='{}'".format(res))
 
 def setup(args):
-    global log
     global db
     global github
 
@@ -283,21 +288,24 @@ def setup(args):
     else:
         exit(f'Invalid --log parameter {args.log}')
 
-    logging.basicConfig(
-        format = '%(asctime)s %(name)s %(levelname)8s %(message)s',
-        level = log_level,
-    )
+    logger = logging.getLogger(__name__)
+    logger.setLevel(log_level)
 
-    log = logging.getLogger('fetch')
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    log_file = os.path.join(project_root, 'log', 'fetch.log')
+    ch = logging.handlers.TimedRotatingFileHandler(log_file, when='M', backupCount=2)
+    ch.setLevel(logging.INFO)
+    ch.setFormatter( logging.Formatter('%(asctime)s - %(name)s - %(levelname)-10s - %(message)s') )
+    logger.addHandler(ch)
 
-    log.info("Starting")
+    logger.info("Starting")
     token = os.environ.get('GITHUB_TOKEN')
     if not token:
         with open('github-token') as fh:
             token = fh.readline().strip()
 
     if not token:
-        log.error("No github token found")
+        logger.error("No github token found")
         exit()
     github = login(token=token)
 
@@ -306,18 +314,19 @@ def main():
     args = get_args()
     setup(args)
 
-    log.info("Staring main")
+    logger = logging.getLogger(__name__)
+    logger.info("Staring main")
     src_dir = PyDigger.common.get_source_dir()
-    log.info("Source directory: {}".format(src_dir))
+    logger.info("Source directory: {}".format(src_dir))
     names = []
     packages = None
 
     if args.update:
-        log.debug("update: {}".format(args.update))
+        logger.debug("update: {}".format(args.update))
         if args.update == 'rss':
             packages = get_from_rss()
         elif args.update == 'deps':
-            log.info("Listing dependencies")
+            logger.info("Listing dependencies")
             seen = {}
             for field in requirements_fields:
                 packages_with_requirements = db.packages.find({field : { '$exists' : True }}, { 'name' : True, field : True})
@@ -325,7 +334,7 @@ def main():
                     for r in p[field]:
                         name = r['name']
                         if not name:
-                            log.info("{} {} found without a name in package {}".format(field, r, p))
+                            logger.info("{} {} found without a name in package {}".format(field, r, p))
                             continue
                         if name not in seen:
                             seen[name] = True
@@ -337,7 +346,7 @@ def main():
         elif re.search(r'^\d+$', args.update):
             packages = db.packages.find().sort([('pubDate', 1)]).limit(int(args.update))
         else:
-            log.error("The update option '{}' is not implemented yet".format(args.update))
+            logger.error("The update option '{}' is not implemented yet".format(args.update))
     elif args.name:
         names.append(args.name)
 
@@ -345,7 +354,7 @@ def main():
         names = [ p['name'] for p in packages ]
 
     count = 0
-    log.info("Start updating packages")
+    logger.info("Start updating packages")
     for name in names:
         count += 1
         if args.limit and count > args.limit:
@@ -354,17 +363,18 @@ def main():
         package = PyPackage(name)
         package.get_details()
         if args.sleep:
-            #log.debug('sleeping {}'.format(args.sleep))
+            #logger.debug('sleeping {}'.format(args.sleep))
             time.sleep(args.sleep)
 
-    log.info("Finished")
+    logger.info("Finished")
 
 
 
 
 # going over the RSS feed most recent first
 def get_from_rss():
-    log.debug("get_from_rss")
+    logger = logging.getLogger(__name__)
+    logger.debug("get_from_rss")
     rss_data = get_rss()
     packages = []
     names = []
@@ -373,7 +383,7 @@ def get_from_rss():
 
     for item in root.iter('item'):
         title = item.find('title').text.split(' ')
-        log.debug("Seen {}".format(title))
+        logger.debug("Seen {}".format(title))
         name = title[0]
         version = title[1]
         lcname = name.lower()
@@ -385,8 +395,8 @@ def get_from_rss():
             continue
         description = item.find('description').text
         pubDate = item.find('pubDate').text
-        log.debug("Description {}".format(description))
-        log.debug("pubDate {}".format(pubDate))
+        logger.debug("Description {}".format(description))
+        logger.debug("pubDate {}".format(pubDate))
 
         # Tue, 01 Oct 2019 18:14:51 GMT
         try:
@@ -395,7 +405,7 @@ def get_from_rss():
             else:
                 upload_time = datetime.strptime(pubDate, "%d %b %Y %H:%M:%S %Z")
         except Exception as ex:
-            log.error("Could not parse time '{}'\n{}".format(pubDate, ex))
+            logger.error("Could not parse time '{}'\n{}".format(pubDate, ex))
             continue
 
         entry = {
@@ -416,26 +426,27 @@ def get_from_rss():
         #    save_entry(entry)
 
         if doc and version == doc.get('version', ''):
-            log.debug("Skipping '{}'. It is already in the database with this version".format(title))
+            logger.debug("Skipping '{}'. It is already in the database with this version".format(title))
             continue
 
-        log.debug("Processing {}".format(title))
+        logger.debug("Processing {}".format(title))
         names.append(lcname)
         packages.append(entry)
     return packages
 
 def get_rss():
+    logger = logging.getLogger(__name__)
     latest_url = 'https://pypi.org/rss/updates.xml'
-    log.debug('get_rss from ' + latest_url)
+    logger.debug('get_rss from ' + latest_url)
     try:
         f = urllib.request.urlopen(latest_url)
         rss_data = f.read()
         f.close()
         #raise Exception("hello")
     except (urllib.reques.HTTPError, urllib.request.URLError):
-        log.exception('Error while fetching ' + latest_url)
+        logger.exception('Error while fetching ' + latest_url)
         raise Exception('Could not fetch RSS feed ' + latest_url)
-    #log.debug(rss_data)
+    #logger.debug(rss_data)
     return rss_data
 
 
