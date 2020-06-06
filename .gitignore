@@ -12,3 +12,4 @@ recent.json
 /src/
 /.cache/
 config.yml
+.mypy_cache/
