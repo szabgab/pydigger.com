@@ -22,7 +22,7 @@ requirements_fields = ['requirements', 'test_requirements']
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--log', help='Set logging level to DEBUG or INFO (or keep it at the default WARNING)')
+    parser.add_argument('--log', help='Set logging level to DEBUG or INFO (or keep it at the default WARNING)', default='WARNING')
     parser.add_argument('--update', help='update the entries: rss - the ones received via rss; all - all of the packages already in the database')
     parser.add_argument('--name', help='Name of the package to update')
     parser.add_argument('--sleep', help='How many seconds to sleep between packages (Help avoiding the GitHub API limit)', type=float)
@@ -278,10 +278,10 @@ def setup(args):
 
     db = PyDigger.common.get_db()
 
-    if args.log and args.log.upper() in ['DEBUG', 'INFO']:
+    if args.log and args.log.upper() in ['DEBUG', 'INFO', 'WARNING']:
         log_level = getattr(logging, args.log.upper())
     else:
-        log_level = logging.WARNING
+        exit(f'Invalid --log parameter {args.log}')
 
     logging.basicConfig(
         format = '%(asctime)s %(name)s %(levelname)8s %(message)s',
