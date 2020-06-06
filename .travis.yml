@@ -4,6 +4,7 @@ before_script: pip install mypy
 python:
 - '3.6'
 - '3.7'
+- '3.8'
 script:
    - pytest -sv
    - mypy --ignore-missing-imports PyDigger/
