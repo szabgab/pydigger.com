@@ -24,7 +24,7 @@ requirements_fields = ['requirements', 'test_requirements']
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--log', help='Set logging level to DEBUG or INFO (or keep it at the default WARNING)', default='WARNING')
-    parser.add_argument('--update', help='update the entries: rss - the ones received via rss; all - all of the packages already in the database')
+    parser.add_argument('--update', help='update the entries: rss - the ones received via rss; deps - dependencies; all - all of the packages already in the database')
     parser.add_argument('--name', help='Name of the package to update')
     parser.add_argument('--sleep', help='How many seconds to sleep between packages (Help avoiding the GitHub API limit)', type=float)
     parser.add_argument('--limit', help='Max number of packages to investigate. (Used during testing and development)', type=int)
@@ -231,7 +231,7 @@ class PyPackage(object):
             logger.info("No download_url")
             return()
 
-        logger.info('doanload_url {}'.format(self.entry['download_url']))
+        logger.info('download_url {}'.format(self.entry['download_url']))
 
         #if 'local_dir' in self.entry:
         #    logger.info('')
@@ -293,7 +293,7 @@ def setup(args):
 
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     log_file = os.path.join(project_root, 'log', 'fetch.log')
-    ch = logging.handlers.TimedRotatingFileHandler(log_file, when='M', backupCount=2)
+    ch = logging.handlers.TimedRotatingFileHandler(log_file, when='D', backupCount=2)
     ch.setLevel(logging.INFO)
     ch.setFormatter( logging.Formatter('%(asctime)s - %(name)s - %(levelname)-10s - %(message)s') )
     logger.addHandler(ch)
