@@ -96,7 +96,6 @@ class TestWeb(Tools):
         os.system("{} fetch_recent.py --update rss --log debug --limit 5".format(sys.executable))
 
     # TODO: look at the log and if there are any warnings, errors, or exceptions report them or even fail the tests
-    recent = []
     def test_recent(self):
         rv = self.app.get('/api/0/recent')
         assert rv.status == '200 OK'
