@@ -184,12 +184,12 @@ def licenses():
     licenses = db.packages.group(['license'], {}, { 'count' : 0}, 'function (curr, result) { result.count++; }' )
     licenses.sort(key=lambda f:f['count'])
     licenses.reverse()
-    for l in licenses:
-        l['count'] = int(l['count'])
-        if l['license'] == None:
-            l['license'] = 'None'
-        if len(l['license']) > max_license_length:
-            l['long'] = True
+    for licence in licenses:
+        licence['count'] = int(licence['count'])
+        if licence['license'] == None:
+            licence['license'] = 'None'
+        if len(licence['license']) > max_license_length:
+            licence['long'] = True
 
     return render_template('licenses.html',
         title = "Licenses of Python packages on PyPI",
