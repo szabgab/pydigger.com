@@ -45,6 +45,7 @@ if not os.environ.get('PYDIGGER_SKIP_SETUP'):
 def commafy(value):
         return '{:,}'.format(value)
 
+
 def gravatar(email):
     if email == None:
         return ''
@@ -58,6 +59,7 @@ def get_int(field, default):
     except Exception:
         value = default
     return value
+
 
 for field in ['tox', 'appveyor', 'editconfig', 'dockbot', 'landscape', 'coveralls', 'travis_ci', 'circleci']:
     cases['has_' + field] = { field : True}
