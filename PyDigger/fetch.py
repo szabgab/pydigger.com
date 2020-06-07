@@ -294,7 +294,7 @@ def setup_logger(args):
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     log_file = os.path.join(project_root, 'log', 'fetch.log')
     ch = logging.handlers.RotatingFileHandler(log_file, maxBytes=100_000_000, backupCount=2)
-    ch.setLevel(logging.INFO)
+    ch.setLevel(log_level)
     ch.setFormatter( logging.Formatter('%(asctime)s - %(name)s - %(levelname)-10s - %(message)s') )
     logger.addHandler(ch)
 
