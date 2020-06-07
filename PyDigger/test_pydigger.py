@@ -111,6 +111,3 @@ class TestWeb(Tools):
         assert rv.status == '200 OK'
         assert rv.headers['Content-Type'] == 'text/html; charset=utf-8'
         assert '<h1>{}</h1>'.format(recent[0]['name']) in rv.data.decode('utf8')
-
-
-

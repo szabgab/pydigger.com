@@ -473,6 +473,3 @@ def get_rss():
         raise Exception('Could not fetch RSS feed ' + latest_url)
     #logger.debug(rss_data)
     return rss_data
-
-
-

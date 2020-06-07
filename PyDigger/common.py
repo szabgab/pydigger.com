@@ -91,4 +91,3 @@ def get_stats():
 
     #github_not_exists = db.packages.find({ 'github' : { '$not' : { '$exists': True }}}).count()
     return stats
-
