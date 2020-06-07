@@ -124,7 +124,7 @@ def main(word = '', keyword = '', name = ''):
         if license == 'None':
             query = {'license' : None}
 
-    skip = max(limit * (page-1), 0)
+    skip = max(limit * (page - 1), 0)
     data = db.packages.find(query).sort([("upload_time", pymongo.DESCENDING)]).skip(skip).limit(limit)
 #    total_found = db.packages.find(query).count()
     total_found = db.packages.count_documents(query)
