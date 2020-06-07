@@ -313,6 +313,7 @@ def setup_logger(args):
 
 def setup_github():
     global github
+    logger = logging.getLogger(__name__)
     token = os.environ.get('GITHUB_TOKEN')
     if not token:
         with open('github-token') as fh:
