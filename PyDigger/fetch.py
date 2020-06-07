@@ -92,15 +92,13 @@ class PyPackage(object):
 
         self.process_release(package_data)
 
+        self.entry['github'] = False
         if 'home_page' in self.entry and self.entry['home_page'] != None:
             match = re.search(r'^https?://github.com/([^/]+)/([^/]+)/?$', self.entry['home_page'])
             if match:
                 self.entry['github'] = True
                 self.entry['github_user'] = match.group(1)
                 self.entry['github_project'] = match.group(2)
-            else:
-                self.entry['github'] = False
-                #entry['error'] = 'Home page URL is not GitHub'
 
         if self.entry['github']:
             try:
