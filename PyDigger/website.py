@@ -157,7 +157,6 @@ def keywords():
     # TODO: tshis should be really improved
     keywords = {}
     total = 0
-    unique = 0
     for p in packages:
         for k in p['split_keywords']:
             if k not in keywords:

@@ -121,7 +121,7 @@ class PyPackage(object):
                 self.check_github()
             except github3.exceptions.NotFoundError:
                 logger.error(f"404 NotFountError while trying to get data from GitHub: '{self.entry['home_page']}'")
-            except Exception as err:
+            except Exception:
                 logger.exception(f"Error while trying to get data from GitHub: '{self.entry['home_page']}'")
 
         self.entry['lcname'] = self.entry['name'].lower()
