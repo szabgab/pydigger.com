@@ -6,6 +6,7 @@ import logging.handlers
 import re
 import requirements
 import time
+import http
 import urllib.request
 import xml.etree.ElementTree as ET
 import os
@@ -49,7 +50,7 @@ class PyPackage(object):
             json_data = f.read()
             f.close()
             #print(json_data)
-        except (urllib.request.HTTPError, urllib.request.URLError):
+        except (urllib.request.HTTPError, urllib.request.URLError, http.client.InvalidURL):
             logger.exception("Could not fetch details of PyPI package from '{}'".format(url))
             return
         package_data = json.loads(json_data)
