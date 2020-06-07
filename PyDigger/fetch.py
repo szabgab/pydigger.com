@@ -11,7 +11,7 @@ import urllib.request
 import xml.etree.ElementTree as ET
 import os
 from datetime import datetime
-from github3 import login
+import github3
 import warnings
 
 import PyDigger.common
@@ -105,8 +105,10 @@ class PyPackage(object):
         if self.entry['github']:
             try:
                 self.check_github()
-            except Exception:
-                logger.exception('Error while tying to get data from GitHub:' + self.entry['home_page'])
+            except github3.exceptions.NotFoundError:
+                logger.error(f"404 NotFountError while trying to get data from GitHub: '{self.entry['home_page']}'")
+            except Exception as err:
+                logger.exception(f"Error while trying to get data from GitHub: '{self.entry['home_page']}'")
 
         self.entry['lcname'] = self.entry['name'].lower()
         self.download_pkg()
@@ -311,7 +313,7 @@ def setup_github():
     if not token:
         logger.error("No github token found")
         exit()
-    github = login(token=token)
+    github = github3.login(token=token)
 
 def setup_db():
     global db
