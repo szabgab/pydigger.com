@@ -11,6 +11,7 @@ import xml.etree.ElementTree as ET
 import os
 from datetime import datetime
 from github3 import login
+import warnings
 
 import PyDigger.common
 
@@ -207,11 +208,16 @@ class PyPackage(object):
                         # for now let's just skip this
                         match = re.search(r'^\s*-r', content)
                         if not match:
-                            for req in requirements.parse(content):
-                                logger.debug("{}: {} {} {}".format(field, req.name, req.specs, req.extras))
-                                # we cannot use the req.name as a key in the dictionary as some of the package names have a . in them
-                                # and MongoDB does not allow . in fieldnames.
-                                self.entry[field].append({ 'name' : req.name, 'specs' : req.specs })
+                            # Capture: UserWarning: Private repos not supported. Skipping.
+                            with warnings.catch_warnings(record=True) as warn:
+                                warnings.simplefilter("always")
+                                for req in requirements.parse(content):
+                                    logger.debug("{}: {} {} {}".format(field, req.name, req.specs, req.extras))
+                                    # we cannot use the req.name as a key in the dictionary as some of the package names have a . in them
+                                    # and MongoDB does not allow . in fieldnames.
+                                    self.entry[field].append({ 'name' : req.name, 'specs' : req.specs })
+                                for w in warn:
+                                    logger.warn(str(w))
                     except Exception:
                         logger.exception("Exception when handling the {}.txt".format(field))
         logger.debug("github finished")
