@@ -133,9 +133,9 @@ class PyPackage(object):
         version = self.entry['version']
         if 'urls' in package_data:
             self.entry['urls'] = package_data['urls']
-        if not 'releases' in package_data:
+        if 'releases' not in package_data:
             logger.error("There are no releases in package {} --- {}".format(self.lcname, package_data))
-        elif not version in package_data['releases']:
+        elif version not in package_data['releases']:
             logger.error("Version {} is not in the releases of package {} --- {}".format(version, self.lcname, package_data))
         elif len(package_data['releases'][version]) == 0:
             logger.error("Version {} has no elements in the releases of package {} --- {}".format(version, self.lcname, package_data))
@@ -157,7 +157,7 @@ class PyPackage(object):
                 #filename: codacy-coverage-1.2.10.tar.gz
                 #url: https://pypi.org/packages/84/85/5ce28077fbf455ddf0ba2506cdfdc2e5caa0822b8a4a2747da41b683fad8/purepng-0.1.3.zip
 
-            if not 'upload_time' in source:
+            if 'upload_time' not in source:
                 logger.error("upload_time is missing from version {} in the releases of package {} --- {}".format(version, self.name, package_data))
             else:
                 upload_time = source['upload_time']
@@ -247,7 +247,7 @@ class PyPackage(object):
            dir.
         """
         logger = logging.getLogger(__name__)
-        if not 'download_url' in self.entry or self.entry['download_url'] is None:
+        if 'download_url' not in self.entry or self.entry['download_url'] is None:
             logger.info("No download_url")
             return()
 
