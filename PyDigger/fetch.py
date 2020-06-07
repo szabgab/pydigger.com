@@ -191,23 +191,23 @@ class PyPackage(object):
         self.entry['coveralls'] = False
         for e in t.tree:
             if e.path == '.travis.yml':
-                    self.entry['travis_ci'] = True
+                self.entry['travis_ci'] = True
             if e.path == '.coveragerc':
-                    self.entry['coveralls'] = True
+                self.entry['coveralls'] = True
             if e.path == 'tox.ini':
-                    self.entry['tox'] = True # http://codespeak.net/tox/
+                self.entry['tox'] = True # http://codespeak.net/tox/
             if e.path == 'circle.yml':
-                    self.entry['circle'] = True # https://circleci.com/
+                self.entry['circle'] = True # https://circleci.com/
             if e.path == 'appveyor.yml':
-                    self.entry['appveyor'] = True # https://www.appveyor.com/
+                self.entry['appveyor'] = True # https://www.appveyor.com/
             if e.path == '.appveyor.yml':
-                    self.entry['appveyor'] = True # https://www.appveyor.com/
+                self.entry['appveyor'] = True # https://www.appveyor.com/
             if e.path == '.editconfig':
-                    self.entry['editconfig'] = True # http://editorconfig.org/
+                self.entry['editconfig'] = True # http://editorconfig.org/
             if e.path == 'dockbot.json':
-                    self.entry['dockbot'] = True # https://github.com/CauldronDevelopmentLLC/dockbot
+                self.entry['dockbot'] = True # https://github.com/CauldronDevelopmentLLC/dockbot
             if e.path == '.landscape.yml':
-                    self.entry['landscape'] = True # https://help.ubuntu.com/lts/clouddocs/en/Installing-Landscape.html
+                self.entry['landscape'] = True # https://help.ubuntu.com/lts/clouddocs/en/Installing-Landscape.html
             for field in requirements_fields:
                 if e.path == field + '.txt':
                     self.entry[field] = []

@@ -41,7 +41,7 @@ if not os.environ.get('PYDIGGER_SKIP_SETUP'):
 
 @app.template_filter()
 def commafy(value):
-        return '{:,}'.format(value)
+    return '{:,}'.format(value)
 
 
 def gravatar(email):
