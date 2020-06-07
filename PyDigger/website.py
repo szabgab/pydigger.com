@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, abort, request, url_for, Response, jsonify
+from flask import Flask, render_template, redirect, request, url_for, Response, jsonify
 from datetime import datetime
 import hashlib
 import json
@@ -6,9 +6,7 @@ import logging
 import math
 import os
 import pymongo
-import re
 import sys
-import time
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 

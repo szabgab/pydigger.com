@@ -2,7 +2,6 @@ import os
 import sys
 import yaml
 import time
-import pytest
 import tempfile
 import shutil
 
