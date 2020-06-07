@@ -231,7 +231,7 @@ class PyPackage(object):
            dir.
         """
         logger = logging.getLogger(__name__)
-        if not 'download_url' in self.entry:
+        if not 'download_url' in self.entry or self.entry['download_url'] is None:
             logger.info("No download_url")
             return()
 
