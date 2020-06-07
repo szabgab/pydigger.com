@@ -68,7 +68,6 @@ class TestEmptyWeb(Tools):
         #print(rv.data)
         assert b'<title>PyDigger - Statistics</title>' in rv.data
 
-
     def test_about(self):
         rv = self.app.get('/about')
         assert rv.status == '200 OK'

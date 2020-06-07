@@ -53,7 +53,6 @@ class PyPackage(object):
             exit()
         self.github = github3.login(token=token)
 
-
     def get_details(self):
         logger = logging.getLogger(__name__)
         logger.debug("get_details of " + self.lcname)
@@ -128,7 +127,6 @@ class PyPackage(object):
         self.entry['lcname'] = self.entry['name'].lower()
         self.download_pkg()
         self.save()
-
 
     def process_release(self, package_data):
         logger = logging.getLogger(__name__)
@@ -394,8 +392,6 @@ def main():
     logger.info("Finished")
 
 
-
-
 # going over the RSS feed most recent first
 def get_from_rss():
     logger = logging.getLogger(__name__)
@@ -412,8 +408,6 @@ def get_from_rss():
         name = title[0]
         version = title[1]
         lcname = name.lower()
-
-
 
         # The same package can appear in the RSS feed twice. We only need to process it once.
         if lcname in names:

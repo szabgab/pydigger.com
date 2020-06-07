@@ -110,7 +110,6 @@ def main(word = '', keyword = '', name = ''):
         query = {'author': name}
         q = ''
 
-
     if q != '':
         query = {'$or' : [ {'name' : { '$regex' : q, '$options' : 'i'}}, { 'split_keywords' : q.lower() } ] }
 
