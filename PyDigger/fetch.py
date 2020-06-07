@@ -281,12 +281,8 @@ class PyPackage(object):
         res = db.packages.insert(entry)
         logger.info("INSERT res='{}'".format(res))
 
-def setup(args):
-    global db
-    global github
 
-    db = PyDigger.common.get_db()
-
+def setup_logger(args):
     if args.log and args.log.upper() in ['DEBUG', 'INFO', 'WARNING']:
         log_level = getattr(logging, args.log.upper())
     else:
@@ -303,6 +299,9 @@ def setup(args):
     logger.addHandler(ch)
 
     logger.info("Starting")
+
+def setup_github():
+    global github
     token = os.environ.get('GITHUB_TOKEN')
     if not token:
         with open('github-token') as fh:
@@ -312,6 +311,16 @@ def setup(args):
         logger.error("No github token found")
         exit()
     github = login(token=token)
+
+def setup_db():
+    global db
+    db = PyDigger.common.get_db()
+
+
+def setup(args):
+    setup_db()
+    setup_logger(args)
+    setup_github()
 
 
 def main():
