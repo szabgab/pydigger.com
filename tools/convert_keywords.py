@@ -15,7 +15,7 @@ for p in all:
     split_keywords = []
     if 'keywords' in p:
         kw = p['keywords']
-        if kw != None and kw != "":
+        if kw is not None and kw != "":
             kw = kw.encode('utf-8')
             print("  ", kw)
             kw = kw.lower()

@@ -94,7 +94,7 @@ class PyPackage(object):
             self.entry['split_keywords'] = []
             if 'keywords' in info:
                 keywords = info['keywords']
-                if keywords != None and keywords != "":
+                if keywords is not None and keywords != "":
                     logger.debug("keywords '{}'".format(keywords))
                     logger.debug("keywords type '{}'".format(keywords.__class__.__name__))
                     #if keywords.__class__.__name__ == 'bytes':
@@ -110,7 +110,7 @@ class PyPackage(object):
         self.process_release(package_data)
 
         self.entry['github'] = False
-        if 'home_page' in self.entry and self.entry['home_page'] != None:
+        if 'home_page' in self.entry and self.entry['home_page'] is not None:
             match = re.search(r'^https?://github.com/([^/]+)/([^/]+)/?$', self.entry['home_page'])
             if match:
                 self.entry['github'] = True

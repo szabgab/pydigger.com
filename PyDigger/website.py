@@ -45,7 +45,7 @@ def commafy(value):
 
 
 def gravatar(email):
-    if email == None:
+    if email is None:
         return ''
     return hashlib.md5(email.strip().lower().encode('utf8')).hexdigest()
 
@@ -184,7 +184,7 @@ def licenses():
     licenses.reverse()
     for licence in licenses:
         licence['count'] = int(licence['count'])
-        if licence['license'] == None:
+        if licence['license'] is None:
             licence['license'] = 'None'
         if len(licence['license']) > max_license_length:
             licence['long'] = True
