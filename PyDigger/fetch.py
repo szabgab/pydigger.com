@@ -25,11 +25,12 @@ requirements_fields = ['requirements', 'test_requirements']
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--log', help='Set logging level to DEBUG or INFO (or keep it at the default WARNING)', default='WARNING')
+    parser.add_argument('--screen', help='Log to the screen', action='store_true')
+    parser.add_argument('--log',    help='Set logging level to DEBUG or INFO (or keep it at the default WARNING)', default='WARNING')
     parser.add_argument('--update', help='update the entries: rss - the ones received via rss; deps - dependencies; all - all of the packages already in the database')
-    parser.add_argument('--name', help='Name of the package to update')
-    parser.add_argument('--sleep', help='How many seconds to sleep between packages (Help avoiding the GitHub API limit)', type=float)
-    parser.add_argument('--limit', help='Max number of packages to investigate. (Used during testing and development)', type=int)
+    parser.add_argument('--name',   help='Name of the package to update')
+    parser.add_argument('--sleep',  help='How many seconds to sleep between packages (Help avoiding the GitHub API limit)', type=float)
+    parser.add_argument('--limit',  help='Max number of packages to investigate. (Used during testing and development)', type=int)
     args = parser.parse_args()
     return args
 
@@ -293,15 +294,22 @@ def setup_logger(args):
 
     logger = logging.getLogger(__name__)
     logger.setLevel(log_level)
+    log_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)-10s - %(message)s')
 
-    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    log_file = os.path.join(project_root, 'log', 'fetch.log')
-    ch = logging.handlers.RotatingFileHandler(log_file, maxBytes=100_000_000, backupCount=2)
-    ch.setLevel(log_level)
-    ch.setFormatter( logging.Formatter('%(asctime)s - %(name)s - %(levelname)-10s - %(message)s') )
-    logger.addHandler(ch)
+    if args.screen:
+        sh = logging.StreamHandler()
+        sh.setLevel(log_level)
+        sh.setFormatter(log_format)
+        logger.addHandler(sh)
+    else:
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        log_file = os.path.join(project_root, 'log', 'fetch.log')
+        ch = logging.handlers.RotatingFileHandler(log_file, maxBytes=100_000_000, backupCount=2)
+        ch.setLevel(log_level)
+        ch.setFormatter(log_format)
+        logger.addHandler(ch)
 
-    logger.info("Starting")
+    logger.info("======================== Starting =================================")
 
 def setup_github():
     global github
@@ -331,7 +339,7 @@ def main():
     setup(args)
 
     logger = logging.getLogger(__name__)
-    logger.info("Staring main")
+    logger.info("Starting main")
     src_dir = PyDigger.common.get_source_dir()
     logger.info("Source directory: {}".format(src_dir))
     names = []
