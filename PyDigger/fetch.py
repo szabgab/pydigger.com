@@ -39,6 +39,20 @@ class PyPackage(object):
     def __init__(self, name):
         self.lcname = name.lower()
         self.entry = {}
+        self.setup_github()
+
+    def setup_github(self):
+        logger = logging.getLogger(__name__)
+        token = os.environ.get('GITHUB_TOKEN')
+        if not token:
+            with open('github-token') as fh:
+                token = fh.readline().strip()
+
+        if not token:
+            logger.error("No github token found")
+            exit()
+        self.github = github3.login(token=token)
+
 
     def get_details(self):
         logger = logging.getLogger(__name__)
@@ -155,7 +169,7 @@ class PyPackage(object):
         logger = logging.getLogger(__name__)
         logger.debug("check_github user='{}', project='{}".format(self.entry['github_user'], self.entry['github_project']))
 
-        repo = github.repository(self.entry['github_user'], self.entry['github_project'])
+        repo = self.github.repository(self.entry['github_user'], self.entry['github_project'])
         if not repo:
             logger.error("Could not fetch GitHub repository for {}".format(self.entry['name']))
             self.entry['error'] = "Could not fetch GitHub repository"
@@ -311,19 +325,6 @@ def setup_logger(args):
 
     logger.info("======================== Starting =================================")
 
-def setup_github():
-    global github
-    logger = logging.getLogger(__name__)
-    token = os.environ.get('GITHUB_TOKEN')
-    if not token:
-        with open('github-token') as fh:
-            token = fh.readline().strip()
-
-    if not token:
-        logger.error("No github token found")
-        exit()
-    github = github3.login(token=token)
-
 def setup_db():
     global db
     db = PyDigger.common.get_db()
@@ -332,7 +333,6 @@ def setup_db():
 def setup(args):
     setup_db()
     setup_logger(args)
-    setup_github()
 
 
 def main():
