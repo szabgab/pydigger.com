@@ -69,8 +69,6 @@ TODO
 * Merge the github-token in the configuration file
 * Allow Travis to use a GitHub token for tests
 
-* Remove print statements where we don't need them, use logging module instead
-* Delete entries that were remove from pypi.
 * Be able to delete entries manually (and maybe even to set them to "not-to-index"
   if they might violate copyright or in some way might be illegal.
   mongo
@@ -88,13 +86,9 @@ TODO
   Download the zip file to a temp directory try to unzip the file and move it to the central directory.
 
 
-* Parse the requirements after downloading the file
-* Show the reverse dependencies, that is modules that depend on the current module
 * It seems sometimes we have entries in the RSS feed that don't have the 'releases' field updated yet. I wonder if I should include them in the database anyway?
   (They won't have an 'upload_time' either.) Maybe the entry should be included, using the PubDate as upload_time and then there should be a separate run that will
   go over all the entries with recent upload_time and if they don't have a 'download_url' then check them again.
-
-* Check what are all the errors of packages without releases?
 
 
 * We might need to change the processing and update strategy so we won't rewrite the whole document every time, but we will update it.
