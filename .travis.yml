@@ -1,10 +1,10 @@
 language: python
 services: mongodb
-before_script: pip install mypy
+before_script: pip install mypy pytest-flake8
 python:
 - '3.8'
 script:
-   - pytest -sv
+   - pytest -sv --flake8
    - mypy --ignore-missing-imports PyDigger/
 env:
   global:
