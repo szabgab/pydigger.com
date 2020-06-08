@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+import datetime
 import os
 import yaml
 import logging
@@ -80,6 +81,16 @@ def read_config():
     with open(config_file) as fh:
         config = yaml.load(fh, Loader=yaml.BaseLoader)
     return config
+
+def get_latests():
+    db = get_db()
+    now = datetime.datetime.now()
+    last_hour = now - datetime.timedelta(hours = 1)
+    stats = {
+        'total'  : db.packages.count_documents({}),
+        'hour'   : db.packages.count_documents({"upload_time": { '$gte': last_hour } }),
+    }
+    return stats
 
 def get_stats():
     db = get_db()
