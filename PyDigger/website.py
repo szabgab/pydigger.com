@@ -11,7 +11,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import PyDigger.common
-from PyDigger.common import cases, get_stats
+from PyDigger.common import cases, get_stats, get_latests
 
 
 max_license_length = 50
@@ -86,6 +86,8 @@ def api_recent():
 @app.route("/search")
 @app.route("/")
 def main(word = '', keyword = '', name = ''):
+    latest = get_latests()
+
     total_indexed = db.packages.count_documents({})
     limit = get_int('limit', 20)
     page = get_int('page', 1)
@@ -144,6 +146,7 @@ def main(word = '', keyword = '', name = ''):
             'pages' : int(math.ceil(total_found / limit)),
             'current' : page,
             'limit' : limit,
+            'latest': latest,
         },
         data = data,
         search_q = q,
