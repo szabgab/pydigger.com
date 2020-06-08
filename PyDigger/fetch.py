@@ -64,7 +64,7 @@ class PyPackage(object):
             json_data = f.read()
             f.close()
             #print(json_data)
-        except (urllib.request.HTTPError, urllib.request.URLError, http.client.InvalidURL):
+        except (urllib.request.HTTPError, urllib.request.URLError, http.client.InvalidURL, ConnectionError):
             logger.exception("Could not fetch details of PyPI package from '{}'".format(url))
             return
         package_data = json.loads(json_data)
