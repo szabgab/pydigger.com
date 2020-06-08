@@ -1,5 +1,10 @@
 {% include "incl/header.html" %}
 
+<table>
+<tr><td>hour</td><td>day</td><td>week</td><td>total</td></tr>
+<tr><td>{{ latest.hour }}</td><td>{{ latest.day }}</td><td>{{ latest.week }}</td><td>{{ latest.total }}</td></tr>
+</table>
+
 <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-10">
@@ -29,6 +34,5 @@
         {% endif %}
     </div>
 </div>
-
 
 {% include "incl/footer.html" %}
