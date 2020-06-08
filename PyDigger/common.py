@@ -86,9 +86,13 @@ def get_latests():
     db = get_db()
     now = datetime.datetime.now()
     last_hour = now - datetime.timedelta(hours = 1)
+    last_day = now - datetime.timedelta(days = 1)
+    last_week = now - datetime.timedelta(days = 7)
     stats = {
         'total'  : db.packages.count_documents({}),
         'hour'   : db.packages.count_documents({"upload_time": { '$gte': last_hour } }),
+        'day'    : db.packages.count_documents({"upload_time": { '$gte': last_day } }),
+        'week'   : db.packages.count_documents({"upload_time": { '$gte': last_week } }),
     }
     return stats
 
