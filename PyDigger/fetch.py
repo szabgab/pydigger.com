@@ -237,8 +237,12 @@ class PyPackage(object):
                                     self.entry[field].append({ 'name' : req.name, 'specs' : req.specs })
                                 for w in warn:
                                     logger.warning(str(w))
+                    except urllib.error.HTTPError as err:
+                        logger.error(f"Exception when handling the {field}.txt: {err}")
+                        if "rate limit exceeded" in err:
+                            time.sleep(2)
                     except Exception:
-                        logger.exception("Exception when handling the {}.txt".format(field))
+                        logger.exception(f"Exception when handling the {field}.txt")
         logger.debug("github finished")
         return
 
