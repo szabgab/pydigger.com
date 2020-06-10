@@ -233,7 +233,7 @@ class PyPackage(object):
                                     # and MongoDB does not allow . in fieldnames.
                                     self.entry[field].append({ 'name' : req.name, 'specs' : req.specs })
                                 for w in warn:
-                                    logger.warn(str(w))
+                                    logger.warning(str(w))
                     except Exception:
                         logger.exception("Exception when handling the {}.txt".format(field))
         logger.debug("github finished")
@@ -261,7 +261,7 @@ class PyPackage(object):
             local_dir = match.group(1)
             extension = match.group(2)
         else:
-            logger.warn("Unsupported download file format: '{}'".format(self.entry['download_url']))
+            logger.warning("Unsupported download file format: '{}'".format(self.entry['download_url']))
             return()
 
         logger.info("local_dir '{}' extension '{}'".format(local_dir, extension))
