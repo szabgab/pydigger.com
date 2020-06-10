@@ -132,7 +132,7 @@ def main(word = '', keyword = '', name = ''):
     total_found = db.packages.count_documents(query)
     count = db.packages.count_documents(query, limit=limit)
 
-    if name and total_found > 0:
+    if name and total_found > 0 and len(data) > 0:
         gravatar_code = gravatar(data[0].get('author_email'))
     else:
         gravatar_code = None
