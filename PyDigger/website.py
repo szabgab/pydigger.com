@@ -166,7 +166,11 @@ def show_list(word = '', keyword = '', name = ''):
     count = db.packages.count_documents(query, limit=limit)
 
     if name and total_found > 0:
-        gravatar_code = gravatar(data[0].get('author_email'))
+        try:
+            gravatar_code = gravatar(data[0].get('author_email'))
+            app.logger.info(f"The gravatar_code={gravatar_code}")
+        except Exception:
+            app.logger.error("Could not get gravatar_code")
     else:
         gravatar_code = None
 
