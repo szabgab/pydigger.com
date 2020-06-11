@@ -98,6 +98,10 @@ def api_recent():
 @app.route("/search")
 @app.route("/")
 def main(word = '', keyword = '', name = ''):
+    app.logger.info("/")
+    return show_list(word = word, keyword = keyword, name = name)
+
+def show_list(word = '', keyword = '', name = ''):
     latest = get_latests()
 
     total_indexed = db.packages.count_documents({})
