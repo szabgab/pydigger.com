@@ -10,6 +10,7 @@ import http
 import urllib.request
 import xml.etree.ElementTree as ET
 import os
+import sys
 from datetime import datetime
 import github3
 import warnings
@@ -377,11 +378,13 @@ def main():
             packages = db.packages.find().sort([('pubDate', 1)]).limit(int(args.update))
         else:
             logger.error("The update option '{}' is not implemented yet".format(args.update))
+
+        if packages:
+            names = [ p['name'] for p in packages ]
     elif args.name:
         names.append(args.name)
-
-    if packages:
-        names = [ p['name'] for p in packages ]
+    else:
+        exit(f"Missing --update or --name.   Run '{sys.argv[0]} -h' to get help.")
 
     count = 0
     logger.info("Start updating packages")
