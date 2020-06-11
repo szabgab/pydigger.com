@@ -96,6 +96,13 @@ def get_latests():
     }
     return stats
 
+def get_stats_from_cache():
+    db = get_db()
+    stats = db.cache.find_one({'_id': 'stats'})
+    if not stats:
+        stats = get_stats()
+    return stats
+
 def get_stats():
     db = get_db()
     stats = {

@@ -11,7 +11,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import PyDigger.common
-from PyDigger.common import cases, get_stats, get_latests
+from PyDigger.common import cases, get_stats_from_cache, get_latests
 
 
 max_license_length = 50
@@ -175,7 +175,7 @@ def keywords():
         words = words,
         total = total,
         unique = len(words),
-        stats = get_stats(),
+        stats = get_stats_from_cache(),
     )
 
 @app.route("/licenses")
@@ -200,7 +200,7 @@ def licenses():
 
 @app.route("/stats")
 def stats():
-    stats = get_stats()
+    stats = get_stats_from_cache()
 
     return render_template('stats.html',
         title = "PyDigger - Statistics",
