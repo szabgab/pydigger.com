@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, url_for, Response, jsonify
+from flask import Flask, render_template, redirect, request, url_for, Response, jsonify, g
 from datetime import datetime
 import hashlib
 import json
@@ -7,6 +7,7 @@ import math
 import os
 import pymongo
 import sys
+import time
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -17,6 +18,12 @@ from PyDigger.common import cases, get_stats_from_cache, get_latests
 max_license_length = 50
 
 app = Flask(__name__)
+
+@app.before_request
+def before_request():
+   g.request_start_time = time.time()
+   g.request_time = lambda: "%.5fs" % (time.time() - g.request_start_time)
+
 
 def setup():
     global db
