@@ -3,6 +3,7 @@ from datetime import datetime
 import hashlib
 import json
 import logging
+import logging.handlers
 import math
 import os
 import pymongo
@@ -30,15 +31,23 @@ def setup():
     db = PyDigger.common.get_db()
 
     # set up logging
+    log_level = logging.ERROR
     if os.environ.get('PYDIGGER_TEST'):
-        app.logger.setLevel(logging.DEBUG)
+        log_level = logging.DEBUG
+
     root = PyDigger.common.get_root()
     logdir = root + '/log'
     if not os.path.exists(logdir):
         os.mkdir(logdir)
-    handler = logging.FileHandler(logdir + '/app.log')
-    handler.setLevel(logging.ERROR)
+    log_file = logdir + '/app.log'
+    log_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)-10s - %(message)s')
+    handler = logging.handlers.RotatingFileHandler(log_file, maxBytes=10_000_000, backupCount=10)
+    handler.setLevel(log_level)
+    handler.setFormatter(log_format)
     app.logger.addHandler(handler)
+
+    app.logger.setLevel(log_level)
+
     app.logger.info("setup")
 
 
