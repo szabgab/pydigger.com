@@ -168,6 +168,7 @@ def main(word = '', keyword = '', name = ''):
 
 @app.route("/keywords")
 def keywords():
+    app.logger.info("/keywords")
     packages = db.packages.find({'$and' : [{'split_keywords' : { '$exists' : True }}, { 'split_keywords': {'$not' : { '$size' : 0}}}] }, {'split_keywords': True})
     # TODO: tshis should be really improved
     keywords = {}
@@ -212,6 +213,7 @@ def licenses():
 
 @app.route("/stats")
 def stats():
+    app.logger.info("/stats")
     stats = get_stats_from_cache()
 
     return render_template('stats.html',
@@ -221,6 +223,7 @@ def stats():
 
 @app.route("/pypi/<name>")
 def pypi(name):
+    app.logger.info(f"/pypi/{name}")
     package = db.packages.find_one({'lcname' : name.lower()})
     if not package:
         return render_template('404.html',
