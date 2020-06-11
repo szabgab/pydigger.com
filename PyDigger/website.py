@@ -21,8 +21,8 @@ app = Flask(__name__)
 
 @app.before_request
 def before_request():
-   g.request_start_time = time.time()
-   g.request_time = lambda: "%.5fs" % (time.time() - g.request_start_time)
+    g.request_start_time = time.time()
+    g.request_time = lambda: "%.5fs" % (time.time() - g.request_start_time)
 
 
 def setup():
@@ -65,10 +65,6 @@ def get_int(field, default):
         value = default
     return value
 
-
-for field in ['tox', 'appveyor', 'editconfig', 'dockbot', 'landscape', 'coveralls', 'travis_ci', 'circleci']:
-    cases['has_' + field] = { field : True}
-    cases['no_' + field] = {'$or' : [ { field : { '$exists' : False } }, { field : False}] }
 
 @app.route("/api/0/recent")
 def api_recent():

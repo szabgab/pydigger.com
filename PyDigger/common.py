@@ -32,6 +32,9 @@ cases = {
     'has_github_no_coveralls' : { '$and' : [ { 'github' : True }, {'$or' : [ { 'coveralls' : { '$exists' : False } }, { 'coveralls' : False}] }] },
 }
 
+for field in ['tox', 'appveyor', 'editconfig', 'dockbot', 'landscape', 'coveralls', 'travis_ci', 'circleci']:
+    cases['has_' + field] = { field : True}
+    cases['no_' + field] = {'$or' : [ { field : { '$exists' : False } }, { field : False}] }
 
 def get_db():
     config = read_config()
