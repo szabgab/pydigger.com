@@ -100,12 +100,25 @@ def keyword(keyword):
 
 
 @app.route("/author/<name>")
+def author(name):
+    app.logger.info(f"/author/{name}")
+    return show_list(name = name)
+
+
 @app.route("/search/<word>")
+def search(word):
+    app.logger.info(f"/search/{word}")
+    return show_list(word = word)
+
 @app.route("/search")
+def search_none():
+    app.logger.info("/search")
+    return show_list()
+
 @app.route("/")
-def main(word = '', keyword = '', name = ''):
+def main():
     app.logger.info("/")
-    return show_list(word = word, keyword = keyword, name = name)
+    return show_list()
 
 def show_list(word = '', keyword = '', name = ''):
     latest = get_latests()
@@ -152,7 +165,7 @@ def show_list(word = '', keyword = '', name = ''):
     total_found = db.packages.count_documents(query)
     count = db.packages.count_documents(query, limit=limit)
 
-    if name and total_found > 0 and len(data) > 0:
+    if name and total_found > 0:
         gravatar_code = gravatar(data[0].get('author_email'))
     else:
         gravatar_code = None
