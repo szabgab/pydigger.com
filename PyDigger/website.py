@@ -92,8 +92,14 @@ def api_recent():
     #return "OK"
     return jsonify(my)
 
-@app.route("/author/<name>")
+
 @app.route("/keyword/<keyword>")
+def keyword(keyword):
+    app.logger.info(f"/keyword/{keyword}")
+    return show_list(keyword = keyword)
+
+
+@app.route("/author/<name>")
 @app.route("/search/<word>")
 @app.route("/search")
 @app.route("/")
@@ -112,8 +118,6 @@ def show_list(word = '', keyword = '', name = ''):
     license = request.args.get('license', '').strip()
     if limit == 0:
         limit = 20
-
-#    keyword = request.args.get('keyword', '')
 
     word = word.replace('-', '_')
     if (word in cases):
