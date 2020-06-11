@@ -1,4 +1,7 @@
 --ignore-directory=.idea/
+--ignore-directory=.git/
+--ignore-directory=.mypy_cache/
+--ignore-directory=.pytest_cache/
 --ignore-directory=venv/
 --ignore-directory=venv2_mac/
 --ignore-directory=venv3_mac/
