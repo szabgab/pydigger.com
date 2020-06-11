@@ -401,6 +401,7 @@ def main():
 
     stats = PyDigger.common.get_stats()
     res = db.cache.update_one({ '_id': 'stats' }, { '$set': stats }, upsert=True)
+    logger.debug(f"res: {res}")
 
     logger.info("Finished")
 
