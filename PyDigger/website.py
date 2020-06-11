@@ -170,8 +170,8 @@ def show_list(word = '', keyword = '', name = ''):
         try:
             gravatar_code = gravatar(data[0].get('author_email'))
             app.logger.info(f"The gravatar_code={gravatar_code}")
-        except Exception:
-            app.logger.error("Could not get gravatar_code")
+        except Exception as err:
+            app.logger.error(f"Could not get gravatar_code {err}")
 
     return render_template('main.html',
         title = "PyDigger - unearthing stuff about Python",
