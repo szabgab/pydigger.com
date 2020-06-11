@@ -399,6 +399,9 @@ def main():
             #logger.debug('sleeping {}'.format(args.sleep))
             time.sleep(args.sleep)
 
+    stats = PyDigger.common.get_stats()
+    res = db.cache.update_one({ '_id': 'stats' }, { '$set': stats }, upsert=True)
+
     logger.info("Finished")
 
 
