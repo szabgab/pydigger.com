@@ -22,6 +22,7 @@ app = Flask(__name__)
 
 @app.before_request
 def before_request():
+    app.logger.info(f"{request.full_path} referrer=={request.referrer}")
     g.request_start_time = time.time()
     g.request_time = lambda: "%.5fs" % (time.time() - g.request_start_time)
 
@@ -86,7 +87,6 @@ def api_recent():
             'home_page': entry.get('home_page'),
             'name': entry['name'],
         })
-    app.logger.info("api_recent")
     app.logger.info(my)
     #return "OK"
     return jsonify(my)
@@ -94,21 +94,17 @@ def api_recent():
 
 @app.route("/keyword/<keyword>")
 def keyword(keyword):
-    app.logger.info(f"/keyword/{keyword}")
     mongo_query = { 'split_keywords' : keyword }
     return show_list(mongo_query = mongo_query)
 
 @app.route("/author/<name>")
 def author(name):
-    app.logger.info(f"/author/{name}")
     mongo_query = {'author': name}
     return show_list(author = name, mongo_query = mongo_query)
 
 
 @app.route("/search/<word>")
 def search(word):
-    app.logger.info(f"/search/{word}")
-
     word = word.replace('-', '_')
     # TODO: what should happen if word not in cases? We should probaly give a 404 error instead of returning all the items
     mongo_query = None
@@ -118,14 +114,12 @@ def search(word):
 
 @app.route("/search")
 def search_none():
-    app.logger.info("/search")
     search_query = request.args.get('q', '').strip()
     mongo_query = {'$or' : [ {'name' : { '$regex' : search_query, '$options' : 'i'}}, { 'split_keywords' : search_query.lower() } ] }
     return show_list(search_query = search_query, mongo_query = mongo_query)
 
 @app.route("/")
 def main():
-    app.logger.info(f"/ referrer={request.referrer}")
     return show_list()
 
 def show_list(author = '', mongo_query = None, search_query = ''):
@@ -185,7 +179,6 @@ def show_list(author = '', mongo_query = None, search_query = ''):
 
 @app.route("/keywords")
 def keywords():
-    app.logger.info("/keywords")
     db = PyDigger.common.get_db()
     packages = db.packages.find({'$and' : [{'split_keywords' : { '$exists' : True }}, { 'split_keywords': {'$not' : { '$size' : 0}}}] }, {'split_keywords': True})
     # TODO: tshis should be really improved
@@ -232,7 +225,6 @@ def licenses():
 
 @app.route("/stats")
 def stats():
-    app.logger.info("/stats")
     stats = get_stats_from_cache()
 
     return render_template('stats.html',
@@ -243,7 +235,6 @@ def stats():
 @app.route("/pypi/<name>")
 def pypi(name):
     db = PyDigger.common.get_db()
-    app.logger.info(f"/pypi/{name}")
     package = db.packages.find_one({'lcname' : name.lower()})
     if not package:
         return render_template('404.html',
