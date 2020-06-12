@@ -114,6 +114,9 @@ class PyPackage(object):
 
         self.process_release(package_data)
 
+        #https://bitbucket.org/ensighten-ondemand/dataintelligence-exports-cli
+        #http://gitlab.com/dimasmjunior/classic
+
         self.entry['github'] = False
         if 'home_page' in self.entry and self.entry['home_page'] is not None:
             match = re.search(r'^https?://(www\.)?github.com/([^/]+)/([^/]+)/?$', self.entry['home_page'])
@@ -390,9 +393,7 @@ def main():
 
     update_packages(args, names)
 
-    stats = PyDigger.common.get_stats()
-    res = db.cache.update_one({ '_id': 'stats' }, { '$set': stats }, upsert=True)
-    logger.debug(f"res: {res}")
+    PyDigger.common.update_cache()
 
     logger.info("Finished")
 

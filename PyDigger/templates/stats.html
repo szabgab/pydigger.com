@@ -2,19 +2,36 @@
 <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-10">
+        {% if stats.total %}
+        <h2>Has VCS - missing some info</h2>
         <table class="table">
-            <tr><td>Number of packages indexed</td><td>{{ stats.total | commafy }}</td><td></td></tr>
-            {% if stats.total %}
-            <tr><td><a href="/search/no-summary">No summary</a></td><td>{{stats.no_summary | commafy}}</td><td>{{(100 * stats.no_summary / stats.total) | round(2)}}%</td></tr>
-            <tr><td><a href="/search/no-license">No license</a></td><td>{{stats.no_license | commafy}}</td><td>{{(100 * stats.no_license / stats.total) | round(2)}}%</td></tr>
-            <tr><td><a href="/search/no-github">No GitHub</a></td><td>{{stats.no_github | commafy}}</td><td>{{(100 * stats.no_github / stats.total) | round(2)}}%</td></tr>
+            <tr><td><a href="/search/has-vcs-no-license">Has VCS no license</a></td><td>{{stats.has_vcs_no_license | commafy}}</td><td>{{ (100 * stats.has_vcs_no_license / stats.total) | round(2)}}%</td></tr>
+            <tr><td><a href="/search/has-github-no-travis-ci">Has GitHub but No Travis-CI</a></td><td>{{stats.has_github_no_travis_ci | commafy}}</td><td>{{(100 * stats.has_github_no_travis_ci / stats.total) | round(2)}}%</td></tr>
+            <tr><td><a href="/search/has-github-no-coveralls">Has GitHub but No Coveralls</a></td><td>{{stats.has_github_no_coveralls | commafy}}</td><td>{{(100 * stats.has_github_no_coveralls / stats.total) | round(2)}}%</td></tr>
+        </table>
+        <h2>No VCS</h2>
+        <table class="table">
+            <tr><td><a href="/search/no-vcs">No VCS</a></td><td>{{stats.no_vcs | commafy}}</td><td>{{(100 * stats.no_vcs / stats.total) | round(2)}}%</td></tr>
+            <tr><td><a href="/search/has-vcs">Has VCS</a></td><td>{{stats.has_vcs | commafy}}</td><td>{{(100 * stats.has_vcs / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/has-github">Has GitHub</a></td><td>{{stats.has_github | commafy}}</td><td>{{(100 * stats.has_github / stats.total) | round(2)}}%</td></tr>
+            <tr><td><a href="/search/no-github">No GitHub</a></td><td>{{stats.no_github | commafy}}</td><td>{{(100 * stats.no_github / stats.total) | round(2)}}%</td></tr>
+        </table>
+        <h2>CI</h2>
+        <table class="table">
             <tr><td><a href="/search/has-travis-ci">Has Travis-CI</a></td><td>{{stats.has_travis_ci | commafy}}</td><td>{{(100 * stats.has_travis_ci / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/no-travis-ci">No Travis-CI</a></td><td>{{stats.no_travis_ci | commafy}}</td><td>{{(100 * stats.no_travis_ci / stats.total) | round(2)}}%</td></tr>
-            <tr><td><a href="/search/has-github-no-travis-ci">Has GitHub but No Travis-CI</a></td><td>{{stats.has_github_no_travis_ci | commafy}}</td><td>{{(100 * stats.has_github_no_travis_ci / stats.total) | round(2)}}%</td></tr>
+            <tr><td><a href="/search/no-appveyor">No Appveyor</a></td><td>{{stats.no_appveyor | commafy}}</td><td>{{(100 * stats.no_appveyor / stats.total) | round(2)}}%</td></tr>
+            <tr><td><a href="/search/has-appveyor">Has Appveyor</a></td><td>{{stats.has_appveyor | commafy}}</td><td>{{(100 * stats.has_appveyor / stats.total) | round(2)}}%</td></tr>
+            <tr><td><a href="/search/no-circleci">No CircleCI</a></td><td>{{stats.no_circleci | commafy}}</td><td>{{(100 * stats.no_circleci / stats.total) | round(2)}}%</td></tr>
+            <tr><td><a href="/search/has-circleci">Has CircleCI</a></td><td>{{stats.has_circleci | commafy}}</td><td>{{(100 * stats.has_circleci / stats.total) | round(2)}}%</td></tr>
+        </table>
+        <h2>All</h2>
+        <table class="table">
+            <tr><td>Number of packages indexed</td><td>{{ stats.total | commafy }}</td><td></td></tr>
+            <tr><td><a href="/search/no-summary">No summary</a></td><td>{{stats.no_summary | commafy}}</td><td>{{(100 * stats.no_summary / stats.total) | round(2)}}%</td></tr>
+            <tr><td><a href="/search/no-license">No license</a></td><td>{{stats.no_license | commafy}}</td><td>{{(100 * stats.no_license / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/has-coveralls">Has coveralls</a></td><td>{{stats.has_coveralls | commafy}}</td><td>{{(100 * stats.has_coveralls / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/no-coveralls">No coveralls</a></td><td>{{stats.no_coveralls | commafy}}</td><td>{{(100 * stats.no_coveralls / stats.total) | round(2)}}%</td></tr>
-            <tr><td><a href="/search/has-github-no-coveralls">Has GitHub but No coveralls</a></td><td>{{stats.has_github_no_coveralls | commafy}}</td><td>{{(100 * stats.has_github_no_coveralls / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/no-docs-url">No docs_url</a></td><td>{{stats.no_docs_url | commafy}}</td><td>{{(100 * stats.no_docs_url / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/has-docs-url">Has docs_url</a></td><td>{{stats.has_docs_url | commafy}}</td><td>{{ (100 * stats.has_docs_url / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/no-author">No author</a></td><td>{{stats.no_author | commafy}}</td><td>{{(100 * stats.no_author / stats.total) | round(2)}}%</td></tr>
@@ -35,18 +52,15 @@
 
             <tr><td><a href="/search/no-tox">No Tox</a></td><td>{{stats.no_tox | commafy}}</td><td>{{(100 * stats.no_tox / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/has-tox">Has Tox</a></td><td>{{stats.has_tox | commafy}}</td><td>{{(100 * stats.has_tox / stats.total) | round(2)}}%</td></tr>
-            <tr><td><a href="/search/no-appveyor">No Appveyor</a></td><td>{{stats.no_appveyor | commafy}}</td><td>{{(100 * stats.no_appveyor / stats.total) | round(2)}}%</td></tr>
-            <tr><td><a href="/search/has-appveyor">Has Appveyor</a></td><td>{{stats.has_appveyor | commafy}}</td><td>{{(100 * stats.has_appveyor / stats.total) | round(2)}}%</td></tr>
-            <tr><td><a href="/search/no-circleci">No CircleCI</a></td><td>{{stats.no_circleci | commafy}}</td><td>{{(100 * stats.no_circleci / stats.total) | round(2)}}%</td></tr>
-            <tr><td><a href="/search/has-circleci">Has CircleCI</a></td><td>{{stats.has_circleci | commafy}}</td><td>{{(100 * stats.has_circleci / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/no-editconfig">No editconfig</a></td><td>{{stats.no_editconfig | commafy}}</td><td>{{(100 * stats.no_editconfig / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/has-editconfig">Has editconfig</a></td><td>{{stats.has_editconfig | commafy}}</td><td>{{(100 * stats.has_editconfig / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/no-dockbot">No dockbot</a></td><td>{{stats.no_dockbot | commafy}}</td><td>{{(100 * stats.no_dockbot / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/has-dockbot">Has dockbot</a></td><td>{{stats.has_dockbot | commafy}}</td><td>{{(100 * stats.has_dockbot / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/no-landscape">No landscape</a></td><td>{{stats.no_landscape | commafy}}</td><td>{{(100 * stats.no_landscape / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/has-landscape">Has landscape</a></td><td>{{stats.has_landscape | commafy}}</td><td>{{(100 * stats.has_landscape / stats.total) | round(2)}}%</td></tr>
-            {% endif %}
         </table>
+        {% endif %}
+
         <h2>Details</h2>
         <ul>
             <li><a href="/licenses">Licenses</a></li>
