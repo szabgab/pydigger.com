@@ -89,12 +89,12 @@ class PyPackage(object):
             # classifiers - an array of stuff
             # releases
             # urls
-            for f in ['name', 'maintainer', 'docs_url', 'requires_python', 'maintainer_email',
+            for field in ['name', 'maintainer', 'docs_url', 'requires_python', 'maintainer_email',
             'cheesecake_code_kwalitee_id', 'cheesecake_documentation_id', 'cheesecake_installability_id',
             'keywords', 'author', 'author_email', 'download_url', 'platform', 'description', 'bugtrack_url',
             'license', 'summary', 'version']:
-                if f in info:
-                    self.entry[f] = info[f]
+                if field in info:
+                    self.entry[field] = info[field]
 
             self.entry['split_keywords'] = []
             if 'keywords' in info:
@@ -277,7 +277,7 @@ class PyPackage(object):
         logger.info(f"local_dir '{local_dir}' extension '{extension}'")
 
         src_dir = PyDigger.common.get_source_dir()
-        logger.info("Source directory: {src_dir}")
+        logger.info(f"Source directory: {src_dir}")
 
         # TODO use the requests module to download the zipfile
 
@@ -443,7 +443,7 @@ def get_from_rss():
             else:
                 upload_time = datetime.strptime(pubDate, "%d %b %Y %H:%M:%S %Z")
         except Exception as err:
-            logger.error("Could not parse time '{pubDate}'\n{err}")
+            logger.error(f"Could not parse time '{pubDate}'\n{err}")
             continue
 
         entry = {
