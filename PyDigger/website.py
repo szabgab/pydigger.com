@@ -106,7 +106,13 @@ def author(name):
 @app.route("/search/<word>")
 def search(word):
     app.logger.info(f"/search/{word}")
-    return show_list(word = word)
+
+    word = word.replace('-', '_')
+    # TODO: what should happen if word not in cases? We should probaly give a 404 error instead of returning all the items
+    mongo_query = None
+    if (word in cases):
+        mongo_query = cases[word]
+    return show_list(mongo_query = mongo_query)
 
 @app.route("/search")
 def search_none():
@@ -120,7 +126,7 @@ def main():
     app.logger.info("/")
     return show_list()
 
-def show_list(word = '', keyword = '', name = '', mongo_query = None, search_query = ''):
+def show_list(keyword = '', name = '', mongo_query = None, search_query = ''):
     if mongo_query is None:
         mongo_query = {}
     latest = get_latests()
@@ -132,10 +138,6 @@ def show_list(word = '', keyword = '', name = '', mongo_query = None, search_que
     license = request.args.get('license', '').strip()
     if limit == 0:
         limit = 20
-
-    word = word.replace('-', '_')
-    if (word in cases):
-        mongo_query = cases[word]
 
     if keyword:
         mongo_query = { 'split_keywords' : keyword }
