@@ -272,7 +272,7 @@ class PyPackage(object):
             logger.warning("Unsupported download file format: '{}'".format(self.entry['download_url']))
             return()
 
-        logger.info("local_dir '{local_dir}' extension '{extension}'")
+        logger.info(f"local_dir '{local_dir}' extension '{extension}'")
 
         src_dir = PyDigger.common.get_source_dir()
         logger.info("Source directory: {src_dir}")
