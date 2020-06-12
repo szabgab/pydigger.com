@@ -265,6 +265,8 @@ def pypi(name):
 def robots():
     #robots = '''Sitemap: http://pydigger.com/sitemap.xml
     robots = '''Disallow: /static/*
+Disallow: /search
+Disallow: /search/*
 '''
     return Response(robots, mimetype='text/plain')
 
