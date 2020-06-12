@@ -177,7 +177,7 @@ class PyPackage(object):
             self.entry['error'] = "Could not fetch GitHub repository"
             return
 
-        logger.debug("default_branch: {}".format(repo.default_branch))
+        logger.debug(f"default_branch: {repo.default_branch}")
 
         # get the last commit of the default branch
         branch = repo.branch(repo.default_branch)
@@ -187,7 +187,7 @@ class PyPackage(object):
             return
 
         last_sha = branch.commit.sha
-        logger.debug("last_sha: {}".format(last_sha))
+        logger.debug(f"last_sha: {last_sha}")
         t = repo.tree(last_sha)
         self.entry['travis_ci'] = False
         self.entry['coveralls'] = False
@@ -218,8 +218,8 @@ class PyPackage(object):
                         as_json = fh.read()
                         file_info = json.loads(as_json)
                         content = base64.b64decode(file_info['content'])
-                        logger.debug("content type: {}".format(content.__class__.__name__))
-                        logger.debug("content: {}".format(content))
+                        logger.debug("content type: {content.__class__.__name__}")
+                        logger.debug("content: {content}")
                         if content.__class__.__name__ == 'bytes':
                             content = content.decode('utf8')
 
@@ -232,7 +232,7 @@ class PyPackage(object):
                             with warnings.catch_warnings(record=True) as warn:
                                 warnings.simplefilter("always")
                                 for req in requirements.parse(content):
-                                    logger.debug("{}: {} {} {}".format(field, req.name, req.specs, req.extras))
+                                    logger.debug("{field}: {req.name} {req.specs} {req.extras}")
                                     # we cannot use the req.name as a key in the dictionary as some of the package names have a . in them
                                     # and MongoDB does not allow . in fieldnames.
                                     self.entry[field].append({ 'name' : req.name, 'specs' : req.specs })
@@ -272,10 +272,10 @@ class PyPackage(object):
             logger.warning("Unsupported download file format: '{}'".format(self.entry['download_url']))
             return()
 
-        logger.info("local_dir '{}' extension '{}'".format(local_dir, extension))
+        logger.info("local_dir '{local_dir}' extension '{extension}'")
 
         src_dir = PyDigger.common.get_source_dir()
-        logger.info("Source directory: {}".format(src_dir))
+        logger.info("Source directory: {src_dir}")
 
         # TODO use the requests module to download the zipfile
 
