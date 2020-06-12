@@ -159,11 +159,7 @@ def show_list(author = '', mongo_query = None, search_query = ''):
 
     gravatar_code = None
     if author and total_found > 0 and latest:
-        try:
-            gravatar_code = gravatar(latest.get('author_email'))
-            app.logger.info(f"The gravatar_code={gravatar_code}")
-        except Exception as err:
-            app.logger.error(f"Could not get gravatar_code {err}")
+        gravatar_code = gravatar(latest.get('author_email'))
 
     return render_template('main.html',
         title = "PyDigger - unearthing stuff about Python",
