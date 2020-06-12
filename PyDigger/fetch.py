@@ -67,6 +67,8 @@ class PyPackage(object):
             #print(json_data)
         except (urllib.request.HTTPError, urllib.request.URLError, http.client.InvalidURL, ConnectionError) as err:
             logger.error(f"Could not fetch details of PyPI package from '{url}'. Error: {type(err)}: {err}")
+            #self.entry['json_missing'] = True
+            #self.save()
             return
         except Exception:
             logger.exception(f"Could not fetch details of PyPI package from '{url}'")
@@ -423,7 +425,7 @@ def get_from_rss():
     for item in root.iter('item'):
         title = item.find('title')
         name, version = title.text.split(' ')
-        logger.debug(f"Seen '{name}' '{version}'")
+        logger.debug(f"Processing '{name}' '{version}'")
         lcname = name.lower()
 
         # The same package can appear in the RSS feed twice. We only need to process it once.
