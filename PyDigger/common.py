@@ -36,8 +36,8 @@ for field in ['tox', 'appveyor', 'editconfig', 'dockbot', 'landscape', 'coverall
     cases['no_' + field] = {'$or' : [ { field : { '$exists' : False } }, { field : False}] }
 
 # Combined:
-cases['has_vcs_no_license'] =  { '$and' : [ cases['has_vcs'], cases['no_license'] ] }
-cases['no_vcs'] =  { '$and': [ cases['no_github'], cases['no_gitlab'], cases['no_bitbucket']] }
+cases['has_vcs_no_license'] = { '$and' : [ cases['has_vcs'], cases['no_license'] ] }
+cases['no_vcs'] = { '$and': [ cases['no_github'], cases['no_gitlab'], cases['no_bitbucket']] }
 
 def get_db():
     config = read_config()
@@ -123,6 +123,4 @@ def get_stats():
 def update_cache():
     stats = get_stats()
     db = get_db()
-    res = db.cache.update_one({ '_id': 'stats' }, { '$set': stats }, upsert=True)
-    #logger.debug(f"res: {res}")
-
+    db.cache.update_one({ '_id': 'stats' }, { '$set': stats }, upsert=True)
