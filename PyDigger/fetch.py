@@ -386,6 +386,16 @@ def main():
     else:
         exit(f"Missing --update or --name.   Run '{sys.argv[0]} -h' to get help.")
 
+    update_packages(args, names)
+
+    stats = PyDigger.common.get_stats()
+    res = db.cache.update_one({ '_id': 'stats' }, { '$set': stats }, upsert=True)
+    logger.debug(f"res: {res}")
+
+    logger.info("Finished")
+
+def update_packages(args, names):
+    logger = logging.getLogger(__name__)
     count = 0
     logger.info("Start updating packages")
     for name in names:
@@ -398,12 +408,6 @@ def main():
         if args.sleep:
             #logger.debug('sleeping {args.sleep}')
             time.sleep(args.sleep)
-
-    stats = PyDigger.common.get_stats()
-    res = db.cache.update_one({ '_id': 'stats' }, { '$set': stats }, upsert=True)
-    logger.debug(f"res: {res}")
-
-    logger.info("Finished")
 
 
 # going over the RSS feed most recent first
