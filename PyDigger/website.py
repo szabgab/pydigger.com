@@ -153,14 +153,14 @@ def show_list(author = '', mongo_query = None, search_query = ''):
 
     skip = max(limit * (page - 1), 0)
     data = db.packages.find(mongo_query).sort([("upload_time", pymongo.DESCENDING)]).skip(skip).limit(limit)
-#    total_found = db.packages.find(mongo_query).count()
+    latest = db.packages.find_one(mongo_query)
     total_found = db.packages.count_documents(mongo_query)
     count = db.packages.count_documents(mongo_query, limit=limit)
 
     gravatar_code = None
-    if author and total_found > 0:
+    if author and total_found > 0 and latest:
         try:
-            gravatar_code = gravatar(data[0].get('author_email'))
+            gravatar_code = gravatar(latest.get('author_email'))
             app.logger.info(f"The gravatar_code={gravatar_code}")
         except Exception as err:
             app.logger.error(f"Could not get gravatar_code {err}")
