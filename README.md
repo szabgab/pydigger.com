@@ -308,3 +308,17 @@ $ mongodb
 > db.packages.find({ $and: [{ "home_page" : { $not : /gitlab|github|bitbucket/ } } , { "home_page" : { $not : /^(UNKNOWN|)$/ } }] }, { home_page: 1 });
 ```
 
+## Indexes added
+
+```
+db.packages.createIndex( { github: -1 } )
+db.packages.createIndex( { split_keywords: -1 } )
+db.packages.createIndex( { name: -1 } )
+
+```
+
+Failed to index:
+
+db.packages.createIndex( { author: -1 } )
+db.packages.createIndex( { license: -1 } )
+
