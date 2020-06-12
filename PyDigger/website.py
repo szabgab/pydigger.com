@@ -111,14 +111,16 @@ def search(word):
 @app.route("/search")
 def search_none():
     app.logger.info("/search")
-    return show_list()
+    search_query = request.args.get('q', '').strip()
+    mongo_query = {'$or' : [ {'name' : { '$regex' : search_query, '$options' : 'i'}}, { 'split_keywords' : search_query.lower() } ] }
+    return show_list(search_query = search_query, mongo_query = mongo_query)
 
 @app.route("/")
 def main():
     app.logger.info("/")
     return show_list()
 
-def show_list(word = '', keyword = '', name = '', mongo_query = None):
+def show_list(word = '', keyword = '', name = '', mongo_query = None, search_query = ''):
     if mongo_query is None:
         mongo_query = {}
     latest = get_latests()
@@ -127,7 +129,6 @@ def show_list(word = '', keyword = '', name = '', mongo_query = None):
     total_indexed = db.packages.count_documents({})
     limit = get_int('limit', 20)
     page = get_int('page', 1)
-    search_query = request.args.get('q', '').strip()
     license = request.args.get('license', '').strip()
     if limit == 0:
         limit = 20
@@ -135,18 +136,12 @@ def show_list(word = '', keyword = '', name = '', mongo_query = None):
     word = word.replace('-', '_')
     if (word in cases):
         mongo_query = cases[word]
-        search_query = ''
 
     if keyword:
         mongo_query = { 'split_keywords' : keyword }
-        search_query = ''
 
     if name != '':
         mongo_query = {'author': name}
-        search_query = ''
-
-    if search_query != '':
-        mongo_query = {'$or' : [ {'name' : { '$regex' : search_query, '$options' : 'i'}}, { 'split_keywords' : search_query.lower() } ] }
 
     if license != '':
         if license == '__long__':
