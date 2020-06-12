@@ -45,7 +45,7 @@ def setup():
         os.mkdir(logdir)
     log_file = logdir + '/app.log'
     log_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)-10s - %(message)s')
-    handler = logging.handlers.RotatingFileHandler(log_file, maxBytes=10_000_000, backupCount=10)
+    handler = logging.handlers.RotatingFileHandler(log_file, maxBytes=1_000_000, backupCount=10)
     handler.setLevel(log_level)
     handler.setFormatter(log_format)
     app.logger.addHandler(handler)
