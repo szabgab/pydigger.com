@@ -100,7 +100,8 @@ def keyword(keyword):
 @app.route("/author/<name>")
 def author(name):
     app.logger.info(f"/author/{name}")
-    return show_list(name = name)
+    mongo_query = {'author': name}
+    return show_list(author = name, mongo_query = mongo_query)
 
 
 @app.route("/search/<word>")
@@ -126,7 +127,7 @@ def main():
     app.logger.info("/")
     return show_list()
 
-def show_list(name = '', mongo_query = None, search_query = ''):
+def show_list(author = '', mongo_query = None, search_query = ''):
     if mongo_query is None:
         mongo_query = {}
     latest = get_latests()
@@ -138,9 +139,6 @@ def show_list(name = '', mongo_query = None, search_query = ''):
     license = request.args.get('license', '').strip()
     if limit == 0:
         limit = 20
-
-    if name != '':
-        mongo_query = {'author': name}
 
     if license != '':
         if license == '__long__':
@@ -160,7 +158,7 @@ def show_list(name = '', mongo_query = None, search_query = ''):
     count = db.packages.count_documents(mongo_query, limit=limit)
 
     gravatar_code = None
-    if name and total_found > 0:
+    if author and total_found > 0:
         try:
             gravatar_code = gravatar(data[0].get('author_email'))
             app.logger.info(f"The gravatar_code={gravatar_code}")
@@ -180,7 +178,7 @@ def show_list(name = '', mongo_query = None, search_query = ''):
         latest = latest,
         data = data,
         search_query = search_query,
-        author = name,
+        author = author,
         gravatar = gravatar_code,
     )
 
