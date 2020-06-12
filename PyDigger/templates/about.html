@@ -1,7 +1,27 @@
 {% include "incl/header.html" %}
+
 <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-10">
+        <h2>Collection process</h2>
+        <p>
+        Using a cron-job we monitog the <a href=">https://pypi.org/rss/updates.xml">updates.xml</a> file on PyPI. For each item we take the name, version number, description and pubDate and add the package
+        to our database. Then we go over the newly added packages and try to fetch the JSON file describing them in details from <b>https://pypi.org/pypi/NAME/json</b>.
+        <p>
+        We extract a lot of fields from the JSON file. For example <b>maintainer</b>, <b>author</b>, <b>description</b>, <b>license</b> and many more. The <b>keywords</b> fields is split
+        by comma <b>,</b> or by space <b> </b> and saved as <b>split_keywords</b>.
+        </p>
+        We also try to extrac the link to the Version Control System used for the development of the package. For this we rely on the <b>home_page</b> field.
+        Currently we only check if this leads to a project on GitHub.
+    </div>
+    <div class="col-md-1"></div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <h2>About</h2>
         Once upon a time there was service called <a href="https://github.com/griggheo/cheesecake">PyCheesecake</a> that measured
         certain "kwalitee" metrics of PyPI packages trying to hint at the quality of those packages.
         The idea was based on the "kwalitee" metrics of the Perl community
