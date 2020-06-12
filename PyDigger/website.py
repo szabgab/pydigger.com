@@ -118,14 +118,15 @@ def main():
     app.logger.info("/")
     return show_list()
 
-def show_list(word = '', keyword = '', name = ''):
+def show_list(word = '', keyword = '', name = '', mongo_query = None):
+    if mongo_query is None:
+        mongo_query = {}
     latest = get_latests()
 
     db = PyDigger.common.get_db()
     total_indexed = db.packages.count_documents({})
     limit = get_int('limit', 20)
     page = get_int('page', 1)
-    mongo_query = {}
     search_query = request.args.get('q', '').strip()
     license = request.args.get('license', '').strip()
     if limit == 0:
