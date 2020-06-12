@@ -27,9 +27,6 @@ def before_request():
 
 
 def setup():
-    global db
-    db = PyDigger.common.get_db()
-
     # set up logging
     log_level = logging.ERROR
     if os.environ.get('PYDIGGER_TEST'):
@@ -80,6 +77,7 @@ def api_recent():
     query = {}
     skip = 0
     limit = 20
+    db = PyDigger.common.get_db()
     data = db.packages.find(query).sort([("upload_time", pymongo.DESCENDING)]).skip(skip).limit(limit)
     my = []
     for entry in data:
@@ -123,6 +121,7 @@ def main():
 def show_list(word = '', keyword = '', name = ''):
     latest = get_latests()
 
+    db = PyDigger.common.get_db()
     total_indexed = db.packages.count_documents({})
     limit = get_int('limit', 20)
     page = get_int('page', 1)
@@ -193,6 +192,7 @@ def show_list(word = '', keyword = '', name = ''):
 @app.route("/keywords")
 def keywords():
     app.logger.info("/keywords")
+    db = PyDigger.common.get_db()
     packages = db.packages.find({'$and' : [{'split_keywords' : { '$exists' : True }}, { 'split_keywords': {'$not' : { '$size' : 0}}}] }, {'split_keywords': True})
     # TODO: tshis should be really improved
     keywords = {}
@@ -217,6 +217,7 @@ def keywords():
 
 @app.route("/licenses")
 def licenses():
+    db = PyDigger.common.get_db()
     licenses = db.packages.group(['license'], {}, { 'count' : 0}, 'function (curr, result) { result.count++; }' )
     licenses.sort(key=lambda f:f['count'])
     licenses.reverse()
@@ -247,6 +248,7 @@ def stats():
 
 @app.route("/pypi/<name>")
 def pypi(name):
+    db = PyDigger.common.get_db()
     app.logger.info(f"/pypi/{name}")
     package = db.packages.find_one({'lcname' : name.lower()})
     if not package:
