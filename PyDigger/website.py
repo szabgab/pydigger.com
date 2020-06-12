@@ -26,6 +26,11 @@ def before_request():
     g.request_start_time = time.time()
     g.request_time = lambda: "%.5fs" % (time.time() - g.request_start_time)
 
+@app.after_request
+def after_request(response):
+    elapsed_time = time.time() - g.request_start_time
+    app.logger.info(f"{request.full_path} elapsed_time={elapsed_time}")
+    return response
 
 def setup():
     # set up logging
