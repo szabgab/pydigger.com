@@ -59,7 +59,7 @@ class PyPackage(object):
         logger.debug("get_details of " + self.lcname)
 
         url = 'https://pypi.org/pypi/' + self.lcname + '/json'
-        logger.debug("Fetching url {}".format(url))
+        logger.debug(f"Fetching url {url}")
         try:
             f = urllib.request.urlopen(url)
             json_data = f.read()
@@ -72,7 +72,7 @@ class PyPackage(object):
             logger.exception(f"Could not fetch details of PyPI package from '{url}'")
             return
         package_data = json.loads(json_data)
-        #logger.debug('package_data: {}'.format(package_data))
+        #logger.debug(f'package_data: {package_data}'))
 
         if 'info' in package_data:
             info = package_data['info']
@@ -98,8 +98,8 @@ class PyPackage(object):
             if 'keywords' in info:
                 keywords = info['keywords']
                 if keywords is not None and keywords != "":
-                    logger.debug("keywords '{}'".format(keywords))
-                    logger.debug("keywords type '{}'".format(keywords.__class__.__name__))
+                    logger.debug(f"keywords '{keywords}'")
+                    logger.debug(f"keywords type '{keywords.__class__.__name__}'")
                     #if keywords.__class__.__name__ == 'bytes':
                     #    keywords = keywords.decode('utf8')
 
@@ -138,11 +138,11 @@ class PyPackage(object):
         if 'urls' in package_data:
             self.entry['urls'] = package_data['urls']
         if 'releases' not in package_data:
-            logger.error("There are no releases in package {} --- {}".format(self.lcname, package_data))
+            logger.error(f"There are no releases in package '{self.lcname}' --- {package_data}")
         elif version not in package_data['releases']:
-            logger.error("Version {} is not in the releases of package {} --- {}".format(version, self.lcname, package_data))
+            logger.error(f"Version '{version}' is not in the releases of package '{self.lcname}' --- {package_data}")
         elif len(package_data['releases'][version]) == 0:
-            logger.error("Version {} has no elements in the releases of package {} --- {}".format(version, self.lcname, package_data))
+            logger.error(f"Version '{version}' has no elements in the releases of package {self.lcname} --- {package_data}")
         else:
             # find the one that has python_version: "source",
             # actually we find the first one that has python_version: source
@@ -153,7 +153,7 @@ class PyPackage(object):
                     if 'url' in version_pack:
                         self.entry['download_url'] = version_pack['url']
                     else:
-                        logger.error("Version {} has no download_url in the releases of package {} --- {}".format(version, self.lcname, package_data))
+                        logger.error(f"Version '{version}' has no download_url in the releases of package {self.lcname} --- {package_data}")
                     source = version_pack
                     break
 
@@ -162,7 +162,7 @@ class PyPackage(object):
                 #url: https://pypi.org/packages/84/85/5ce28077fbf455ddf0ba2506cdfdc2e5caa0822b8a4a2747da41b683fad8/purepng-0.1.3.zip
 
             if 'upload_time' not in source:
-                logger.error("upload_time is missing from version {} in the releases of package {} --- {}".format(version, self.name, package_data))
+                logger.error(f"upload_time is missing from version {version} in the releases of package {self.name} --- {package_data}")
             else:
                 upload_time = source['upload_time']
                 self.entry['upload_time'] = datetime.strptime(upload_time, "%Y-%m-%dT%H:%M:%S")
@@ -396,7 +396,7 @@ def main():
         package = PyPackage(name)
         package.get_details()
         if args.sleep:
-            #logger.debug('sleeping {}'.format(args.sleep))
+            #logger.debug('sleeping {args.sleep}')
             time.sleep(args.sleep)
 
     stats = PyDigger.common.get_stats()
@@ -412,24 +412,23 @@ def get_from_rss():
     logger.debug("get_from_rss")
     rss_data = get_rss()
     packages = []
-    names = []
+    seen_names = []
 
     root = ET.fromstring(rss_data)
 
     for item in root.iter('item'):
-        title = item.find('title').text.split(' ')
-        logger.debug("Seen {}".format(title))
-        name = title[0]
-        version = title[1]
+        title = item.find('title')
+        name, version = title.text.split(' ')
+        logger.debug(f"Seen '{name}' '{version}'")
         lcname = name.lower()
 
         # The same package can appear in the RSS feed twice. We only need to process it once.
-        if lcname in names:
+        if lcname in seen_names:
             continue
         description = item.find('description').text
         pubDate = item.find('pubDate').text
-        logger.debug("Description {}".format(description))
-        logger.debug("pubDate {}".format(pubDate))
+        logger.debug(f"Description {description}")
+        logger.debug(f"pubDate {pubDate}")
 
         # Tue, 01 Oct 2019 18:14:51 GMT
         try:
@@ -437,8 +436,8 @@ def get_from_rss():
                 upload_time = datetime.strptime(pubDate[0:-4], "%a, %d %b %Y %H:%M:%S")
             else:
                 upload_time = datetime.strptime(pubDate, "%d %b %Y %H:%M:%S %Z")
-        except Exception as ex:
-            logger.error("Could not parse time '{}'\n{}".format(pubDate, ex))
+        except Exception as err:
+            logger.error("Could not parse time '{pubDate}'\n{err}")
             continue
 
         entry = {
@@ -454,16 +453,16 @@ def get_from_rss():
         # This still does not solve the problem of packages that have no upload_time
         # in their JSON file. Especially if we try to add such a package by name
         # and not from the RSS feed
+        # TODO: check if the new version number is higher than the old one!
         doc = db.packages.find_one({'lcname' : lcname})
-        #if not doc:
-        #    save_entry(entry)
+        if doc:
+            old_version = doc.get('version', '')
+            if version == old_version:
+                logger.debug("Skipping '{name}' '{version}'. It is already in the database with this version")
+                continue
+            logger.debug("Update '{name}' from '{old_version}' to '{version}'. It is already in the database with this version")
 
-        if doc and version == doc.get('version', ''):
-            logger.debug("Skipping '{}'. It is already in the database with this version".format(title))
-            continue
-
-        logger.debug("Processing {}".format(title))
-        names.append(lcname)
+        seen_names.append(lcname)
         packages.append(entry)
     return packages
 
