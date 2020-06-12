@@ -94,8 +94,8 @@ def api_recent():
 @app.route("/keyword/<keyword>")
 def keyword(keyword):
     app.logger.info(f"/keyword/{keyword}")
-    return show_list(keyword = keyword)
-
+    mongo_query = { 'split_keywords' : keyword }
+    return show_list(mongo_query = mongo_query)
 
 @app.route("/author/<name>")
 def author(name):
@@ -126,7 +126,7 @@ def main():
     app.logger.info("/")
     return show_list()
 
-def show_list(keyword = '', name = '', mongo_query = None, search_query = ''):
+def show_list(name = '', mongo_query = None, search_query = ''):
     if mongo_query is None:
         mongo_query = {}
     latest = get_latests()
@@ -138,9 +138,6 @@ def show_list(keyword = '', name = '', mongo_query = None, search_query = ''):
     license = request.args.get('license', '').strip()
     if limit == 0:
         limit = 20
-
-    if keyword:
-        mongo_query = { 'split_keywords' : keyword }
 
     if name != '':
         mongo_query = {'author': name}
