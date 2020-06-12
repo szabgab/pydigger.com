@@ -116,7 +116,7 @@ class PyPackage(object):
 
         self.entry['github'] = False
         if 'home_page' in self.entry and self.entry['home_page'] is not None:
-            match = re.search(r'^https?://github.com/([^/]+)/([^/]+)/?$', self.entry['home_page'])
+            match = re.search(r'^https?://(www\.)?github.com/([^/]+)/([^/]+)/?$', self.entry['home_page'])
             if match:
                 self.entry['github'] = True
                 self.entry['github_user'] = match.group(1)
