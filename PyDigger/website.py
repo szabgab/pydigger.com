@@ -31,6 +31,7 @@ def setup():
     log_level = logging.ERROR
     if os.environ.get('PYDIGGER_TEST'):
         log_level = logging.DEBUG
+    log_level = logging.DEBUG
 
     root = PyDigger.common.get_root()
     logdir = root + '/log'
@@ -124,7 +125,7 @@ def search_none():
 
 @app.route("/")
 def main():
-    app.logger.info("/")
+    app.logger.info(f"/ referrer={request.referrer}")
     return show_list()
 
 def show_list(author = '', mongo_query = None, search_query = ''):
