@@ -1,8 +1,8 @@
 <div class="pagination">
 Found {{page.total_found | commafy}} out of {{page.total_indexed | commafy}}. Showing {{page.count}} on page {{page.current}}.
 Total pages: {{page.pages}}.<br>
-<a href="?q={{search_q}}&amp;page=1&amp;limit={{page.limit}}" class="btn btn-default {% if page.current == 1 %}disabled{% endif %}">first</a>
-<a href="?q={{search_q}}&amp;page={{page.current-1}}&amp;limit={{page.limit}}" class="btn btn-default {% if page.current == 1 %}disabled{% endif %}">prev</a>
-<a href="?q={{search_q}}&amp;page={{page.current+1}}&amp;limit={{page.limit}}" class="btn btn-default {% if page.current == page.pages %}disabled{% endif %}">next</a>
-<a href="?q={{search_q}}&amp;page={{page.pages}}&amp;limit={{page.limit}}" class="btn btn-default {% if page.current == page.pages %}disabled{% endif %}">last</a>
+<a href="?q={{search_query}}&amp;page=1&amp;limit={{page.limit}}" class="btn btn-default {% if page.current == 1 %}disabled{% endif %}">first</a>
+<a href="?q={{search_query}}&amp;page={{page.current-1}}&amp;limit={{page.limit}}" class="btn btn-default {% if page.current == 1 %}disabled{% endif %}">prev</a>
+<a href="?q={{search_query}}&amp;page={{page.current+1}}&amp;limit={{page.limit}}" class="btn btn-default {% if page.current == page.pages %}disabled{% endif %}">next</a>
+<a href="?q={{search_query}}&amp;page={{page.pages}}&amp;limit={{page.limit}}" class="btn btn-default {% if page.current == page.pages %}disabled{% endif %}">last</a>
 </div>

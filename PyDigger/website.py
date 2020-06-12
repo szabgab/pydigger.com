@@ -125,44 +125,44 @@ def show_list(word = '', keyword = '', name = ''):
     total_indexed = db.packages.count_documents({})
     limit = get_int('limit', 20)
     page = get_int('page', 1)
-    query = {}
-    q = request.args.get('q', '').strip()
+    mongo_query = {}
+    search_query = request.args.get('q', '').strip()
     license = request.args.get('license', '').strip()
     if limit == 0:
         limit = 20
 
     word = word.replace('-', '_')
     if (word in cases):
-        query = cases[word]
-        q = ''
+        mongo_query = cases[word]
+        search_query = ''
 
     if keyword:
-        query = { 'split_keywords' : keyword }
-        q = ''
+        mongo_query = { 'split_keywords' : keyword }
+        search_query = ''
 
     if name != '':
-        query = {'author': name}
-        q = ''
+        mongo_query = {'author': name}
+        search_query = ''
 
-    if q != '':
-        query = {'$or' : [ {'name' : { '$regex' : q, '$options' : 'i'}}, { 'split_keywords' : q.lower() } ] }
+    if search_query != '':
+        mongo_query = {'$or' : [ {'name' : { '$regex' : search_query, '$options' : 'i'}}, { 'split_keywords' : search_query.lower() } ] }
 
     if license != '':
         if license == '__long__':
             this_regex = '.{' + str(max_license_length) + '}'
-            query = {'$and' : [ {'license': {'$exists': True} }, { 'license' : { '$regex': this_regex } }] }
+            mongo_query = {'$and' : [ {'license': {'$exists': True} }, { 'license' : { '$regex': this_regex } }] }
         elif license == '__empty__':
-            query = {'$and' : [ {'license': {'$exists': True} }, { 'license' : '' }] }
+            mongo_query = {'$and' : [ {'license': {'$exists': True} }, { 'license' : '' }] }
         else:
-            query = {'license' : license}
+            mongo_query = {'license' : license}
         if license == 'None':
-            query = {'license' : None}
+            mongo_query = {'license' : None}
 
     skip = max(limit * (page - 1), 0)
-    data = db.packages.find(query).sort([("upload_time", pymongo.DESCENDING)]).skip(skip).limit(limit)
-#    total_found = db.packages.find(query).count()
-    total_found = db.packages.count_documents(query)
-    count = db.packages.count_documents(query, limit=limit)
+    data = db.packages.find(mongo_query).sort([("upload_time", pymongo.DESCENDING)]).skip(skip).limit(limit)
+#    total_found = db.packages.find(mongo_query).count()
+    total_found = db.packages.count_documents(mongo_query)
+    count = db.packages.count_documents(mongo_query, limit=limit)
 
     gravatar_code = None
     if name and total_found > 0:
@@ -184,7 +184,7 @@ def show_list(word = '', keyword = '', name = ''):
         },
         latest = latest,
         data = data,
-        search_q = q,
+        search_query = search_query,
         author = name,
         gravatar = gravatar_code,
     )
