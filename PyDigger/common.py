@@ -105,6 +105,13 @@ def get_latests():
     }
     return stats
 
+def get_latests_from_cache():
+    db = get_db()
+    data = db.cache.find_one({'_id': 'latests'})
+    if not data:
+        data = get_latests()
+    return data
+
 def get_stats_from_cache():
     db = get_db()
     stats = db.cache.find_one({'_id': 'stats'})
@@ -125,5 +132,7 @@ def get_stats():
 
 def update_cache():
     stats = get_stats()
+    latests = get_latests()
     db = get_db()
     db.cache.update_one({ '_id': 'stats' }, { '$set': stats }, upsert=True)
+    db.cache.update_one({ '_id': 'latests' }, { '$set': latests }, upsert=True)

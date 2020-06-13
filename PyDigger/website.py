@@ -13,7 +13,7 @@ import time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import PyDigger.common
-from PyDigger.common import cases, get_stats_from_cache, get_latests
+from PyDigger.common import cases, get_stats_from_cache, get_latests_from_cache
 
 
 max_license_length = 50
@@ -170,7 +170,7 @@ def show_list(author = '', mongo_query = None, search_query = ''):
             'current' : page,
             'limit' : limit,
         },
-        latest = get_latests(),
+        latest = get_latests_from_cache(),
         data = data,
         search_query = search_query,
         author = author,
