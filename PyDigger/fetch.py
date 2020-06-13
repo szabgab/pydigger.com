@@ -114,16 +114,7 @@ class PyPackage(object):
 
         self.process_release(package_data)
 
-        #https://bitbucket.org/ensighten-ondemand/dataintelligence-exports-cli
-        #http://gitlab.com/dimasmjunior/classic
-
-        self.entry['github'] = False
-        if 'home_page' in self.entry and self.entry['home_page'] is not None:
-            match = re.search(r'^https?://(www\.)?github.com/([^/]+)/([^/]+)/?$', self.entry['home_page'])
-            if match:
-                self.entry['github'] = True
-                self.entry['github_user'] = match.group(1)
-                self.entry['github_project'] = match.group(2)
+        self.extract_vcs()
 
         if self.entry['github']:
             try:
@@ -136,6 +127,43 @@ class PyPackage(object):
         self.entry['lcname'] = self.entry['name'].lower()
         self.download_pkg()
         self.save()
+
+    def extract_vcs(self):
+        logger = logging.getLogger(__name__)
+        vcs_found = False
+        # https://github.com/szabgab/pydigger.com/
+        # https://bitbucket.org/ensighten-ondemand/dataintelligence-exports-cli
+        # http://gitlab.com/dimasmjunior/classic
+        vcs_es = {
+            'github': {
+                'host': 'github.com',
+                'regex': r'^https?://(www\.)?github.com/([^/]+)/([^/]+)/?$',
+            },
+            'gitlab': {
+                'host': 'gitlab.com',
+                'regex': r'^https?://(www\.)?gitlab.com/([^/]+)/([^/]+)/?$',
+            },
+            'bitbucket': {
+                'host': 'bitbucket.org',
+                'regex': r'^https?://(www\.)?bitbucket.org/([^/]+)/([^/]+)/?$',
+            }
+        }
+        for vcs in vcs_es:
+            self.entry[vcs] = False
+
+        for vcs in vcs_es:
+            if 'home_page' in self.entry and self.entry['home_page'] is not None:
+                vcs_url = self.entry['home_page']
+                match = re.search(vcs_es[vcs]['regex'], self.entry['home_page'])
+                if match:
+                    self.entry[vcs] = True
+                    self.entry[f'{vcs}_user'] = match.group(1)
+                    self.entry[f'{vcs}_project'] = match.group(2)
+                    logger.info(f"Project {self.lcname} Version {self.entry['version']} has VCS {vcs}: {vcs_url}")
+                    vcs_found = True
+                    break
+        if not vcs_found:
+            logger.info(f"No VCS found for project {self.lcname} Version {self.entry['version']}")
 
     def process_release(self, package_data):
         logger = logging.getLogger(__name__)
