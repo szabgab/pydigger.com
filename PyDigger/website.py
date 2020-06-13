@@ -130,7 +130,6 @@ def main():
 def show_list(author = '', mongo_query = None, search_query = ''):
     if mongo_query is None:
         mongo_query = {}
-    latest = get_latests()
 
     db = PyDigger.common.get_db()
     total_indexed = db.packages.count_documents({})
@@ -171,7 +170,7 @@ def show_list(author = '', mongo_query = None, search_query = ''):
             'current' : page,
             'limit' : limit,
         },
-        latest = latest,
+        latest = get_latests(),
         data = data,
         search_query = search_query,
         author = author,
