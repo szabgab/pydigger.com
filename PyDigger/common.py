@@ -28,7 +28,6 @@ cases = {
     'no_bugtrack_url'   : { '$or' : [{ 'bugtrack_url' : { '$exists' : False } }, { 'bugtrack_url' : None }, { 'bugtrack_url' : '' } ] },
     'has_github_no_travis_ci' : { '$and' : [ { 'github' : True }, {'$or' : [ { 'travis_ci' : { '$exists' : False } }, { 'travis_ci' : False}] }] },
     'has_github_no_coveralls' : { '$and' : [ { 'github' : True }, {'$or' : [ { 'coveralls' : { '$exists' : False } }, { 'coveralls' : False}] }] },
-    'has_vcs': { '$or': [ { 'github': True }, { 'bitbucket': True }, { 'gitlab': True }] },
 }
 
 for field in ['tox', 'appveyor', 'editconfig', 'dockbot', 'landscape', 'coveralls', 'travis_ci', 'circleci', 'github', 'gitlab', 'bitbucket']:
@@ -36,8 +35,12 @@ for field in ['tox', 'appveyor', 'editconfig', 'dockbot', 'landscape', 'coverall
     cases['no_' + field] = {'$or' : [ { field : { '$exists' : False } }, { field : False}] }
 
 # Combined:
-cases['has_vcs_no_license'] = { '$and' : [ cases['has_vcs'], cases['no_license'] ] }
-cases['no_vcs'] = { '$and': [ cases['no_github'], cases['no_gitlab'], cases['no_bitbucket']] }
+cases['has_vcs']             = { '$or': [ cases['has_github'], cases['has_bitbucket'], cases['has_gitlab'] ] }
+cases['no_vcs']              = { '$and': [ cases['no_github'], cases['no_gitlab'], cases['no_bitbucket']] }
+cases['has_vcs_no_license']  = { '$and' : [ cases['has_vcs'], cases['no_license'] ] }
+cases['has_vcs_has_license'] = { '$and' : [ cases['has_vcs'], cases['has_license'] ] }
+cases['has_vcs_no_author']   = { '$and' : [ cases['has_vcs'], cases['no_author'] ] }
+cases['has_vcs_has_author']  = { '$and' : [ cases['has_vcs'], cases['has_author'] ] }
 
 def get_db():
     config = read_config()
