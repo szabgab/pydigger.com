@@ -9,6 +9,7 @@
             <tr><td><a href="/search/has-vcs-has-license">Has VCS has license</a></td><td>{{stats.has_vcs_has_license | commafy}}</td><td>{{ (100 * stats.has_vcs_has_license / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/has-vcs-no-author">Has VCS but no author</a></td><td>{{stats.has_vcs_no_author | commafy}}</td><td>{{ (100 * stats.has_vcs_no_author / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/has-vcs-has-author">Has VCS has author</a></td><td>{{stats.has_vcs_has_author | commafy}}</td><td>{{ (100 * stats.has_vcs_has_author / stats.total) | round(2)}}%</td></tr>
+            <tr><td><a href="/search/has-vcs-no-summary">Has VCS but no summary</a></td><td>{{stats.has_vcs_no_summary | commafy}}</td><td>{{ (100 * stats.has_vcs_no_summary / stats.total) | round(2)}}%</td></tr>
         </table>
         <h2>No VCS</h2>
         <table class="table">

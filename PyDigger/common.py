@@ -41,6 +41,7 @@ cases['has_vcs_no_license']  = { '$and' : [ cases['has_vcs'], cases['no_license'
 cases['has_vcs_has_license'] = { '$and' : [ cases['has_vcs'], cases['has_license'] ] }
 cases['has_vcs_no_author']   = { '$and' : [ cases['has_vcs'], cases['no_author'] ] }
 cases['has_vcs_has_author']  = { '$and' : [ cases['has_vcs'], cases['has_author'] ] }
+cases['has_vcs_no_summary']   = { '$and' : [ cases['has_vcs'], cases['no_summary'] ] }
 
 def get_db():
     config = read_config()
