@@ -5,22 +5,22 @@
         {% if stats.total %}
         <h2>Has VCS - missing some info</h2>
         <table class="table">
-            <tr><td><a href="/search/has-vcs-no-license">Has VCS no license</a></td><td>{{stats.has_vcs_no_license | commafy}}</td><td>{{ (100 * stats.has_vcs_no_license / stats.total) | round(2)}}%</td></tr>
+            <tr><td><a href="/search/has-vcs-no-license">Has VCS but no license</a></td><td>{{stats.has_vcs_no_license | commafy}}</td><td>{{ (100 * stats.has_vcs_no_license / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/has-vcs-has-license">Has VCS has license</a></td><td>{{stats.has_vcs_has_license | commafy}}</td><td>{{ (100 * stats.has_vcs_has_license / stats.total) | round(2)}}%</td></tr>
-            <tr><td><a href="/search/has-vcs-no-author">Has VCS no author</a></td><td>{{stats.has_vcs_no_author | commafy}}</td><td>{{ (100 * stats.has_vcs_no_author / stats.total) | round(2)}}%</td></tr>
+            <tr><td><a href="/search/has-vcs-no-author">Has VCS but no author</a></td><td>{{stats.has_vcs_no_author | commafy}}</td><td>{{ (100 * stats.has_vcs_no_author / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/has-vcs-has-author">Has VCS has author</a></td><td>{{stats.has_vcs_has_author | commafy}}</td><td>{{ (100 * stats.has_vcs_has_author / stats.total) | round(2)}}%</td></tr>
-            <tr><td><a href="/search/has-github-no-travis-ci">Has GitHub but No Travis-CI</a></td><td>{{stats.has_github_no_travis_ci | commafy}}</td><td>{{(100 * stats.has_github_no_travis_ci / stats.total) | round(2)}}%</td></tr>
-            <tr><td><a href="/search/has-github-no-coveralls">Has GitHub but No Coveralls</a></td><td>{{stats.has_github_no_coveralls | commafy}}</td><td>{{(100 * stats.has_github_no_coveralls / stats.total) | round(2)}}%</td></tr>
         </table>
         <h2>No VCS</h2>
         <table class="table">
             <tr><td><a href="/search/no-vcs">No VCS</a></td><td>{{stats.no_vcs | commafy}}</td><td>{{(100 * stats.no_vcs / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/has-vcs">Has VCS</a></td><td>{{stats.has_vcs | commafy}}</td><td>{{(100 * stats.has_vcs / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/has-github">Has GitHub</a></td><td>{{stats.has_github | commafy}}</td><td>{{(100 * stats.has_github / stats.total) | round(2)}}%</td></tr>
-            <tr><td><a href="/search/no-github">No GitHub</a></td><td>{{stats.no_github | commafy}}</td><td>{{(100 * stats.no_github / stats.total) | round(2)}}%</td></tr>
+            <tr><td><a href="/search/has-gitlab">Has Gitlab</a></td><td>{{stats.has_gitlab | commafy}}</td><td>{{(100 * stats.has_gitlab / stats.total) | round(2)}}%</td></tr>
+            <tr><td><a href="/search/has-bitbucket">Has Bitbucket</a></td><td>{{stats.has_bitbucket | commafy}}</td><td>{{(100 * stats.has_bitbucket / stats.total) | round(2)}}%</td></tr>
         </table>
         <h2>CI</h2>
         <table class="table">
+            <tr><td><a href="/search/has-github-no-travis-ci">Has GitHub but no Travis-CI</a></td><td>{{stats.has_github_no_travis_ci | commafy}}</td><td>{{(100 * stats.has_github_no_travis_ci / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/has-travis-ci">Has Travis-CI</a></td><td>{{stats.has_travis_ci | commafy}}</td><td>{{(100 * stats.has_travis_ci / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/no-travis-ci">No Travis-CI</a></td><td>{{stats.no_travis_ci | commafy}}</td><td>{{(100 * stats.no_travis_ci / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/no-appveyor">No Appveyor</a></td><td>{{stats.no_appveyor | commafy}}</td><td>{{(100 * stats.no_appveyor / stats.total) | round(2)}}%</td></tr>
@@ -30,8 +30,9 @@
         </table>
         <h2>Testing and QA</h2>
         <table class="table">
-            <tr><td><a href="/search/has-coveralls">Has coveralls</a></td><td>{{stats.has_coveralls | commafy}}</td><td>{{(100 * stats.has_coveralls / stats.total) | round(2)}}%</td></tr>
-            <tr><td><a href="/search/no-coveralls">No coveralls</a></td><td>{{stats.no_coveralls | commafy}}</td><td>{{(100 * stats.no_coveralls / stats.total) | round(2)}}%</td></tr>
+            <tr><td><a href="/search/has-github-no-coveralls">Has GitHub but no Coveralls</a></td><td>{{stats.has_github_no_coveralls | commafy}}</td><td>{{(100 * stats.has_github_no_coveralls / stats.total) | round(2)}}%</td></tr>
+            <tr><td><a href="/search/has-coveralls">Has Coveralls</a></td><td>{{stats.has_coveralls | commafy}}</td><td>{{(100 * stats.has_coveralls / stats.total) | round(2)}}%</td></tr>
+            <tr><td><a href="/search/no-coveralls">No Coveralls</a></td><td>{{stats.no_coveralls | commafy}}</td><td>{{(100 * stats.no_coveralls / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/no-tox">No Tox</a></td><td>{{stats.no_tox | commafy}}</td><td>{{(100 * stats.no_tox / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/has-tox">Has Tox</a></td><td>{{stats.has_tox | commafy}}</td><td>{{(100 * stats.has_tox / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/has_bugtrack_url">Has bugtrack_url</a></td><td>{{stats.has_bugtrack_url | commafy}}</td><td>{{ (100 * stats.has_bugtrack_url / stats.total) | round(2)}}%</td></tr>
