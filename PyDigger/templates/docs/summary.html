@@ -1,0 +1,20 @@
+{% include "incl/header.html" %}
+
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <h2>Adding Summary</h2>
+        Each package can have a field called <b>summary</b> that contains the short description of the package.
+        The most common way to include it in the packages is to add a field called <b>description</b> to the the <b>setup</b> function in the <b>setup.py</b> of the project.
+        (Not to be confused with the <b>long_description</b>.)
+        <p>
+        In <b>setup</b> use the field <b>description</b> to provide a one-line description that will become the <b>summary</b> field in the JSON file.<br>
+        In <b>setup</b> use the field <b>long_descrption</b> to provide, well, a long description that will become the <b>description</b> field in the JSON file.
+        <h2></h2>
+        <p>
+    </div>
+    <div class="col-md-1"></div>
+</div>
+
+
+{% include "incl/footer.html" %}
