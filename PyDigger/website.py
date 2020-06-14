@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, url_for, Response, jsonify, g
+from flask import Flask, render_template, redirect, request, url_for, Response, jsonify, g, abort
 from datetime import datetime
 import hashlib
 import json
@@ -9,6 +9,7 @@ import os
 import pymongo
 import sys
 import time
+import re
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -295,3 +296,14 @@ def not_found(error):
 def json_converter(o):
     if isinstance(o, datetime):
         return o.__str__()
+
+@app.route("/docs/")
+@app.route("/docs/<page>")
+def docs(page = "index"):
+    if not re.search(r'^[a-z0-9]+$', page):
+        abort(404)
+    root = PyDigger.common.get_root()
+    filename = os.path.join(root, 'PyDigger', 'templates', 'docs', page + '.html')
+    if not os.path.exists(filename):
+        abort(404)
+    return render_template(f'docs/{page}.html')
