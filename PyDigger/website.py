@@ -297,6 +297,10 @@ def json_converter(o):
     if isinstance(o, datetime):
         return o.__str__()
 
+@app.route("/books")
+def books():
+    return render_template('books.html')
+
 @app.route("/docs/")
 @app.route("/docs/<page>")
 def docs(page = "index"):
