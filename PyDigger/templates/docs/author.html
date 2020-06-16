@@ -3,12 +3,33 @@
 <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-10">
+        <h2>Background</h2>
+        The Pydigger site monitors the uploads to <a href="https://pypi.org/">PyPI</a> and collects meta-data about the packages.
+        It shows various <a href="/stats">statistics</a> and points you to packages that could be improved by adding some simple meta-data to them.
+        One of the easiste to fix is the missing <b>author</b> field.
+
         <h2>Adding Author</h2>
-        Each package can have a field called <b>author</b> that contains the name of, well the author. The most common way to include it in the packages
-        is to add a field called <b>author</b> to the the <b>setup</b> function in the <b>setup.py</b> of the project.
-        In the video we checked the <a href="https://pydigger.com/pypi/eririn">eririn</a> project and then fixed the <a href="https://pydigger.com/pypi/arduino-udev">arduino-udev</a> project.
-        This is the <a href="https://github.com/strawlab/arduino-udev/pull/4">pull request</a> you can see in the video.
+        Each package can have a field called <b>author</b> that contains the name of, well the author. Accourding to our stats about
+        4.6% of the packages <a href="/search/no-author">have not author field</a>. About 1% <a href="/search/has-vcs-no-author">has VCS but no author field</a>
+        making them very easy to fix. (Locating the missing VCS-es (ak Version Control System) will be the material of another post.
         <p>
+        The most common way to include it in the package is to add a field called <b>author</b> to the the <b>setup</b> function in the <b>setup.py</b> of the project.
+        In the video we checked the <a href="https://pydigger.com/pypi/eririn">eririn</a> project to see how it is done
+        and then fixed the <a href="https://pydigger.com/pypi/arduino-udev">arduino-udev</a> project.
+        This is the <a href="https://github.com/strawlab/arduino-udev/pull/4">pull request</a> you can see in the video.
+        Within a few minutes the Pull-request was accepted.
+        <p>
+
+        <h2>Step you can do:</h2>
+        <ul>
+            <li>Visit the <a href="/search/has-vcs-no-author">list of packages that have VCS but no author field</a> and pick one.</li>
+            <li>Visit the source code of the package. (Link is on the page of the package)</li>
+            <li>In the VCS (Github, GitLab, Bitbucket, etc. look for the name of the author of the package.</li>
+            <li>Locate the <b>setup.py</b> in the root of the repository</li>
+            <li>Edit the file and add the <b>author</b> field.</li>
+            <li>Save it. (This creates a commit)</li>
+            <li>Send a Pull-Request</li>
+        </ul>
     </div>
     <div class="col-md-1"></div>
 </div>
