@@ -1,0 +1,29 @@
+{% include "incl/header.html" %}
+
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <h2>Adding the License field</h2>
+        Adding the <b>summary</b> is technically very similar to adding the <a href="author">author field</a>, but knowing what to write is a bit more challenging.
+        You'll have to check what is the real license of the project. Most probably there is a file called "LICENSE" in the root of the project with the full text
+        of the license. Issue <a href="https://github.com/szabgab/pydigger.com/issues/20">#20</a> call for the collection of that information.
+        <p>
+        Alternatively you can locate the bug-tracking system of the project (they are usually the same place the version control system can be found) and you can open
+        a ticket or issue depending the word the particular system uses.
+        <p>
+
+        <h2>Shortening the license field</h2>
+        We can <a href="/search?license=__long__">list package with long licenses</a> (over 50 character), but we don't have a way to list the ones that also have a VCS.
+        In general it would be better to use a short and standard name for each license. That will make them more comparable.
+
+        <h2>The technical details</h2>
+        The JSON file of each package can have a field called <b>license</b> that contains the short name of the license.
+        The most common way to include it in the packages is to add a field called <b>license</b> to the <b>setup</b> function in the <b>setup.py</b> of the project.
+        <p>
+        Ticket <a href="https://github.com/szabgab/pydigger.com/issues/19">#19</a> futher discusses the issues.
+    </div>
+    <div class="col-md-1"></div>
+</div>
+
+
+{% include "incl/footer.html" %}
