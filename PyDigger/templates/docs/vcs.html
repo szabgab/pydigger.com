@@ -1,0 +1,33 @@
+{% include "incl/header.html" %}
+
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <h2>Version Control System (VCS)</h2>
+        Nowadays most developers use some kind of a version control system for their project, usually with a publicly hosted version with read access to everyone.
+        The most commonly used Version Control System is <b>Git</b>. The most popular public Git hosting services are <a href="https://github.com/">GitHub</a>,
+        <a href="https://about.gitlab.com/">GitLab</a>, and <a href="https://bitbucket.org/">BitBucket</a>.
+        <p>
+        In order to make it easier to the users of the project, many people include a link to the version control system of the project in the meta-data of the project.
+        In most cases they use the <b>home_page</b> field. In other cases the link is embedded in the <b>description</b> field in the JSON file.
+        <p>
+        Our database indicates that about 32% of the packages have no VCS, however we have to take in account that our process only checks the <b>home_page</b> field
+        (not the description) and until June 12, 2020 the system only recognized GitHub URLs. Since then it also recognized GitLab and BitBucket URLs.
+        <p>
+        In order to make it easier for every to be able to contribute to their favorite project we would like to encourage more project owners to include the link to
+        their public VCS in their meta-data. Ideally there would be a specialized field for this (instead of re-using the home_page field), but for now the <b>home_page</b>
+        will do it.
+        <h2>How can you help fixing the situation?</h2>
+        Check the list of packages where we <a href="/search/no-vcs">have not found a VCS</a>. First make sure the package indeed does not have a link to its VCS.
+        Our code might have bugs or the package might have been indexed before some of our latest improvements to our indexing.
+        <p>
+        If there really is no VCS then finding and adding the link to it is probably not an easy task.
+        One thing that can be done is to see if the same author has multiple packages, maybe some of
+        the other packages have VCS links. Then the VCS of this package might be in a similar place.
+        In addition on could just manually search the major Git hosting services.
+    </div>
+    <div class="col-md-1"></div>
+</div>
+
+
+{% include "incl/footer.html" %}
