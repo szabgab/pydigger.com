@@ -13,3 +13,4 @@ recent.json
 /.cache/
 config.yml
 .mypy_cache/
+*.bak
