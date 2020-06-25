@@ -322,3 +322,18 @@ Failed to index:
 db.packages.createIndex( { author: -1 } )
 db.packages.createIndex( { license: -1 } )
 
+Copyright and LICENSE
+======================
+
+Copyright 2020 Gábor Szabó
+
+The source code in this repository is licensed under the MIT License.
+
+The content of the site as collected from the various sources
+are copyright the respective parties.
+
+
+
+
+
+
