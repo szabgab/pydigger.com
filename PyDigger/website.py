@@ -21,6 +21,32 @@ max_license_length = 50
 
 app = Flask(__name__)
 
+@app.before_first_request
+def before_first_request():
+    if os.environ.get('PYDIGGER_SKIP_SETUP'):
+        return
+
+    # set up logging
+    log_level = logging.ERROR
+    if os.environ.get('PYDIGGER_TEST'):
+        log_level = logging.DEBUG
+    log_level = logging.DEBUG
+
+    root = PyDigger.common.get_root()
+    logdir = os.path.join(root, 'log')
+    if not os.path.exists(logdir):
+        os.mkdir(logdir)
+    log_file = os.path.join(logdir, 'app.log')
+    log_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)-10s - %(message)s')
+    handler = logging.handlers.RotatingFileHandler(log_file, maxBytes=1_000_000, backupCount=10)
+    handler.setLevel(log_level)
+    handler.setFormatter(log_format)
+    app.logger.addHandler(handler)
+
+    app.logger.setLevel(log_level)
+
+    app.logger.info("setup")
+
 @app.before_request
 def before_request():
     app.logger.info(f"{request.full_path} referrer=={request.referrer}")
@@ -32,33 +58,6 @@ def after_request(response):
     elapsed_time = time.time() - g.request_start_time
     app.logger.info(f"{request.full_path} elapsed_time={elapsed_time}")
     return response
-
-def setup():
-    # set up logging
-    log_level = logging.ERROR
-    if os.environ.get('PYDIGGER_TEST'):
-        log_level = logging.DEBUG
-    log_level = logging.DEBUG
-
-    root = PyDigger.common.get_root()
-    logdir = root + '/log'
-    if not os.path.exists(logdir):
-        os.mkdir(logdir)
-    log_file = logdir + '/app.log'
-    log_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)-10s - %(message)s')
-    handler = logging.handlers.RotatingFileHandler(log_file, maxBytes=1_000_000, backupCount=10)
-    handler.setLevel(log_level)
-    handler.setFormatter(log_format)
-    app.logger.addHandler(handler)
-
-    app.logger.setLevel(log_level)
-
-    app.logger.info("setup")
-
-
-if not os.environ.get('PYDIGGER_SKIP_SETUP'):
-    setup()
-
 
 @app.template_filter()
 def commafy(value):

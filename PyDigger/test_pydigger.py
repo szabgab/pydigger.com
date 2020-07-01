@@ -45,7 +45,6 @@ def create_config_files():
 class Tools():
     def setup_class(self):
         self.tmpdir = create_config_files()
-        PyDigger.website.setup()
         self.app = PyDigger.website.app.test_client()
 
     def teardown_class(self):
