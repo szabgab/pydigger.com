@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, request, url_for, Response, jsonify, g, abort
-from datetime import datetime
+import datetime
 import hashlib
 import json
 import logging
@@ -269,7 +269,7 @@ Disallow: /search/*
 # def sitemap():
 #     xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
 #     xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-#     today = datetime.now().strftime("%Y-%m-%d")
+#     today = datetime.datetime.now().strftime("%Y-%m-%d")
 #
 #     for page in ('', 'stats', 'about'):
 #         xml += '  <url>\n'
@@ -293,7 +293,7 @@ def not_found(error):
     return render_template('404.html'), 404
 
 def json_converter(o):
-    if isinstance(o, datetime):
+    if isinstance(o, datetime.datetime):
         return o.__str__()
 
 @app.route("/books")
