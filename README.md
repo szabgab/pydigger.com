@@ -314,6 +314,7 @@ $ mongodb
 db.packages.createIndex( { github: -1 } )
 db.packages.createIndex( { split_keywords: -1 } )
 db.packages.createIndex( { name: -1 } )
+db.packages.createIndex( { upload_time: -1 } )
 
 ```
 
