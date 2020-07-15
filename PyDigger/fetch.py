@@ -449,7 +449,12 @@ def get_from_rss():
     packages = []
     seen_names = []
 
-    root = ET.fromstring(rss_data)
+    try:
+        root = ET.fromstring(rss_data)
+    except Exception as err:
+        logger.error(f"Could not parse rss_data\n{err}")
+        return packages
+        # seen: xml.etree.ElementTree.ParseError: not well-formed (invalid token)
 
     for item in root.iter('item'):
         title = item.find('title')
