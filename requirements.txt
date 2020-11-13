@@ -1,4 +1,5 @@
 flask               >= 0.8
+pytest              >= 0
 pymongo             >= 0
 github3.py          >= 0
 requirements-parser >= 0.1.0
