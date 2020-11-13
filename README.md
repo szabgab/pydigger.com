@@ -1,11 +1,13 @@
+# PyDigger
+
 Source code of https://pydigger.com/
 
 See the about page on the web site https://pydigger.com/about for some explanation.
 
 [![Build Status](https://travis-ci.org/szabgab/pydigger.com.png)](https://travis-ci.org/szabgab/pydigger.com)
 
-SETUP
-========
+
+## SETUP
 
 
 ```
@@ -16,8 +18,6 @@ pip install -r requirements.txt
 
 Install and launch MongoDB server.
 
-Sign up to GitHub, get a "Personal access token" from https://github.com/settings/tokens and save it
-in the github-token file in the root of the project.
 
 ```
 repo
@@ -28,7 +28,6 @@ user
    x user:email
 ```
 
-
 Create config.yml that looks like this:
 
 ```
@@ -37,7 +36,11 @@ username: ""
 password: ""
 server: "localhost:27017"
 dbname: "pydigger"
+github-token: "131491461"
 ```
+
+Sign up to GitHub, get a "Personal access token" from https://github.com/settings/tokens and save it
+in the config.yml file in the github-token field.
 
 
 Run on the server in crontab:
@@ -63,10 +66,9 @@ Run the web server in development mode.
 FLASK_APP=PyDigger.website FLASK_DEBUG=1 flask run  --port 5000 --host 127.0.0.1
 ```
 
-TODO
-======
+## TODO
 
-* Merge the github-token in the configuration file
+
 * Allow Travis to use a GitHub token for tests
 
 * Be able to delete entries manually (and maybe even to set them to "not-to-index"

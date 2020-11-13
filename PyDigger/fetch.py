@@ -40,14 +40,14 @@ class PyPackage(object):
     def __init__(self, name):
         self.lcname = name.lower()
         self.entry = {}
+        self.config = PyDigger.common.read_config()
         self.setup_github()
 
     def setup_github(self):
         logger = logging.getLogger(__name__)
         token = os.environ.get('GITHUB_TOKEN')
         if not token:
-            with open('github-token') as fh:
-                token = fh.readline().strip()
+            token = self.config['github-token']
 
         if not token:
             logger.error("No github token found")
