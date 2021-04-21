@@ -325,6 +325,27 @@ Failed to index:
 db.packages.createIndex( { author: -1 } )
 db.packages.createIndex( { license: -1 } )
 
+
+## Docker
+
+In one terminal:
+```
+docker-compose up
+```
+
+Run the tests in the Docker container
+
+```
+docker exec pydiggercom_web_1 pytest
+```
+
+Fetch data in the Docker container
+
+```
+```
+
+
+
 Copyright and LICENSE
 ======================
 

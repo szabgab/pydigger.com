@@ -1,0 +1,6 @@
+---
+username: "root"
+password: "Secret"
+server: "mymongo:27017"
+dbname: "pydigger"
+github-token: ""
