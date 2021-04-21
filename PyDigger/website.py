@@ -10,7 +10,6 @@ import pymongo
 import sys
 import time
 import re
-import datadog
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -50,7 +49,6 @@ def before_first_request():
         'statsd_host':'127.0.0.1',
         'statsd_port':8125
     }
-    datadog.initialize(**options)
 
     app.logger.info("setup")
 
@@ -65,8 +63,6 @@ def after_request(response):
     elapsed_time = time.time() - g.request_start_time
     app.logger.info(f"{request.full_path} elapsed_time={elapsed_time}")
 
-    datadog.statsd.gauge('pydigger.elapsed_time', elapsed_time)
-    #datadog.statsd.gauge('pydigger.full_path', request.full_path)
 
     return response
 
