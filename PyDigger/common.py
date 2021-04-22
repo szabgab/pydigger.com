@@ -44,7 +44,10 @@ cases['has_vcs_has_author']  = { '$and' : [ cases['has_vcs'], cases['has_author'
 cases['has_vcs_no_summary']   = { '$and' : [ cases['has_vcs'], cases['no_summary'] ] }
 
 def get_db():
+    log = logging.getLogger('PyDigger.common')
+    log.info("get_db")
     config = read_config()
+    log.info("username: {} server: {}".format(config["username"], config["server"] ))
     if config["username"] and config["password"]:
         connector = "mongodb://{}:{}@{}".format(config["username"], config["password"], config["server"])
     else:
@@ -64,7 +67,7 @@ def get_source_dir():
     return get_root() + "/src"
 
 def remove_package(name):
-    log = logging.getLogger('fetch')
+    log = logging.getLogger('PyDigger.common')
     db = get_db()
     doc = db.packages.find_one({'name' : name})
     if not doc:
@@ -73,7 +76,7 @@ def remove_package(name):
     log.info("res: {}".format(res))
 
 def show_package(name):
-    log = logging.getLogger('fetch')
+    log = logging.getLogger('PyDigger.common')
     db = get_db()
     doc = db.packages.find_one({'name' : name})
     if not doc:
@@ -81,7 +84,7 @@ def show_package(name):
     log.info("doc: {}".format(doc))
 
 def read_config():
-    log = logging.getLogger('fetch')
+    log = logging.getLogger('PyDigger.common')
     config_file = os.environ.get('PYDIGGER_CONFIG')
     if config_file is None:
         root = os.path.dirname(os.path.dirname(__file__))
