@@ -1,0 +1,8 @@
+version: '3.8'
+services:
+  web:
+    volumes:
+      - .:/opt
+    environment:
+     - PYDIGGER_CONFIG=dev.yml
+     - FLASK_DEBUG=1

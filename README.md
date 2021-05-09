@@ -331,7 +331,7 @@ db.packages.createIndex( { license: -1 } )
 
 In one terminal:
 ```
-docker-compose up --build
+docker-compose -f docker-compose.yml -f docker-compose-override.yml up --build
 ```
 
 Visit the web page at http://localhost:5001
