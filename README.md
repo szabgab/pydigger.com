@@ -39,8 +39,9 @@ dbname: "pydigger"
 github-token: "131491461"
 ```
 
-Sign up to GitHub, get a "Personal access token" from https://github.com/settings/tokens and save it
-in the config.yml file in the github-token field.
+Sign up to GitHub, create a [Personal access token](https://github.com/settings/tokens)
+(give it a name that you can easily recognize, e.g. PyDigger Development Token)
+and save it in the config.yml file in the github-token field.
 
 
 Run on the server in crontab:
@@ -330,8 +331,10 @@ db.packages.createIndex( { license: -1 } )
 
 In one terminal:
 ```
-docker-compose up
+docker-compose up --build
 ```
+
+Visit the web page at http://localhost:5001
 
 Run the tests in the Docker container
 
@@ -339,25 +342,35 @@ Run the tests in the Docker container
 docker exec pydiggercom_web_1 pytest
 ```
 
+Connect to the shell if the web application
+
+```
+docker exec -it pydiggercom_web_1 bash
+...
+Ctrl-D
+```
+
+```
+docker exec -it pydiggercom_mymongo_1 bash
+mongo
+>
+```
+
 Fetch data in the Docker container
 
 ```
+docker exec -it pydiggercom_web_1 bash
+$ python fetch_recent.py --update rss --screen --log DEBUG
+$ python fetch_recent.py --update dep --screen --log DEBUG
 ```
-
 
 
 Copyright and LICENSE
 ======================
 
-Copyright 2020 Gábor Szabó
+Copyright 2021 Gábor Szabó
 
 The source code in this repository is licensed under the MIT License.
 
 The content of the site as collected from the various sources
 are copyright the respective parties.
-
-
-
-
-
-
