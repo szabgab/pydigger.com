@@ -28,9 +28,10 @@ def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--screen', help='Log to the screen', action='store_true')
     parser.add_argument('--log',    help='Set logging level to DEBUG or INFO (or keep it at the default WARNING)', default='WARNING')
-    parser.add_argument('--update', help='update the entries: rss - the ones received via rss; deps - dependencies; all - all of the packages already in the database')
+    parser.add_argument('--update', help='update the entries: rss - the ones received via rss; deps - dependencies; all - all of the packages already in the database; url - provide the url of a github repository')
     parser.add_argument('--name',   help='Name of the package to update')
     parser.add_argument('--sleep',  help='How many seconds to sleep between packages (Help avoiding the GitHub API limit)', type=float)
+    parser.add_argument('--url', help='URL of a github repository')
     parser.add_argument('--limit',  help='Max number of packages to investigate. (Used during testing and development)', type=int)
     args = parser.parse_args()
     return args
@@ -158,8 +159,8 @@ class PyPackage(object):
                 match = re.search(vcs_es[vcs]['regex'], self.entry['home_page'])
                 if match:
                     self.entry[vcs] = True
-                    self.entry[f'{vcs}_user'] = match.group(1)
-                    self.entry[f'{vcs}_project'] = match.group(2)
+                    self.entry[f'{vcs}_user'] = match.group(2)
+                    self.entry[f'{vcs}_project'] = match.group(3)
                     logger.info(f"Project {self.lcname} Version {self.entry['version']} has VCS {vcs}: {vcs_url}")
                     vcs_found = True
                     break
@@ -224,12 +225,15 @@ class PyPackage(object):
 
         last_sha = branch.commit.sha
         logger.debug(f"last_sha: {last_sha}")
-        t = repo.tree(last_sha)
+        t = repo.tree(last_sha, recursive=True)
         self.entry['travis_ci'] = False
         self.entry['coveralls'] = False
+        self.entry['github_actions'] = False
         for e in t.tree:
             if e.path == '.travis.yml':
                 self.entry['travis_ci'] = True
+            if re.search(r'^.github/workflows/.*\.ya?ml$',e.path):
+                self.entry['github_actions'] = True
             if e.path == '.coveragerc':
                 self.entry['coveralls'] = True
             if e.path == 'tox.ini':
@@ -254,8 +258,8 @@ class PyPackage(object):
                         as_json = fh.read()
                         file_info = json.loads(as_json)
                         content = base64.b64decode(file_info['content'])
-                        logger.debug("content type: {content.__class__.__name__}")
-                        logger.debug("content: {content}")
+                        logger.debug(f"content type: {content.__class__.__name__}")
+                        logger.debug(f"content: {content}")
                         if content.__class__.__name__ == 'bytes':
                             content = content.decode('utf8')
 
@@ -268,7 +272,7 @@ class PyPackage(object):
                             with warnings.catch_warnings(record=True) as warn:
                                 warnings.simplefilter("always")
                                 for req in requirements.parse(content):
-                                    logger.debug("{field}: {req.name} {req.specs} {req.extras}")
+                                    logger.debug(f"{field}: {req.name} {req.specs} {req.extras}")
                                     # we cannot use the req.name as a key in the dictionary as some of the package names have a . in them
                                     # and MongoDB does not allow . in fieldnames.
                                     self.entry[field].append({ 'name' : req.name, 'specs' : req.specs })
@@ -392,6 +396,12 @@ def main():
         logger.debug("update: {}".format(args.update))
         if args.update == 'rss':
             packages = get_from_rss()
+        elif args.update == 'url':
+            package = PyPackage("foo")
+            package.entry['home_page'] = args.url
+            package.entry['version'] = 0
+            package.extract_vcs()
+            package.check_github()
         elif args.update == 'deps':
             logger.info("Listing dependencies")
             seen = {}

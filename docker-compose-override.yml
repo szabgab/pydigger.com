@@ -6,3 +6,9 @@ services:
     environment:
      - PYDIGGER_CONFIG=dev.yml
      - FLASK_DEBUG=1
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.57.0/24
