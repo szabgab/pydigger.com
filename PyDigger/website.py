@@ -19,7 +19,7 @@ from PyDigger.common import cases, get_stats_from_cache, get_latests_from_cache
 
 max_license_length = 50
 
-app = Flask(__name__)
+app = Flask('PyDigger')
 
 @app.before_first_request
 def before_first_request():
