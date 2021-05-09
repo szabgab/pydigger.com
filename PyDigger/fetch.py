@@ -258,8 +258,8 @@ class PyPackage(object):
                         as_json = fh.read()
                         file_info = json.loads(as_json)
                         content = base64.b64decode(file_info['content'])
-                        logger.debug("content type: {content.__class__.__name__}")
-                        logger.debug("content: {content}")
+                        logger.debug(f"content type: {content.__class__.__name__}")
+                        logger.debug(f"content: {content}")
                         if content.__class__.__name__ == 'bytes':
                             content = content.decode('utf8')
 
@@ -272,7 +272,7 @@ class PyPackage(object):
                             with warnings.catch_warnings(record=True) as warn:
                                 warnings.simplefilter("always")
                                 for req in requirements.parse(content):
-                                    logger.debug("{field}: {req.name} {req.specs} {req.extras}")
+                                    logger.debug(f"{field}: {req.name} {req.specs} {req.extras}")
                                     # we cannot use the req.name as a key in the dictionary as some of the package names have a . in them
                                     # and MongoDB does not allow . in fieldnames.
                                     self.entry[field].append({ 'name' : req.name, 'specs' : req.specs })
