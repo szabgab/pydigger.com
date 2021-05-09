@@ -361,7 +361,7 @@ Fetch data in the Docker container
 ```
 docker exec -it pydiggercom_web_1 bash
 $ python fetch_recent.py --update rss --screen --log DEBUG
-$ python fetch_recent.py --update dep --screen --log DEBUG
+$ python fetch_recent.py --update deps --screen --log DEBUG
 ```
 
 Run tests in the Docker compose:
