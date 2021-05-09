@@ -43,22 +43,27 @@ cases['has_vcs_no_author']   = { '$and' : [ cases['has_vcs'], cases['no_author']
 cases['has_vcs_has_author']  = { '$and' : [ cases['has_vcs'], cases['has_author'] ] }
 cases['has_vcs_no_summary']   = { '$and' : [ cases['has_vcs'], cases['no_summary'] ] }
 
-def get_db():
+def get_client_and_db():
     log = logging.getLogger('PyDigger.common')
-    log.info("get_db")
+    log.info("get_client_and_db")
     config = read_config()
     log.info("username: {} server: {}".format(config["username"], config["server"] ))
     if config["username"] and config["password"]:
         connector = "mongodb://{}:{}@{}".format(config["username"], config["password"], config["server"])
     else:
         connector = "mongodb://{}".format(config["server"])
-    client = MongoClient(connector)
-    return client[ config["dbname"] ]
+    client = MongoClient(connector, connectTimeoutMS=5000, socketTimeoutMS=5000)
+    return client, client[ config["dbname"] ]
+
+def get_db():
+    client, db = get_client_and_db()
+    return db
 
 def remove_db():
-    client = MongoClient()
-    config = read_config()
-    client.drop_database(config["dbname"])
+    #client = MongoClient()
+    #config = read_config()
+    client, db = get_client_and_db()
+    client.drop_database(db)
 
 def get_root():
     return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

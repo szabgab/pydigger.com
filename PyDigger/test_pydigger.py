@@ -4,6 +4,7 @@ import yaml
 import time
 import tempfile
 import shutil
+import logging
 
 os.environ['PYDIGGER_SKIP_SETUP'] = 'oh yeah'
 os.environ['PYDIGGER_TEST'] = 'oh yeah'
@@ -16,18 +17,10 @@ os.environ['PYDIGGER_SKIP_SETUP'] = ''
 root = os.path.dirname(os.path.dirname(__file__))
 sys.path.insert(0, root)
 
-
-class TestDigger:
-    def test_common(self):
-        root = PyDigger.common.get_root()
-        source_dir = PyDigger.common.get_source_dir()
-        assert root + '/src' == source_dir
-
-# TODO: Make sure the web site can be loaded even if the configuration files are missing and there is no access to the
-# databse. Report this properly in the log or on the generate web page.
-
 def create_config_files():
+    logger = logging.getLogger('PyDigger.test')
     tmpdir = tempfile.mkdtemp()
+    logger.info(f"tmpdir {tmpdir}")
     config_file = os.path.join(tmpdir, 'test_config.yml')
     os.environ['PYDIGGER_CONFIG'] = config_file
 
@@ -42,10 +35,22 @@ def create_config_files():
             yaml.dump(config, outfile, default_flow_style=False)
     return tmpdir
 
+
+class TestDigger:
+    def test_common(self):
+        root = PyDigger.common.get_root()
+        source_dir = PyDigger.common.get_source_dir()
+        assert root + '/src' == source_dir
+
+# TODO: Make sure the web site can be loaded even if the configuration files are missing and there is no access to the
+# databse. Report this properly in the log or on the generate web page.
+
 class Tools():
     def setup_class(self):
+        self.logger = logging.getLogger('PyDigger.test')
         self.tmpdir = create_config_files()
         self.app = PyDigger.website.app.test_client()
+
 
     def teardown_class(self):
         if not os.environ.get('KEEP_DB'):
@@ -82,6 +87,7 @@ class TestEmptyWeb(Tools):
         assert b'<title></title>' in rv.data  # TODO make 404 page look nicer and have some title and body
 
     def test_api_recent(self):
+        self.logger.info(f"test_api_recent")
         rv = self.app.get('/api/0/recent')
         assert rv.status == '200 OK'
         assert rv.headers['Content-Type'] == 'application/json'
