@@ -364,6 +364,12 @@ $ python fetch_recent.py --update rss --screen --log DEBUG
 $ python fetch_recent.py --update dep --screen --log DEBUG
 ```
 
+Run tests in the Docker compose:
+
+```
+docker exec -it pydiggercom_web_1 pytest
+```
+
 
 Copyright and LICENSE
 ======================
