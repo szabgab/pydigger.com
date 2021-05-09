@@ -56,5 +56,5 @@ jobs:
     - name: Build the stack
       run: docker-compose up -d
     - name: Test
-      run: docker exec -it pydiggercom_web_1 pytest
+      run: docker exec pydiggercom_web_1 pytest
 
