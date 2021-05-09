@@ -33,9 +33,9 @@ def create_config_files():
 
     if not os.path.exists(config_file):
         config = {
-            "username": "",
-            "password": "",
-            "server": "localhost:27017",
+            "username": "root",
+            "password": "Secret",
+            "server": "mymongo:27017",
             "dbname": "test_pydigger_{}".format(str(time.time()).replace('.', '_')),
         }
         with open(config_file, 'w') as outfile:
