@@ -1,14 +1,17 @@
 # PyDigger
 
-Source code of https://pydigger.com/
+Source code of [PyDigger](https://pydigger.com/)
 
 See the [about page](https://pydigger.com/about) on the web site for some explanation.
 
 ## SETUP
 
-* Install Docker
-* Install docker-compose
-* Sign up to GitHub, create a [Personal access token](https://github.com/settings/tokens) using the following rights:
+* Clone the repository.
+* [Install Docker](https://docs.docker.com/get-docker/).
+* [Install docker-compose](https://docs.docker.com/compose/install/).
+* Copy `config-skeleton.yml` to `dev.yml`.
+* Sign up to [GitHub](https://github.com/)
+* Create a [Personal access token](https://github.com/settings/tokens) with a name that you can easily recognize, e.g. "PyDigger Development Token" using the following rights:
 
 ```
 repo
@@ -18,19 +21,8 @@ user
    x read:user
    x user:email
 ```
-* (give it a name that you can easily recognize, e.g. PyDigger Development Token) and save it in the config.yml file in the github-token field.
+* Save the token it in the `dev.yml` file in the `github-token` field.
 
-
-* Create config.yml that looks like this:
-
-```
----
-username: ""
-password: ""
-server: "localhost:27017"
-dbname: "pydigger"
-github-token: "131491461"
-```
 
 In one terminal:
 ```
@@ -64,9 +56,8 @@ mongo
 Fetch data in the Docker container
 
 ```
-docker exec -it pydiggercom_web_1 bash
-$ python fetch_recent.py --update rss --screen --log DEBUG
-$ python fetch_recent.py --update deps --screen --log DEBUG
+docker exec -it pydiggercom_web_1 python fetch_recent.py --update rss --screen --log DEBUG
+docker exec -it pydiggercom_web_1 python fetch_recent.py --update deps --screen --log DEBUG
 ```
 
 
