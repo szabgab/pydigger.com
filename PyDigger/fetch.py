@@ -37,7 +37,7 @@ def get_args():
     return args
 
 
-class PyPackage(object):
+class PyPackage:
     def __init__(self, name):
         self.lcname = name.lower()
         self.entry = {}
