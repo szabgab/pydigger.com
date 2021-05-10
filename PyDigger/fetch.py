@@ -122,7 +122,7 @@ class PyPackage(object):
             try:
                 self.check_github()
             except github3.exceptions.NotFoundError:
-                logger.error(f"404 NotFountError while trying to get data from GitHub: '{self.entry['home_page']}'")
+                logger.error(f"404 NotFoundError while trying to get data from GitHub: '{self.entry['home_page']}'")
             except Exception:
                 logger.exception(f"Error while trying to get data from GitHub: '{self.entry['home_page']}'")
 
