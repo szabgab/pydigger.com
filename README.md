@@ -2,22 +2,13 @@
 
 Source code of https://pydigger.com/
 
-See the about page on the web site https://pydigger.com/about for some explanation.
-
-[![Build Status](https://travis-ci.org/szabgab/pydigger.com.png)](https://travis-ci.org/szabgab/pydigger.com)
-
+See the [about page](https://pydigger.com/about) on the web site for some explanation.
 
 ## SETUP
 
-
-```
-virtualenv venv
-source venv/bin/activate
-pip install -r requirements.txt
-```
-
-Install and launch MongoDB server.
-
+* Install Docker
+* Install docker-compose
+* Sign up to GitHub, create a [Personal access token](https://github.com/settings/tokens) using the following rights:
 
 ```
 repo
@@ -27,8 +18,10 @@ user
    x read:user
    x user:email
 ```
+* (give it a name that you can easily recognize, e.g. PyDigger Development Token) and save it in the config.yml file in the github-token field.
 
-Create config.yml that looks like this:
+
+* Create config.yml that looks like this:
 
 ```
 ---
@@ -39,10 +32,58 @@ dbname: "pydigger"
 github-token: "131491461"
 ```
 
-Sign up to GitHub, create a [Personal access token](https://github.com/settings/tokens)
-(give it a name that you can easily recognize, e.g. PyDigger Development Token)
-and save it in the config.yml file in the github-token field.
+In one terminal:
+```
+docker-compose -f docker-compose.yml -f docker-compose-override.yml up --build
+```
 
+Visit the web page at http://localhost:6001
+
+Run the tests in the Docker container
+
+```
+docker exec pydiggercom_web_1 pytest
+```
+
+Connect to the shell of the web application
+
+```
+docker exec -it pydiggercom_web_1 bash
+...
+Ctrl-D
+```
+
+Connect to the shell of the MongoDB server
+
+```
+docker exec -it pydiggercom_mymongo_1 bash
+mongo
+>
+```
+
+Fetch data in the Docker container
+
+```
+docker exec -it pydiggercom_web_1 bash
+$ python fetch_recent.py --update rss --screen --log DEBUG
+$ python fetch_recent.py --update deps --screen --log DEBUG
+```
+
+
+Cleaning up database (during development)
+
+```
+docker exec pydiggercom_web_1 python remove_db.py
+```
+
+Run the web server in development mode.
+
+```
+FLASK_APP=PyDigger.website FLASK_DEBUG=1 flask run  --port 5000 --host 127.0.0.1
+```
+
+
+## Deployment
 
 Run on the server in crontab:
 
@@ -53,24 +94,7 @@ python fetch_recent.py --update deps
 ```
 
 
-Cleaning up database (during development)
-```
-$ mongodb      (On Ubuntu 2019.04 the client is called mongo)
-> show dbs
-> use pydigger
-> db.dropDatabase()
-```
-
-Run the web server in development mode.
-
-```
-FLASK_APP=PyDigger.website FLASK_DEBUG=1 flask run  --port 5000 --host 127.0.0.1
-```
-
 ## TODO
-
-
-* Allow Travis to use a GitHub token for tests
 
 * Be able to delete entries manually (and maybe even to set them to "not-to-index"
   if they might violate copyright or in some way might be illegal.
@@ -327,49 +351,6 @@ db.packages.createIndex( { author: -1 } )
 db.packages.createIndex( { license: -1 } )
 
 
-## Docker
-
-In one terminal:
-```
-docker-compose -f docker-compose.yml -f docker-compose-override.yml up --build
-```
-
-Visit the web page at http://localhost:5001
-
-Run the tests in the Docker container
-
-```
-docker exec pydiggercom_web_1 pytest
-```
-
-Connect to the shell if the web application
-
-```
-docker exec -it pydiggercom_web_1 bash
-...
-Ctrl-D
-```
-
-```
-docker exec -it pydiggercom_mymongo_1 bash
-mongo
->
-```
-
-Fetch data in the Docker container
-
-```
-docker exec -it pydiggercom_web_1 bash
-$ python fetch_recent.py --update rss --screen --log DEBUG
-$ python fetch_recent.py --update deps --screen --log DEBUG
-```
-
-Run tests in the Docker compose:
-
-```
-docker exec -it pydiggercom_web_1 pytest
-```
-
 
 Copyright and LICENSE
 ======================
@@ -380,3 +361,10 @@ The source code in this repository is licensed under the MIT License.
 
 The content of the site as collected from the various sources
 are copyright the respective parties.
+
+## Contributors
+
+* Upasana Shukla
+* Ed Sabol
+* Greg Lawrance
+
