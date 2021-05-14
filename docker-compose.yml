@@ -1,11 +1,22 @@
 version: '3.8'
 services:
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
     - "127.0.0.1:6001:5000"
     links:
     - mymongo
+    restart: unless-stopped
+  cron:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    links:
+    - mymongo
+    restart: unless-stopped
+    entrypoint: cron -f -L3
   mymongo:
     image: mongo:4.4
     environment:
@@ -14,6 +25,7 @@ services:
     volumes:
       - mongo-data:/data/db
       - mongo-configdb:/data/configdb
+    restart: unless-stopped
 volumes:
   mongo-data:
   mongo-configdb:
