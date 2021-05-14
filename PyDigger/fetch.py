@@ -128,7 +128,14 @@ class PyPackage:
 
         self.entry['lcname'] = self.entry['name'].lower()
         self.download_pkg()
+        self.analyze_source_code()
         self.save()
+
+
+    def analyze_source_code(self):
+        pass
+        # We probably don't need to clone the repo with `git clone --depth 1 {URL}` as we already have it downloaded
+        # myflake.process(directory)
 
     def extract_vcs(self):
         logger = logging.getLogger('PyDigger.fetch')
