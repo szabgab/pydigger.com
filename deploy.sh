@@ -1,3 +1,6 @@
+#!/usr/bin/bash
+export PATH=$PATH:/home/gabor/docker-compose/bin
+
 git pull
 docker-compose build
 docker-compose stop --time 0
