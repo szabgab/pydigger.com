@@ -363,7 +363,10 @@ def setup_logger(args):
         logger.addHandler(sh)
     else:
         project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        log_file = os.path.join(project_root, 'log', 'fetch.log')
+        log_dir = os.path.join(project_root, 'log')
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+        log_file = os.path.join(log_dir, 'fetch.log')
         ch = logging.handlers.RotatingFileHandler(log_file, maxBytes=10_000_000, backupCount=10)
         ch.setLevel(log_level)
         ch.setFormatter(log_format)
