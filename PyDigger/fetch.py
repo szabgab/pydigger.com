@@ -66,7 +66,7 @@ class PyPackage:
             f = urllib.request.urlopen(url)
             json_data = f.read()
             f.close()
-            #print(json_data)
+            #logger.debug(json_data)
         except (urllib.request.HTTPError, urllib.request.URLError, http.client.InvalidURL, ConnectionError) as err:
             logger.error(f"Could not fetch details of PyPI package from '{url}'. Error: {type(err)}: {err}")
             #self.entry['json_missing'] = True
@@ -135,7 +135,7 @@ class PyPackage:
         vcs_found = False
         # https://github.com/szabgab/pydigger.com/
         # https://bitbucket.org/ensighten-ondemand/dataintelligence-exports-cli
-        # http://gitlab.com/dimasmjunior/classic
+        # https://gitlab.com/dimasmjunior/classic
         vcs_es = {
             'github': {
                 'host': 'github.com',
@@ -325,10 +325,7 @@ class PyPackage:
         logger = logging.getLogger('PyDigger.fetch')
         entry = self.entry
         logger.info("save_entry: '{}'".format(entry['name']))
-        #logger.debug("save_entry: {}".format(e)
 
-        #my_entries.append(e)
-        #print(e)
         # TODO make sure we only add newer version!
         # Version numbers I've seen:
         # 1.0.3
@@ -337,9 +334,6 @@ class PyPackage:
         # 3.1.0a12
         # 2.0.0.dev11
 
-        #doc = db.packages.find_one({'name' : e['name']})
-        #if doc:
-            #print(doc)
         db.packages.remove({'name' : entry['name']})
         db.packages.remove({'name' : entry['name'].lower()})
         res = db.packages.insert(entry)
