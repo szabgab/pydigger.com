@@ -1,0 +1,2 @@
+14,44 * * * * (cd /opt; python3 fetch_recent.py --update rss --sleep 3 --log DEBUG) >> /opt/cron.log 2>&1
+53    * * * * (cd /opt; python3 fetch_recent.py --update deps --sleep 3 --log DEBUG) >> /opt/cron.log 2>&1
