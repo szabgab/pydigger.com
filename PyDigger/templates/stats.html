@@ -21,6 +21,7 @@
         </table>
         <h2>CI</h2>
         <table class="table">
+            <tr><td><a href="/search/has-github-no-ci">Has GitHub but no CI</a></td><td>{{stats.has_github_no_ci | commafy}}</td><td>{{(100 * stats.has_github_no_ci / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/has-github-no-travis-ci">Has GitHub but no Travis-CI</a></td><td>{{stats.has_github_no_travis_ci | commafy}}</td><td>{{(100 * stats.has_github_no_travis_ci / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/has-travis-ci">Has Travis-CI</a></td><td>{{stats.has_travis_ci | commafy}}</td><td>{{(100 * stats.has_travis_ci / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/no-travis-ci">No Travis-CI</a></td><td>{{stats.no_travis_ci | commafy}}</td><td>{{(100 * stats.no_travis_ci / stats.total) | round(2)}}%</td></tr>
