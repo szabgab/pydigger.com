@@ -8,9 +8,6 @@
                   <a href="https://pypi.org/project/{{package.name}}/{{package.version}}">{{package.version}}</a>
                   <a href="https://badge.fury.io/py/{{package.name}}"><img src="https://badge.fury.io/py/{{package.name}}.svg" alt="PyPI version" height="18"></a>
                   <a href="https://pypi.org/pypi/{{package.name}}/{{package.version}}/json">JSON</a></td>
-            {% if 'error' in e %}
-            <tr><td>Error:</td><td class="danger">{{ e['error'] }}</td></tr>
-            {% endif %}
             <tr><td></td><td><a href="{{package.download_url}}">download</a> </td>
             <tr><td>home_page</td><td><a href="{{package.home_page}}">{{package.home_page}}</a> </td>
             <tr><td>Summary</td><td>{{package.summary}}</td></tr>
