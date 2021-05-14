@@ -236,29 +236,30 @@ class PyPackage:
         self.entry['travis_ci'] = False
         self.entry['coveralls'] = False
         self.entry['github_actions'] = False
-        for e in t.tree:
-            if e.path == '.travis.yml':
+        for file in t.tree:
+            if file.path == '.travis.yml':
                 self.entry['travis_ci'] = True
-            if re.search(r'^.github/workflows/.*\.ya?ml$',e.path):
+            if re.search(r'^.github/workflows/.*\.ya?ml$', file.path):
                 self.entry['github_actions'] = True
-            if e.path == '.coveragerc':
+            if file.path == '.coveragerc':
                 self.entry['coveralls'] = True
-            if e.path == 'tox.ini':
+            if file.path == 'tox.ini':
                 self.entry['tox'] = True # http://codespeak.net/tox/
-            if e.path == 'circle.yml':
+            if file.path == 'circle.yml':
                 self.entry['circle'] = True # https://circleci.com/
-            if e.path == 'appveyor.yml':
+            if file.path == 'appveyor.yml':
                 self.entry['appveyor'] = True # https://www.appveyor.com/
-            if e.path == '.appveyor.yml':
+            if file.path == '.appveyor.yml':
                 self.entry['appveyor'] = True # https://www.appveyor.com/
-            if e.path == '.editconfig':
+            if file.path == '.editconfig':
                 self.entry['editconfig'] = True # http://editorconfig.org/
-            if e.path == 'dockbot.json':
+            if file.path == 'dockbot.json':
                 self.entry['dockbot'] = True # https://github.com/CauldronDevelopmentLLC/dockbot
-            if e.path == '.landscape.yml':
+            if file.path == '.landscape.yml':
                 self.entry['landscape'] = True # https://help.ubuntu.com/lts/clouddocs/en/Installing-Landscape.html
+
             for field in requirements_fields:
-                if e.path == field + '.txt':
+                if file.path == field + '.txt':
                     self.entry[field] = []
                     try:
                         fh = urllib.request.urlopen(e.url)
