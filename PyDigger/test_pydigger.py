@@ -51,7 +51,6 @@ class Tools():
         self.tmpdir = create_config_files()
         self.app = PyDigger.website.app.test_client()
 
-
     def teardown_class(self):
         if not os.environ.get('KEEP_DB'):
             print(self.tmpdir)
@@ -87,7 +86,7 @@ class TestEmptyWeb(Tools):
         assert b'<title></title>' in rv.data  # TODO make 404 page look nicer and have some title and body
 
     def test_api_recent(self):
-        self.logger.info(f"test_api_recent")
+        self.logger.info("test_api_recent")
         rv = self.app.get('/api/0/recent')
         assert rv.status == '200 OK'
         assert rv.headers['Content-Type'] == 'application/json'

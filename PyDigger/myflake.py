@@ -7,12 +7,11 @@ from io import StringIO
 # Given a directory path, run flake8 in that directory and return the data
 
 
-def process(path_to_dir):  
+def process(path_to_dir):
     python_files = get_python_files(path_to_dir)
 
     # TODO read .flake8 configuration file and generate the report accoringly
     report = run_flake8(python_files)
-
 
     reports = {}
     for key in ['A', 'E', 'F', 'W']:
@@ -36,7 +35,7 @@ def run_flake8(python_files):
     backup = sys.stdout
     sys.stdout = StringIO()
     report = style_guide.check_files(python_files)
-    out = sys.stdout.getvalue()
+#    out = sys.stdout.getvalue()
     sys.stdout = backup
     return report
 
@@ -51,8 +50,6 @@ def get_python_files(path_to_dir):
             path = os.path.join(dirname, filename)   # relative path to the "current" file
             python_files.append(path)
     return python_files
-
-
 
 
 # '/home/gabor/x/e-commerce'

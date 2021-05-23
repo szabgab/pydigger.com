@@ -261,7 +261,7 @@ class PyPackage:
                 if file.path == field + '.txt':
                     self.entry[field] = []
                     try:
-                        fh = urllib.request.urlopen(e.url)
+                        fh = urllib.request.urlopen(file.url)
                         as_json = fh.read()
                         file_info = json.loads(as_json)
                         content = base64.b64decode(file_info['content'])
