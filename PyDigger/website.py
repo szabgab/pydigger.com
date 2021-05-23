@@ -7,15 +7,10 @@ import logging.handlers
 import math
 import os
 import pymongo
-import sys
 import time
 import re
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 import PyDigger.common
 from PyDigger.common import cases, get_stats_from_cache, get_latests_from_cache
-
 
 max_license_length = 50
 
@@ -45,10 +40,10 @@ def before_first_request():
 
     app.logger.setLevel(log_level)
 
-    options = {
-        'statsd_host':'127.0.0.1',
-        'statsd_port':8125
-    }
+    # options = {
+    #     'statsd_host':'127.0.0.1',
+    #     'statsd_port':8125
+    # }
 
     app.logger.info("setup")
 
@@ -62,8 +57,6 @@ def before_request():
 def after_request(response):
     elapsed_time = time.time() - g.request_start_time
     app.logger.info(f"{request.full_path} elapsed_time={elapsed_time}")
-
-
     return response
 
 @app.template_filter()

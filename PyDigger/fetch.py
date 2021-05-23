@@ -14,6 +14,9 @@ import sys
 from datetime import datetime
 import github3
 import warnings
+import requests
+import tempfile
+import tarfile
 
 import PyDigger.common
 
@@ -130,7 +133,6 @@ class PyPackage:
         self.download_pkg()
         self.analyze_source_code()
         self.save()
-
 
     def analyze_source_code(self):
         pass
@@ -262,7 +264,7 @@ class PyPackage:
                 if file.path == field + '.txt':
                     self.entry[field] = []
                     try:
-                        fh = urllib.request.urlopen(e.url)
+                        fh = urllib.request.urlopen(file.url)
                         as_json = fh.read()
                         file_info = json.loads(as_json)
                         content = base64.b64decode(file_info['content'])
@@ -325,8 +327,16 @@ class PyPackage:
         src_dir = PyDigger.common.get_source_dir()
         logger.info(f"Source directory: {src_dir}")
 
-        # TODO use the requests module to download the zipfile
-
+        request = requests.get(self.entry['download_url'])
+        temp_dir = tempfile.mkdtemp()
+        # os.chdir(temp_dir)
+        # temp_file = os.path.join(temp_dir,f'temp{extension}')
+        # with open(temp_file, 'wb') as fh:
+        #     fh.write(request.content)
+        # tar = tarfile.open(temp_file, "r:gz")
+        # tar.extractall()
+        # tar.close()
+        # os.system("ls -l")
         # self.downloaded_from_url = True
 
     def save(self):
