@@ -36,7 +36,7 @@ def run_flake8(python_files):
     backup = sys.stdout
     sys.stdout = StringIO()
     report = style_guide.check_files(python_files)
-    print("report: {report}");
+    print("report: {report}")
     #    out = sys.stdout.getvalue()
     sys.stdout = backup
     return report
@@ -58,8 +58,8 @@ def get_python_files(path_to_dir):
 
 # '/home/gabor/x/e-commerce'
 if __name__ == '__main__':
-    logger = logging.getLogger('PyDigger')
-    logger.setLevel('DEBUG')
+    # logger = logging.getLogger('PyDigger')
+    # logger.setLevel('DEBUG')
     if len(sys.argv) != 2:
         exit(f"Usage: {sys.argv[0]} PATH")
     reports = process(sys.argv[1])
