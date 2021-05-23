@@ -131,7 +131,6 @@ class PyPackage:
         self.analyze_source_code()
         self.save()
 
-
     def analyze_source_code(self):
         pass
         # We probably don't need to clone the repo with `git clone --depth 1 {URL}` as we already have it downloaded
