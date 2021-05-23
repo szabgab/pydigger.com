@@ -14,9 +14,9 @@ import sys
 from datetime import datetime
 import github3
 import warnings
-import requests
-import tempfile
-import tarfile
+# import requests
+# import tempfile
+# import tarfile
 
 import PyDigger.common
 
@@ -327,8 +327,8 @@ class PyPackage:
         src_dir = PyDigger.common.get_source_dir()
         logger.info(f"Source directory: {src_dir}")
 
-        request = requests.get(self.entry['download_url'])
-        temp_dir = tempfile.mkdtemp()
+        # request = requests.get(self.entry['download_url'])
+        # temp_dir = tempfile.mkdtemp()
         # os.chdir(temp_dir)
         # temp_file = os.path.join(temp_dir,f'temp{extension}')
         # with open(temp_file, 'wb') as fh:
