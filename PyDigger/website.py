@@ -7,15 +7,10 @@ import logging.handlers
 import math
 import os
 import pymongo
-import sys
 import time
 import re
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 import PyDigger.common
 from PyDigger.common import cases, get_stats_from_cache, get_latests_from_cache
-
 
 max_license_length = 50
 

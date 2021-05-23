@@ -5,12 +5,11 @@ import time
 import tempfile
 import shutil
 import logging
+import PyDigger.common
+import PyDigger.website
 
 os.environ['PYDIGGER_SKIP_SETUP'] = 'oh yeah'
 os.environ['PYDIGGER_TEST'] = 'oh yeah'
-
-import PyDigger.common
-import PyDigger.website
 
 os.environ['PYDIGGER_SKIP_SETUP'] = ''
 
