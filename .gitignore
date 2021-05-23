@@ -15,3 +15,4 @@ config.yml
 dev.yml
 .mypy_cache/
 *.bak
+*~
