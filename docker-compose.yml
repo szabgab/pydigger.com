@@ -25,7 +25,9 @@ services:
     volumes:
       - mongo-data:/data/db
       - mongo-configdb:/data/configdb
+      - mongo-backup:/data/backup
     restart: unless-stopped
 volumes:
   mongo-data:
   mongo-configdb:
+  mongo-backup:
