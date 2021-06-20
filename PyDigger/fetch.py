@@ -14,11 +14,26 @@ import sys
 from datetime import datetime
 import github3
 import warnings
-# import requests
-# import tempfile
-# import tarfile
+import requests
+import tempfile
+import tarfile
 
 import PyDigger.common
+import os
+import shutil
+from contextlib import contextmanager
+import PyDigger.myflake
+
+@contextmanager
+def tempdir():
+    temp_dir = tempfile.mkdtemp()
+    oldpwd = os.getcwd()
+    os.chdir(temp_dir)
+    try:
+        yield temp_dir
+    finally:
+        os.chdir(oldpwd)
+        shutil.rmtree(temp_dir)
 
 requirements_fields = ['requirements', 'test_requirements']
 
@@ -36,6 +51,7 @@ def get_args():
     parser.add_argument('--sleep',  help='How many seconds to sleep between packages (Help avoiding the GitHub API limit)', type=float)
     parser.add_argument('--url', help='URL of a github repository')
     parser.add_argument('--limit',  help='Max number of packages to investigate. (Used during testing and development)', type=int)
+    parser.add_argument('--package',  help='Name of a PyPI package that would fit this URL https://pypi.org/pypi/<package>',)
     args = parser.parse_args()
     return args
 
@@ -327,17 +343,19 @@ class PyPackage:
         src_dir = PyDigger.common.get_source_dir()
         logger.info(f"Source directory: {src_dir}")
 
-        # request = requests.get(self.entry['download_url'])
-        # temp_dir = tempfile.mkdtemp()
-        # os.chdir(temp_dir)
-        # temp_file = os.path.join(temp_dir,f'temp{extension}')
-        # with open(temp_file, 'wb') as fh:
-        #     fh.write(request.content)
-        # tar = tarfile.open(temp_file, "r:gz")
-        # tar.extractall()
-        # tar.close()
-        # os.system("ls -l")
-        # self.downloaded_from_url = True
+        request = requests.get(self.entry['download_url'])
+        with tempdir() as temp_dir:
+            temp_file = os.path.join(temp_dir,f'temp{extension}')
+            with open(temp_file, 'wb') as fh:
+                fh.write(request.content)
+            tar = tarfile.open(temp_file, "r:gz")
+            tar.extractall()
+            tar.close()
+            flake_report = PyDigger.myflake.process(temp_dir)
+            self.entry['flake8_score'] = flake_report
+            logger.info(flake_report)
+            os.system("ls -l")
+            self.downloaded_from_url = True
 
     def save(self):
         logger = logging.getLogger('PyDigger.fetch')
@@ -411,10 +429,13 @@ def main():
         logger.debug("update: {}".format(args.update))
         if args.update == 'rss':
             packages = get_from_rss()
+        elif args.update == 'package':
+            packages = [{ 'name': args.package }]
         elif args.update == 'url':
             package = PyPackage("foo")
             package.entry['home_page'] = args.url
             package.entry['version'] = 0
+            names = [ 'foo' ]
             package.extract_vcs()
             package.check_github()
         elif args.update == 'deps':

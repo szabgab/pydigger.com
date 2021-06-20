@@ -10,7 +10,7 @@ import pymongo
 import time
 import re
 import PyDigger.common
-from PyDigger.common import cases, get_stats_from_cache, get_latests_from_cache
+from PyDigger.common import cases, get_stats_from_cache, get_latests_from_cache, get_flake8_report
 
 max_license_length = 50
 
@@ -230,6 +230,16 @@ def stats():
     return render_template('stats.html',
         title = "PyDigger - Statistics",
         stats = stats,
+    )
+
+
+@app.route("/stats/flake8")
+def flake8():
+    flake8_report = get_flake8_report()
+
+    return render_template('flake8.html',
+        title = "PyDigger - Flake8",
+        flake8_report = flake8_report,
     )
 
 @app.route("/pypi/<name>")

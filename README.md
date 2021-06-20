@@ -26,7 +26,8 @@ user
 
 In one terminal:
 ```
-docker-compose -f docker-compose.yml -f docker-compose-override.yml up --build
+cp docker-compose.override.yml.example docker-compose.override.yml
+docker-compose up --build
 ```
 
 Visit the web page at http://localhost:6001
@@ -41,6 +42,12 @@ Connect to the shell of the web application
 
 ```
 docker exec -it pydiggercom_web_1 bash
+
+# To run for only one URL and to print the logs on the STDOUT/STDERR instead of a file
+python fetch_recent.py --update url --url https://github.com/szabgab/pydigger.com --log DEBUG --screen
+
+# To run for only one package and to print the logs on the STDOUT/STDERR instead of a file
+python fetch_recent.py --update package --package <PyPI package name> --log DEBUG --screen
 ...
 Ctrl-D
 ```
@@ -49,8 +56,10 @@ Connect to the shell of the MongoDB server
 
 ```
 docker exec -it pydiggercom_mymongo_1 bash
-mongo
->
+mongo -u root -p Secret # to login to mongodb
+> use pydigger # pydigger is our database name
+> db.dropDatabase() # To drop the pydigger database
+> db.packages.find() # To list all the entries
 ```
 
 Fetch data in the Docker container
