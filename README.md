@@ -56,8 +56,10 @@ Connect to the shell of the MongoDB server
 
 ```
 docker exec -it pydiggercom_mymongo_1 bash
-mongo
->
+mongo -u root -p Secret # to login to mongodb
+> use pydigger # pydigger is our database name
+> db.dropDatabase() # To drop the pydigger database
+> db.packages.find() # To list all the entries
 ```
 
 Fetch data in the Docker container
