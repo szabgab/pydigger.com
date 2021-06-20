@@ -352,6 +352,7 @@ class PyPackage:
             tar.extractall()
             tar.close()
             flake_report = PyDigger.myflake.process(temp_dir)
+            self.entry['flake8_score'] = flake_report
             logger.info(flake_report)
             os.system("ls -l")
             self.downloaded_from_url = True
