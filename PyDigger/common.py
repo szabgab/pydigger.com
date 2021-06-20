@@ -127,7 +127,7 @@ def get_latests_from_cache():
     return data
 
 def get_flake8_report():
-    db = get_db()
+    # db = get_db()
     return {}
 # https://stackoverflow.com/questions/16492891/mongodb-aggregation-get-counts-of-key-value-pairs
 #     map = function () {

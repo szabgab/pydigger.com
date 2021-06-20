@@ -19,7 +19,6 @@ import tempfile
 import tarfile
 
 import PyDigger.common
-import os
 import shutil
 from contextlib import contextmanager
 import PyDigger.myflake
@@ -34,6 +33,7 @@ def tempdir():
     finally:
         os.chdir(oldpwd)
         shutil.rmtree(temp_dir)
+
 
 requirements_fields = ['requirements', 'test_requirements']
 
