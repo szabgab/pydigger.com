@@ -26,7 +26,8 @@ user
 
 In one terminal:
 ```
-docker-compose -f docker-compose.yml -f docker-compose-override.yml up --build
+cp docker-compose.override.yml.example docker-compose.override.yml
+docker-compose up --build
 ```
 
 Visit the web page at http://localhost:6001

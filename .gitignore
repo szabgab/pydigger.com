@@ -16,3 +16,4 @@ dev.yml
 .mypy_cache/
 *.bak
 *~
+docker-compose.override.yml
