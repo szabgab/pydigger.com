@@ -42,6 +42,12 @@ Connect to the shell of the web application
 
 ```
 docker exec -it pydiggercom_web_1 bash
+
+# To run for only one URL and to print the logs on the STDOUT/STDERR instead of a file
+python fetch_recent.py --update url --url https://github.com/szabgab/pydigger.com --log DEBUG --screen
+
+# To run for only one package and to print the logs on the STDOUT/STDERR instead of a file
+python fetch_recent.py --update package --package <PyPI package name> --log DEBUG --screen
 ...
 Ctrl-D
 ```
