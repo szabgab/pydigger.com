@@ -129,6 +129,7 @@ def get_latests_from_cache():
 def get_flake8_report():
     db = get_db()
     return {}
+# https://stackoverflow.com/questions/16492891/mongodb-aggregation-get-counts-of-key-value-pairs
 #     map = function () {
 #        for (k in this.flake8_score) {
 #                emit( { key: k, flake8: this.flake8_score[k]}, 1 );
