@@ -61,7 +61,7 @@ jobs:
     - name: Stop the docker compose
       run: docker-compose stop
     - name: Build the stack
-      run: docker-compose -f docker-compose.yml -f docker-compose-override.yml up -d
+      run: docker-compose -f docker-compose.yml -f docker-compose.override.yml.example up -d
     - name: Test
       run: docker exec pydiggercom_web_1 pytest -v --flake8
 
