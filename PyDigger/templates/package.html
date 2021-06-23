@@ -19,7 +19,10 @@
             <!-- <tr><td>author_email</td><td>{{package.author_email}}</td></tr> -->
             <tr><td>requires_python</td><td>{{package.requires_python}}</td></tr>
             {% if package.distribution_file_size %}
-               <tr><td>size</td><td>{{package.distribution_file_size}} bytes</td></tr>
+               <tr><td>File size</td><td>{{package.distribution_file_size}} bytes</td></tr>
+            {% endif %}
+            {% if package.distribution_directory_size %}
+               <tr><td>Extraced size</td><td>{{package.distribution_directory_size}} bytes</td></tr>
             {% endif %}
             <tr><td>license</td><td><a href="/search?license={{package.license}}">{{package.license}}</a></td></tr>
             <tr><td>keywords</td><td>

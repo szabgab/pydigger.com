@@ -345,19 +345,22 @@ class PyPackage:
 
         request = requests.get(self.entry['download_url'])
         with tempdir() as temp_dir:
-            temp_file = os.path.join(temp_dir,f'temp{extension}')
+            temp_file = os.path.join(temp_dir, f'{local_dir}{extension}')
             with open(temp_file, 'wb') as fh:
                 fh.write(request.content)
             file_size = os.stat(temp_file).st_size
             self.entry['distribution_file_size'] = file_size
-            logger.info(f"Downloaded {file_size} bytes into f{temp_file}")
+            logger.info(f"Downloaded {file_size} bytes into '{temp_file}'")
             tar = tarfile.open(temp_file, "r:gz")
             tar.extractall()
             tar.close()
+            os.unlink(temp_file)
+            dir_size = get_size(temp_dir)
+            self.entry['distribution_directory_size'] = dir_size
+            logger.info(f"Extracted directory size {dir_size} bytes")
             flake_report = PyDigger.myflake.process(temp_dir)
             self.entry['flake8_score'] = flake_report
             logger.info(f"flake_report: {flake_report}")
-            os.system("ls -l")
             self.downloaded_from_url = True
 
     def save(self):
@@ -572,3 +575,14 @@ def get_rss():
         raise Exception('Could not fetch RSS feed ' + latest_url)
     #logger.debug(rss_data)
     return rss_data
+
+def get_size(start_path):
+    total_size = 0
+    for dirpath, dirnames, filenames in os.walk(start_path):
+        for filename in filenames:
+            file_path = os.path.join(dirpath, filename)
+            # skip if it is symbolic link
+            if not os.path.islink(file_path):
+                total_size += os.path.getsize(file_path)
+
+    return total_size
