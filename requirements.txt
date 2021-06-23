@@ -5,3 +5,5 @@ pymongo             >= 0
 github3.py          >= 0
 requirements-parser >= 0.1.0
 PyYAML              >= 0
+types-PyYAML
+types-requests
