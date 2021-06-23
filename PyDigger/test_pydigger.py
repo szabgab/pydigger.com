@@ -94,7 +94,12 @@ class TestEmptyWeb(Tools):
 class TestWeb(Tools):
     def setup_class(self):
         super().setup_class(self)
-        os.system("{} fetch_recent.py --update rss --log debug --limit 5".format(sys.executable))
+        #os.system("printenv | sort")
+        #os.system("cat $PYDIGGER_CONFIG")
+        # This fails on development machines beacuse there is no GitHub token in the test code.
+        # Strangely the test passes in either way
+        if 'CI' in os.environ:
+            os.system("{} fetch_recent.py --update rss --log DEBUG --screen --limit 5".format(sys.executable))
 
     # TODO: look at the log and if there are any warnings, errors, or exceptions report them or even fail the tests
     def test_recent(self):
