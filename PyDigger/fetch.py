@@ -349,6 +349,7 @@ class PyPackage:
             with open(temp_file, 'wb') as fh:
                 fh.write(request.content)
             file_size = os.stat(temp_file).st_size
+            self.entry['distribution_file_size'] = file_size
             logger.info(f"Downloaded {file_size} bytes into f{temp_file}")
             tar = tarfile.open(temp_file, "r:gz")
             tar.extractall()
