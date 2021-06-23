@@ -98,4 +98,9 @@ db.packages.createIndex( { author: -1 } )
 db.packages.createIndex( { license: -1 } )
 
 
+Enabled monitoring in the Docker version of the production server.
+
+```
+db.enableFreeMonitoring()
+```
 

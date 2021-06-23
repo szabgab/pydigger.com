@@ -43,7 +43,7 @@ docker exec -it pydiggercom_cron_1 bash
 To run the tests type in
 
 ```
-pytest --flake8 -vs
+pytest --cache-clear --flake8 -vs
 ```
 
 To collect data from a single GitHub repository:
