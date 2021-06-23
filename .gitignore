@@ -17,3 +17,4 @@ dev.yml
 *.bak
 *~
 docker-compose.override.yml
+cron.log
