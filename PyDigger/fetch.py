@@ -348,12 +348,14 @@ class PyPackage:
             temp_file = os.path.join(temp_dir,f'temp{extension}')
             with open(temp_file, 'wb') as fh:
                 fh.write(request.content)
+            file_size = os.stat(temp_file).st_size
+            logger.info(f"Downloaded {file_size} bytes into f{temp_file}")
             tar = tarfile.open(temp_file, "r:gz")
             tar.extractall()
             tar.close()
             flake_report = PyDigger.myflake.process(temp_dir)
             self.entry['flake8_score'] = flake_report
-            logger.info(flake_report)
+            logger.info(f"flake_report: {flake_report}")
             os.system("ls -l")
             self.downloaded_from_url = True
 
