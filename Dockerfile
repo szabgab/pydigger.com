@@ -9,6 +9,7 @@ RUN apt-get update           && \
 WORKDIR /opt
 COPY .bashrc /root/
 COPY requirements.txt /opt/
+RUN /usr/local/bin/python -m pip install --upgrade pip
 RUN pip install -r /opt/requirements.txt
 
 COPY . .
