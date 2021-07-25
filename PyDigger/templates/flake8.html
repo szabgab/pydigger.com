@@ -2,10 +2,18 @@
 <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-10">
-      <table>
-      {% for entry in flake8_report %}
-        <tr><td>{{ entry._id.key }}</td><td>{{ entry._id.flake8 }}</td></tr>
-      {% endfor %}
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Code</th>
+            <th scope="col">Count</th>
+          </tr>
+        </thead>
+        <tbody>
+         {% for entry in flake8_report %}
+           <tr><td scope="row">{{ entry._id.key }}</td><td>{{ entry._id.flake8 }}</td></tr>
+         {% endfor %}
+        </tbody>
       </table>
     </div>
     <div class="col-md-1"></div>
