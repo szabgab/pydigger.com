@@ -2,11 +2,18 @@
 <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-10">
-      <table class="table">
+      <table class="table"
+         id="flake8"
+  data-search="true"
+  data-show-columns="false"
+  data-show-multi-sort="true"
+  data-show-multi-sort-button="false"
+  data-sort-priority='[{"sortName": "code","sortOrder":"desc"},{"sortName":"count","sortOrder":"desc"}]'
+      >
         <thead>
           <tr>
-            <th scope="col">Code</th>
-            <th scope="col">Count</th>
+            <th scope="col" data-field="code" data-sortable="true">Code</th>
+            <th scope="col" data-field="count" data-sortable="true">Count</th>
           </tr>
         </thead>
         <tbody>
@@ -24,3 +31,10 @@
 -->
 </div>
 {% include "incl/footer.html" %}
+
+<script>
+  $(function() {
+    $('#flake8').bootstrapTable()
+  })
+</script>
+
