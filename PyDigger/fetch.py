@@ -146,7 +146,7 @@ class PyPackage:
                 logger.exception(f"Error while trying to get data from GitHub: '{self.entry['home_page']}'")
 
         self.entry['lcname'] = self.entry['name'].lower()
-        # self.download_pkg()
+        self.download_pkg()
         self.analyze_source_code()
         self.save()
 

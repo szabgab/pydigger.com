@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+from bson.code import Code
 import datetime
 import os
 import yaml
@@ -127,25 +128,36 @@ def get_latests_from_cache():
     return data
 
 def get_flake8_report():
-    # db = get_db()
-    return {}
-# https://stackoverflow.com/questions/16492891/mongodb-aggregation-get-counts-of-key-value-pairs
-#     map = function () {
-#        for (k in this.flake8_score) {
-#                emit( { key: k, flake8: this.flake8_score[k]}, 1 );
-#        }
-#     }
+    db = get_db()
+    log = logging.getLogger('PyDigger.common')
 
-# reduce = function (k, values) {
-#     result = 0;
-#     values.forEach( function(v) { result += v; } );
-#        return result;
-# }
+    # https://stackoverflow.com/questions/16492891/mongodb-aggregation-get-counts-of-key-value-pairs
+    my_map = Code("""
+      function () {
+          for (k in this.flake8_score) {
+                  emit( { key: k, flake8: this.flake8_score[k]}, 1 );
+          }
+       }
+    """)
 
-# db.packages.find({},{_id:0,flake8:1}).pretty()
+    my_reduce = Code("""
+      function (k, values) {
+        result = 0;
+        values.forEach( function(v) { result += v; } );
+           return result;
+      }
+    """)
+    result = db.packages.map_reduce(my_map, my_reduce, "myresults")
+    # Find all the packages with given flake score
+    # db.packages.find({ "flake8_score.W391": { $exists: true }  }).pretty()
+    # count all the packages with given flake8 score
+    # db.packages.count({ "flake8_score.W391": { $exists: true }  })
 
-# db.packages.mapReduce(map, reduce, {out:{inline:1}})
-#     data = db.packages.count_documents({ 'flake8.E221' :  })
+    log.info("------")
+    my_results = []
+    for doc in result.find():
+        my_results.append(doc)
+    return my_results
 
 
 def get_stats_from_cache():
