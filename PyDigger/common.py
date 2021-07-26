@@ -153,7 +153,6 @@ def get_flake8_report():
     # count all the packages with given flake8 score
     # db.packages.count({ "flake8_score.W391": { $exists: true }  })
 
-    log.info("------")
     my_results = []
     for doc in result.find():
         my_results.append(doc)
