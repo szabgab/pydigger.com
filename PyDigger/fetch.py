@@ -257,13 +257,15 @@ class PyPackage:
         for file in t.tree:
             if file.path == '.travis.yml':
                 self.entry['travis_ci'] = True
-            if re.search(r'^.github/workflows/.*\.ya?ml$', file.path):
+            if re.search(r'^\.github/workflows/.*\.ya?ml$', file.path):
                 self.entry['github_actions'] = True
             if file.path == '.coveragerc':
                 self.entry['coveralls'] = True
             if file.path == 'tox.ini':
                 self.entry['tox'] = True # http://codespeak.net/tox/
             if file.path == 'circle.yml':
+                self.entry['circle'] = True # https://circleci.com/
+            if re.search(r'^\.circleci/.*\.ya?ml$', file.path):
                 self.entry['circle'] = True # https://circleci.com/
             if file.path == 'appveyor.yml':
                 self.entry['appveyor'] = True # https://www.appveyor.com/
