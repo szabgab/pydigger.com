@@ -9,7 +9,7 @@ Specifically in the first episode you can see an explanation about it.
 
 ## Setup a development environment
 
-* Clone the repository.
+* Clone the repository. `git clone https://github.com/szabgab/pydigger.com`
 * [Install Docker](https://docs.docker.com/get-docker/).
 * [Install docker-compose](https://docs.docker.com/compose/install/).
 * Copy `config-skeleton.yml` to `dev.yml`.
@@ -43,6 +43,11 @@ docker exec -it pydiggercom_cron_1 bash
 To run the tests type in
 
 ```
+pytest --cache-clear -vs
+```
+
+We could also use the flake8 flag but due to a bug pytest-flake8 does not work with the recent versions of flake8.
+```
 pytest --cache-clear --flake8 -vs
 ```
 
@@ -56,6 +61,12 @@ To collect data for a single PyPI package:
 
 ```
 python fetch_recent.py --update package --package <PyPI package name> --log DEBUG --screen
+```
+
+For example:
+
+```
+python fetch_recent.py --update package --package flask --log DEBUG --screen
 ```
 
 Fetch data of recently uploaded packages using the RSS feed of PyPI:
