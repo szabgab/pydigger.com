@@ -378,9 +378,10 @@ class PyPackage:
         # 3.1.0a12
         # 2.0.0.dev11
 
-        db.packages.remove({'name' : entry['name']})
-        db.packages.remove({'name' : entry['name'].lower()})
-        res = db.packages.insert(entry)
+        # logger.info(dir(db.packages))
+        db.packages.delete_one({'name' : entry['name']})
+        db.packages.delete_one({'name' : entry['name'].lower()})
+        res = db.packages.insert_one(entry)
         logger.info("INSERT res='{}'".format(res))
 
 
