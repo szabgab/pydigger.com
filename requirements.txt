@@ -1,10 +1,10 @@
-flask               >= 0.8
-pytest              >= 0
-pytest-flake8       >= 0
+flask
+pytest
+pytest-flake8
 pytest-mypy
-pymongo             >= 0
-github3.py          >= 0
-requirements-parser >= 0.1.0
-PyYAML              >= 0
+pymongo
+github3.py
+requirements-parser
+PyYAML
 types-PyYAML
 types-requests
