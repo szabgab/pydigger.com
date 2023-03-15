@@ -7,7 +7,7 @@ cryptography==39.0.2
 dnspython==2.3.0
 entrypoints==0.4
 exceptiongroup==1.1.1
-filelock==3.9.0
+filelock==3.9.1
 flake8==6.0.0
 Flask==2.2.3
 github3.py==3.2.0
