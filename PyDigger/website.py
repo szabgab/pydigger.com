@@ -205,21 +205,26 @@ def keywords():
 @app.route("/licenses")
 def licenses():
     db = PyDigger.common.get_db()
-    licenses = db.packages.group(['license'], {}, { 'count' : 0}, 'function (curr, result) { result.count++; }' )
-    licenses.sort(key=lambda f:f['count'])
-    licenses.reverse()
-    for licence in licenses:
+    licenses_res = db.packages.aggregate([{ "$group" : { "_id": "$license", 'count' : {"$sum" : 1} }}])
+    licenses = []
+    for licence in licenses_res:
+        #if licence['_id'] is not None and len(licence['_id']) < 10:
+        #    app.logger.info(licence)
         licence['count'] = int(licence['count'])
-        if licence['license'] is None:
-            licence['license'] = 'None'
-        if len(licence['license']) > max_license_length:
+        if licence['_id'] is None:
+            licence['_id'] = 'None'
+        if len(licence['_id']) > max_license_length:
             licence['long'] = True
+        licenses.append(licence)
+
+    licenses.sort(key=lambda f:f['count'], reverse=True)
 
     return render_template('licenses.html',
         title = "Licenses of Python packages on PyPI",
-        total = db.packages.find().count(),
-        has_license = db.packages.find(cases['has_license']).count(),
-        no_license = db.packages.find(cases['no_license']).count(),
+        total = db.packages.count_documents({}),
+
+        has_license = db.packages.count_documents(cases['has_license']),
+        no_license = db.packages.count_documents(cases['no_license']),
         licenses = licenses,
     )
 

@@ -18,11 +18,11 @@
         {% for l in licenses %}
             <tr><td>{{l.count | commafy}}</td><td>
                 {% if l.long %}
-                    <a href="/search?license=__long__">{{l.license}}</a>
-                {% elif l.license == '' %}
+                    <a href="/search?license=__long__">{{l._id}}</a>
+                {% elif l._id == '' %}
                     <a href="/search?license=__empty__">**EMPTY**</a>
                 {% else %}
-                    <a href="/search?license={{l.license}}">{{l.license}}</a>
+                    <a href="/search?license={{l.license}}">{{l._id}}</a>
                 {% endif %}
             </td></tr>
         {% endfor %}
