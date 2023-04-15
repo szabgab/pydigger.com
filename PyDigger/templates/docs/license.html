@@ -19,9 +19,9 @@
         <h2>The technical details</h2>
         The JSON file of each package can have a field called <b>license</b> that contains the short name of the license.
         The most common way to include it in the packages is to add a field called <b>license</b> to the <b>setup</b> function in the <b>setup.py</b> of the project
-        or add the same field under <b>[build-system]<b> in <b>pyproject.toml file<b>.
-        <p>
+        or add the same field under <b>[build-system]</b> in <b>pyproject.toml file</b>.
         Ticket <a href="https://github.com/szabgab/pydigger.com/issues/19">#19</a> futher discusses the issues.
+        <p>
         Here is the section of the setup.py file:
         <pre>
         setuptools.setup(
@@ -31,7 +31,7 @@
         author_email="Foo.Bar.contact@Foo.com",
         <b>license="MIT"</b>
         </pre>
-        Here is the section of the pyproject.toml files:
+        Here is the section of the pyproject.toml file:
         <pre>
         [build-system]
         requires = ["poetry>=0.12"]
