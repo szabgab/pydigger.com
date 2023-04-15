@@ -4,7 +4,7 @@
     <div class="col-md-1"></div>
     <div class="col-md-10">
         <h2>Adding the License field</h2>
-        Adding the <b>summary</b> is technically very similar to adding the <a href="author">author field</a>, but knowing what to write is a bit more challenging.
+        Adding the <b>license</b> is technically very similar to adding the <a href="author">author field</a>, but knowing what to write is a bit more challenging.
         You'll have to check what is the real license of the project. Most probably there is a file called "LICENSE" in the root of the project with the full text
         of the license. Issue <a href="https://github.com/szabgab/pydigger.com/issues/20">#20</a> call for the collection of that information.
         <p>
@@ -18,9 +18,26 @@
 
         <h2>The technical details</h2>
         The JSON file of each package can have a field called <b>license</b> that contains the short name of the license.
-        The most common way to include it in the packages is to add a field called <b>license</b> to the <b>setup</b> function in the <b>setup.py</b> of the project.
+        The most common way to include it in the packages is to add a field called <b>license</b> to the <b>setup</b> function in the <b>setup.py</b> of the project
+        or add the same field under <b>[build-system]<b> in <b>pyproject.toml file<b>.
         <p>
         Ticket <a href="https://github.com/szabgab/pydigger.com/issues/19">#19</a> futher discusses the issues.
+        Here is the section of the setup.py file:
+        <pre>
+        setuptools.setup(
+        name="name of the project",
+        version="1.1.7",
+        author="John M",
+        author_email="John.m.contact@gmail.com",
+        <b>license="MIT"</b>
+        </pre>
+        Here is the section of the pyproject.toml files:
+        <pre>
+        [build-system]
+        requires = ["poetry>=0.12"]
+        build-backend = "poetry.masonry.api"
+        <b>license = "Apache-2.0"</b>
+        </pre>
         <h2>OSI approved licenses</h2>
         One of the goals is to make it easy to check if a package has an <a href="https://opensource.org/licenses">OSI approved license</a> or not. The short names probably should
         be either the names of URLs of OSI approved licenses or  on the short names should be hosted on <a href="https://pypi.org/">PYPI</a> web site.
