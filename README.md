@@ -103,7 +103,7 @@ ssh to the server and run
 Copyright and LICENSE
 ======================
 
-Copyright 2021 Gábor Szabó
+Copyright 2023 Gábor Szabó
 
 The source code in this repository is licensed under the MIT License.
 
