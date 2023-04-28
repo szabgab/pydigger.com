@@ -190,7 +190,7 @@ class PyPackage:
 
     def is_this_a_vcs(self, vcs, vcs_url):
         logger = logging.getLogger('PyDigger.fetch')
-        match = re.search(vcs_es[vcs]['regex'], self.entry['home_page'])
+        match = re.search(vcs_es[vcs]['regex'], vcs_url)
         if match:
             self.entry[vcs] = True
             self.entry[f'{vcs}_user'] = match.group(2)
