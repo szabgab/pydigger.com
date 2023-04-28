@@ -192,12 +192,10 @@ class PyPackage:
                 # this should be 'repository' but I found all kind of other keys:
                 # in numpy https://pypi.org/project/numpy/  it is "Source Code"
                 # in farm-haystack https://pypi.org/project/farm-haystack/ it is "GitHub: repo"
-                for name in ['GitHub: repo', 'Source Code', 'repository']:
-                    vcs_url = self.entry['project_urls'].get(name)
-                    if vcs_url is not None:
-                        vcs_found = self.is_this_a_vcs(vcs, vcs_url)
-                        if vcs_found:
-                            break
+                for field_name, vcs_url in self.entry['project_urls'].items():
+                    vcs_found = self.is_this_a_vcs(vcs, vcs_url)
+                    if vcs_found:
+                        break
             if vcs_found:
                 break
         if not vcs_found:
@@ -205,6 +203,9 @@ class PyPackage:
 
     def is_this_a_vcs(self, vcs, vcs_url):
         logger = logging.getLogger('PyDigger.fetch')
+        if vcs_url is None:
+            return False
+
         match = re.search(vcs_es[vcs]['regex'], vcs_url)
         if match:
             self.entry[vcs] = True
