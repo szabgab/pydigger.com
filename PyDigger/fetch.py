@@ -23,6 +23,24 @@ import shutil
 from contextlib import contextmanager
 import PyDigger.myflake
 
+# https://github.com/szabgab/pydigger.com/
+# https://bitbucket.org/ensighten-ondemand/dataintelligence-exports-cli
+# https://gitlab.com/dimasmjunior/classic
+vcs_es = {
+    'github': {
+        'host': 'github.com',
+        'regex': r'^https?://(www\.)?github.com/([^/]+)/([^/]+)/?$',
+    },
+    'gitlab': {
+        'host': 'gitlab.com',
+        'regex': r'^https?://(www\.)?gitlab.com/([^/]+)/([^/]+)/?$',
+    },
+    'bitbucket': {
+        'host': 'bitbucket.org',
+        'regex': r'^https?://(www\.)?bitbucket.org/([^/]+)/([^/]+)/?$',
+    }
+}
+
 @contextmanager
 def tempdir():
     temp_dir = tempfile.mkdtemp()
@@ -158,39 +176,28 @@ class PyPackage:
     def extract_vcs(self):
         logger = logging.getLogger('PyDigger.fetch')
         vcs_found = False
-        # https://github.com/szabgab/pydigger.com/
-        # https://bitbucket.org/ensighten-ondemand/dataintelligence-exports-cli
-        # https://gitlab.com/dimasmjunior/classic
-        vcs_es = {
-            'github': {
-                'host': 'github.com',
-                'regex': r'^https?://(www\.)?github.com/([^/]+)/([^/]+)/?$',
-            },
-            'gitlab': {
-                'host': 'gitlab.com',
-                'regex': r'^https?://(www\.)?gitlab.com/([^/]+)/([^/]+)/?$',
-            },
-            'bitbucket': {
-                'host': 'bitbucket.org',
-                'regex': r'^https?://(www\.)?bitbucket.org/([^/]+)/([^/]+)/?$',
-            }
-        }
         for vcs in vcs_es:
             self.entry[vcs] = False
 
         for vcs in vcs_es:
             if 'home_page' in self.entry and self.entry['home_page'] is not None:
                 vcs_url = self.entry['home_page']
-                match = re.search(vcs_es[vcs]['regex'], self.entry['home_page'])
-                if match:
-                    self.entry[vcs] = True
-                    self.entry[f'{vcs}_user'] = match.group(2)
-                    self.entry[f'{vcs}_project'] = match.group(3)
-                    logger.info(f"Project {self.lcname} Version {self.entry['version']} has VCS {vcs}: {vcs_url}")
-                    vcs_found = True
+                vcs_found = self.is_this_a_vcs(vcs, vcs_url)
+                if vcs_found:
                     break
         if not vcs_found:
             logger.info(f"No VCS found for project {self.lcname} Version {self.entry['version']}")
+
+    def is_this_a_vcs(self, vcs, vcs_url):
+        logger = logging.getLogger('PyDigger.fetch')
+        match = re.search(vcs_es[vcs]['regex'], self.entry['home_page'])
+        if match:
+            self.entry[vcs] = True
+            self.entry[f'{vcs}_user'] = match.group(2)
+            self.entry[f'{vcs}_project'] = match.group(3)
+            logger.info(f"Project {self.lcname} Version {self.entry['version']} has VCS {vcs}: {vcs_url}")
+            return True
+        return False
 
     def process_release(self, package_data):
         logger = logging.getLogger('PyDigger.fetch')
