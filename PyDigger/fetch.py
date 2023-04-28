@@ -131,7 +131,7 @@ class PyPackage:
             for field in ['name', 'maintainer', 'docs_url', 'requires_python', 'maintainer_email',
             'cheesecake_code_kwalitee_id', 'cheesecake_documentation_id', 'cheesecake_installability_id',
             'keywords', 'author', 'author_email', 'download_url', 'platform', 'description', 'bugtrack_url',
-            'license', 'summary', 'version']:
+            'license', 'summary', 'version', 'project_urls']:
                 if field in info:
                     self.entry[field] = info[field]
 
@@ -185,6 +185,21 @@ class PyPackage:
                 vcs_found = self.is_this_a_vcs(vcs, vcs_url)
                 if vcs_found:
                     break
+            if 'project_urls' in self.entry:
+                logger.info(f"project_urls found in project {self.lcname} Version {self.entry['version']}")
+                logger.info(f"project_urls keys: {self.entry['project_urls'].keys()}")
+                # Officially https://packaging.python.org/en/latest/specifications/declaring-project-metadata/#urls
+                # this should be 'repository' but I found all kind of other keys:
+                # in numpy https://pypi.org/project/numpy/  it is "Source Code"
+                # in farm-haystack https://pypi.org/project/farm-haystack/ it is "GitHub: repo"
+                for name in ['GitHub: repo', 'Source Code', 'repository']:
+                    vcs_url = self.entry['project_urls'].get(name)
+                    if vcs_url is not None:
+                        vcs_found = self.is_this_a_vcs(vcs, vcs_url)
+                        if vcs_found:
+                            break
+            if vcs_found:
+                break
         if not vcs_found:
             logger.info(f"No VCS found for project {self.lcname} Version {self.entry['version']}")
 
