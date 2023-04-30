@@ -1,0 +1,50 @@
+{% include "incl/header.html" %}
+
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        {% include "incl/pagination.html" %}
+
+        <table class="table">
+        <tr>
+          <th>Name</th><th>Version</th><th>Summary</th><th>date</th>
+        </tr>
+        {% for e in data %}
+            <tr>
+                <td><a href="/pypi/{{e['name']}}">{{ e['name'] }}</a></td>
+                <td>{{e.version}}</td>
+                <td>{{e.summary}}</td>
+                <td>{{e.upload_time}}</td>
+            </tr>
+        {% endfor %}
+        </table>
+
+        {% include "incl/pagination.html" %}
+
+    </div>
+    <div class="col-md-1">
+        {% if author %}
+            <img src="http://www.gravatar.com/avatar/{{gravatar}}?s=100&d=blank" title="{{author}}">
+            {{author}}
+        {% endif %}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <table class="table">
+        <thead>
+          <tr><th>hour</th><th>day</th><th>week</th><th>total</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>{{ latest.hour }}</td><td>{{ latest.day }}</td><td>{{ latest.week }}</td><td>{{ latest.total }}</td></tr>
+        </tbody>
+        </table>
+    </div>
+    <div class="col-md-3">
+    </div>
+</div>
+
+
+{% include "incl/footer.html" %}

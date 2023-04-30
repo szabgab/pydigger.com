@@ -125,6 +125,12 @@ def search_none():
 
 @app.route("/")
 def main():
+    return render_template('main.html',
+        title = "PyDigger - unearthing stuff about Python",
+    )
+
+@app.route("/all")
+def full_list():
     return show_list()
 
 def show_list(author = '', mongo_query = None, search_query = ''):
@@ -160,7 +166,7 @@ def show_list(author = '', mongo_query = None, search_query = ''):
     if author and total_found > 0 and latest:
         gravatar_code = gravatar(latest.get('author_email'))
 
-    return render_template('main.html',
+    return render_template('list.html',
         title = "PyDigger - unearthing stuff about Python",
         page = {
             'total_indexed' : total_indexed,

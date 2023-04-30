@@ -3,46 +3,25 @@
 <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-10">
-        {% include "incl/pagination.html" %}
-
-        <table class="table">
-        <tr>
-          <th>Name</th><th>Version</th><th>Summary</th><th>date</th>
-        </tr>
-        {% for e in data %}
-            <tr>
-                <td><a href="/pypi/{{e['name']}}">{{ e['name'] }}</a></td>
-                <td>{{e.version}}</td>
-                <td>{{e.summary}}</td>
-                <td>{{e.upload_time}}</td>
-            </tr>
-        {% endfor %}
-        </table>
-
-        {% include "incl/pagination.html" %}
-
+&nbsp;
+<p>
+We monitor <a href="https://pypi.org/">PyPI</a>, collect data from the new uploads and from their GitHub/GitLab/... repositories. Based on this data we try to understand the status of the Python ecosystem. For example how many projects use setup.py, setup.cfg, or pyproject.toml files.
+<p>
+Using this data we would like to encourage you to make improvements to the projects.
+<p>
+For example, in order to make it easier to contribute to a project first it needs to be easy to find its source code. For projects that supply this information PyPI shows the links.
+We list the <a href="/search/no-vcs">packages that don't link to their public VCS</a> and provide <a href="/docs/vcs">instructions</a> how to locate the source of these packages and how to send a Pull-Request so from the next release the link will be included.
+<p>
+For project where we found the link to their VCS, we analyze that too. For example we try to understand which <b>Continuous Integration (CI)</b> system they use, if any.
+We list the projects <a href="/search/has-github-no-ci">without a CI</a> and provide instructions how to add CI.
+<p>
+We use this data to send Open Issues and send Pull-request to make small contributions to the projects. We also use the data in the <a href="https://osdc.code-maven.com/">Open Source Development Courses (OSDC)</a> where participants learn how to use Git and GitHub by contributing to open source projects.
+<p>
+We hope that by collecting and analyzing this data we will help you improve the Python ecosystem.
+<p>
+Check out the <a href="/stats">stats</a> page for further reports. Read more <a href="/about">about the project</a>. Check out our <a href="https://github.com/szabgab/pydigger.com">project on GitHub</a> if you find a problem or if you'd like to help us in the development.
     </div>
     <div class="col-md-1">
-        {% if author %}
-            <img src="http://www.gravatar.com/avatar/{{gravatar}}?s=100&d=blank" title="{{author}}">
-            {{author}}
-        {% endif %}
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-3"></div>
-    <div class="col-md-6">
-        <table class="table">
-        <thead>
-          <tr><th>hour</th><th>day</th><th>week</th><th>total</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>{{ latest.hour }}</td><td>{{ latest.day }}</td><td>{{ latest.week }}</td><td>{{ latest.total }}</td></tr>
-        </tbody>
-        </table>
-    </div>
-    <div class="col-md-3">
     </div>
 </div>
 
