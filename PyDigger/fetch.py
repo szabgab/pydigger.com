@@ -24,8 +24,12 @@ from contextlib import contextmanager
 import PyDigger.myflake
 
 # https://github.com/szabgab/pydigger.com/
-# https://bitbucket.org/ensighten-ondemand/dataintelligence-exports-cli
-# https://gitlab.com/dimasmjunior/classic
+# https://github.com/szabgab/pydigger.com.git     # remove the .git for our purposes (GitHub would redirect anyway)
+# https://gitlab.com/szabgab/gl-try
+# https://gitlab.com/szabgab/gl-try.git   # remove the .git
+# https://bitbucket.org/szabgab/hostlocal.com
+# https://bitbucket.org/szabgab/hostlocal.com.git   #remove the .git
+
 vcs_es = {
     'github': {
         'host': 'github.com',
