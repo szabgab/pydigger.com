@@ -1,6 +1,16 @@
 from PyDigger import fetch
 
-def test_vcs():
+import os
+import yaml
+
+def test_vcs(tmpdir):
+    print(tmpdir)
+    config_file = os.environ['PYDIGGER_CONFIG'] = os.path.join(tmpdir, 'config.yml')
+    print(os.environ['PYDIGGER_CONFIG'])
+    config = {'github-token': 'fake'}
+    with open(config_file, 'w') as outfile:
+            yaml.dump(config, outfile, default_flow_style=False)
+
     package = fetch.PyPackage("foo")
     package.entry['home_page'] = 'https://github.com/user/project'
     package.entry['version'] = '1.0'

@@ -56,7 +56,7 @@ jobs:
     - name: Build the stack
       run: docker-compose up -d
     - name: Test
-      run: docker exec pydiggercom_web_1 pytest -svv PyDigger
+      run: docker exec pydiggercom_web_1 pytest -svv
 
     - name: Stop the docker compose
       run: docker-compose stop
@@ -64,5 +64,5 @@ jobs:
     - name: Build the stack again now with example
       run: docker-compose -f docker-compose.yml -f docker-compose.override.yml.example up -d
     - name: Run the test again
-      run: docker exec pydiggercom_web_1 pytest -svv PyDigger # --flake8 --mypy
+      run: docker exec pydiggercom_web_1 pytest -svv # --flake8 --mypy
 
