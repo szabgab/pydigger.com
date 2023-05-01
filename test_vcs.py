@@ -24,4 +24,18 @@ def test_vcs(tmpdir):
         'github_user': 'user',
         'github_project': 'project'
     }
-    pass
+
+    package = fetch.PyPackage("foo")
+    package.entry['home_page'] = 'https://gitlab.com/user/project'
+    package.entry['version'] = 'abc'
+    package.extract_vcs()
+    assert package.entry == {
+        'home_page': 'https://gitlab.com/user/project',
+        'version': 'abc',
+        'github': False,
+        'gitlab': True,
+        'bitbucket': False,
+        'gitlab_user': 'user',
+        'gitlab_project': 'project'
+    }
+
