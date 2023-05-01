@@ -63,5 +63,5 @@ jobs:
     - name: Build the stack
       run: docker-compose -f docker-compose.yml -f docker-compose.override.yml.example up -d
     - name: Test
-      run: docker exec pydiggercom_web_1 pytest -vs # --flake8 --mypy
+      run: docker exec pydiggercom_web_1 pytest -svv PyDigger # --flake8 --mypy
 
