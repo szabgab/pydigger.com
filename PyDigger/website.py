@@ -47,9 +47,7 @@ def setup():
     app.logger.info("setup")
 
 
-@app.before_first_request
-def before_first_request():
-    setup()
+setup()
 
 @app.before_request
 def before_request():
