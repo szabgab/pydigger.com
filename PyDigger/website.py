@@ -16,8 +16,7 @@ max_license_length = 50
 
 app = Flask('PyDigger')
 
-@app.before_first_request
-def before_first_request():
+def setup():
     if os.environ.get('PYDIGGER_SKIP_SETUP'):
         return
 
@@ -46,6 +45,11 @@ def before_first_request():
     # }
 
     app.logger.info("setup")
+
+
+@app.before_first_request
+def before_first_request():
+    setup()
 
 @app.before_request
 def before_request():
