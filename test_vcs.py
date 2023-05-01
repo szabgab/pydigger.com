@@ -22,6 +22,7 @@ def test_vcs(tmpdir):
         'github': True,
         'gitlab': False,
         'bitbucket': False,
+        'codeberg': False,
         'github_user': 'user',
         'github_project': 'project'
     }
@@ -37,6 +38,7 @@ def test_vcs(tmpdir):
         'github': True,
         'gitlab': False,
         'bitbucket': False,
+        'codeberg': False,
         'github_user': 'user',
         'github_project': 'project'
     }
@@ -53,6 +55,7 @@ def test_vcs(tmpdir):
         'github': False,
         'gitlab': True,
         'bitbucket': False,
+        'codeberg': False,
         'gitlab_user': 'user',
         'gitlab_project': 'project'
     }
@@ -68,6 +71,7 @@ def test_vcs(tmpdir):
         'github': False,
         'gitlab': False,
         'bitbucket': False,
+        'codeberg': False,
     }
 
     # github url with extra /tags in home_page
@@ -81,6 +85,7 @@ def test_vcs(tmpdir):
         'github': True,
         'gitlab': False,
         'bitbucket': False,
+        'codeberg': False,
         'github_user': 'user',
         'github_project': 'project'
     }
@@ -96,6 +101,7 @@ def test_vcs(tmpdir):
         'github': True,
         'gitlab': False,
         'bitbucket': False,
+        'codeberg': False,
         'github_user': 'user',
         'github_project': 'project'
     }
