@@ -39,3 +39,15 @@ def test_vcs(tmpdir):
         'gitlab_project': 'project'
     }
 
+    package = fetch.PyPackage("foo")
+    package.entry['home_page'] = 'https://pypi.org/user/project'
+    package.entry['version'] = 'abc'
+    package.extract_vcs()
+    assert package.entry == {
+        'home_page': 'https://pypi.org/user/project',
+        'version': 'abc',
+        'github': False,
+        'gitlab': False,
+        'bitbucket': False,
+    }
+
