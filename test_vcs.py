@@ -71,19 +71,19 @@ def test_vcs(tmpdir):
     }
 
     # github url with extra /tags in home_page
-    # package = fetch.PyPackage("foo")
-    # package.entry['home_page'] = 'https://github.com/user/project/tags'
-    # package.entry['version'] = '1.0'
-    # package.extract_vcs()
-    # assert package.entry == {
-    #     'home_page': 'https://github.com/user/project/tags',
-    #     'version': '1.0',
-    #     'github': True,
-    #     'gitlab': False,
-    #     'bitbucket': False,
-    #     'github_user': 'user',
-    #     'github_project': 'project'
-    # }
+    package = fetch.PyPackage("foo")
+    package.entry['home_page'] = 'https://github.com/user/project/tags'
+    package.entry['version'] = '1.0'
+    package.extract_vcs()
+    assert package.entry == {
+        'home_page': 'https://github.com/user/project/tags',
+        'version': '1.0',
+        'github': True,
+        'gitlab': False,
+        'bitbucket': False,
+        'github_user': 'user',
+        'github_project': 'project'
+    }
 
     # github url with extra .git in home_page
     # package = fetch.PyPackage("foo")

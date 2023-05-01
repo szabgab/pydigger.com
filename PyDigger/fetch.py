@@ -33,15 +33,15 @@ import PyDigger.myflake
 vcs_es = {
     'github': {
         'host': 'github.com',
-        'regex': r'^https?://(www\.)?github.com/([^/]+)/([^/]+)/?$',
+        'regex': r'^https?://(www\.)?github.com/([^/]+)/([^/]+)(/.*)?$',
     },
     'gitlab': {
         'host': 'gitlab.com',
-        'regex': r'^https?://(www\.)?gitlab.com/([^/]+)/([^/]+)/?$',
+        'regex': r'^https?://(www\.)?gitlab.com/([^/]+)/([^/]+)(/.*)?$',
     },
     'bitbucket': {
         'host': 'bitbucket.org',
-        'regex': r'^https?://(www\.)?bitbucket.org/([^/]+)/([^/]+)/?$',
+        'regex': r'^https?://(www\.)?bitbucket.org/([^/]+)/([^/]+)(/.*)?$',
     }
 }
 
