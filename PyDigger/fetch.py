@@ -214,7 +214,9 @@ class PyPackage:
         if match:
             self.entry[vcs] = True
             self.entry[f'{vcs}_user'] = match.group(2)
-            self.entry[f'{vcs}_project'] = match.group(3)
+            project = match.group(3)
+            project = re.sub(r'\.git$', '', project)
+            self.entry[f'{vcs}_project'] = project
             logger.info(f"Project {self.lcname} Version {self.entry['version']} has VCS {vcs}: {vcs_url}")
             return True
         return False
