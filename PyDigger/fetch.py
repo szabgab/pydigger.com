@@ -42,7 +42,11 @@ vcs_es = {
     'bitbucket': {
         'host': 'bitbucket.org',
         'regex': r'^https?://(www\.)?bitbucket.org/([^/]+)/([^/]+)(/.*)?$',
-    }
+    },
+    'codeberg': {
+        'host': 'codeberg.org',
+        'regex': r'^https?://(www\.)?codeberg.org/([^/]+)/([^/]+)(/.*)?$',
+    },
 }
 
 @contextmanager
