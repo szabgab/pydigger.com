@@ -191,10 +191,19 @@ def logs():
     if not os.path.exists(logs_dir):
         return "Logs folder does not exist"
 
+    entries = []
     files = os.listdir(logs_dir)
+    files = sorted(files, reverse=True)
+    for filename in files:
+        size = os.path.getsize(os.path.join(logs_dir, filename))
+        entries.append({
+            "filename": filename,
+            "size": size,
+        })
+    
     return render_template('logs.html',
         title = "Logs",
-        logs = sorted(files, reverse=True),
+        logs = entries,
     )
 
 @app.route("/logs/<filename>")
