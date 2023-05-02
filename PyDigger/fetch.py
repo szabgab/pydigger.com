@@ -591,9 +591,9 @@ def get_from_rss():
         if doc:
             old_version = doc.get('version', '')
             if version == old_version:
-                logger.debug("Skipping '{name}' '{version}'. It is already in the database with this version")
+                logger.debug(f"Skipping '{name}' '{version}'. It is already in the database with this version")
                 continue
-            logger.debug("Update '{name}' from '{old_version}' to '{version}'. It is already in the database with this version")
+            logger.debug(f"Update '{name}' from '{old_version}' to '{version}'. It is already in the database with this version")
 
         seen_names.append(lcname)
         packages.append(entry)
@@ -609,8 +609,8 @@ def get_rss():
         f.close()
         #raise Exception("hello")
     except (urllib.reques.HTTPError, urllib.request.URLError):
-        logger.exception('Error while fetching ' + latest_url)
-        raise Exception('Could not fetch RSS feed ' + latest_url)
+        logger.exception(f'Error while fetching {latest_url}')
+        raise Exception(f'Could not fetch RSS feed {latest_url}')
     #logger.debug(rss_data)
     return rss_data
 
