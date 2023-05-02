@@ -72,6 +72,7 @@ def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--screen', help='Log to the screen', action='store_true')
     parser.add_argument('--log',    help='Set logging level to DEBUG or INFO (or keep it at the default WARNING)', default='WARNING')
+    parser.add_argument('--logdir', help='Folder where to put the log files')
     parser.add_argument('--update', help='update the entries: rss - the ones received via rss; deps - dependencies; all - all of the packages already in the database; url - provide the url of a github repository')
     parser.add_argument('--name',   help='Name of the package to update')
     parser.add_argument('--sleep',  help='How many seconds to sleep between packages (Help avoiding the GitHub API limit)', type=float)
@@ -437,11 +438,13 @@ def setup_logger(args):
         logger.addHandler(sh)
     else:
         project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        log_dir = os.path.join(project_root, 'log')
+        log_dir = args.logdir
+        if not log_dir:
+            log_dir = os.path.join(project_root, 'log')
         if not os.path.exists(log_dir):
             os.makedirs(log_dir)
-        log_file = os.path.join(log_dir, 'fetch.log')
-        ch = logging.handlers.RotatingFileHandler(log_file, maxBytes=10_000_000, backupCount=10)
+        log_file = os.path.join(log_dir, datetime.now().strptime("fetch-%Y-%m-%d-%H-%M-%S.log"))
+        ch = logging.handlers.FileHandler(log_file)
         ch.setLevel(log_level)
         ch.setFormatter(log_format)
         logger.addHandler(ch)

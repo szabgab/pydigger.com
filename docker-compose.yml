@@ -10,6 +10,9 @@ services:
     - mymongo
     restart: unless-stopped
     hostname: pydigger-web
+    volumes:
+      - logs:/logs
+
   cron:
     build:
       context: .
@@ -19,6 +22,9 @@ services:
     restart: unless-stopped
     entrypoint: cron -f -L3
     hostname: pydigger-cron
+    volumes:
+      - logs:/logs
+
   mymongo:
     image: mongo:4.4
     environment:
@@ -30,7 +36,9 @@ services:
       - mongo-backup:/data/backup
     restart: unless-stopped
     hostname: pydigger-mongodb
+
 volumes:
   mongo-data:
   mongo-configdb:
   mongo-backup:
+  logs:
