@@ -91,7 +91,7 @@ class PyPackage:
         self.setup_github()
 
     def setup_github(self):
-        logger = logging.getLogger('PyDigger.fetch')
+        logger = logging.getLogger('PyDigger')
         token = os.environ.get('GITHUB_TOKEN')
         if not token:
             token = self.config['github-token']
@@ -103,7 +103,7 @@ class PyPackage:
         self.github = github3.login(token=token)
 
     def get_details(self):
-        logger = logging.getLogger('PyDigger.fetch')
+        logger = logging.getLogger('PyDigger')
         logger.debug("get_details of " + self.lcname)
 
         url = 'https://pypi.org/pypi/' + self.lcname + '/json'
@@ -185,7 +185,7 @@ class PyPackage:
         # myflake.process(directory)
 
     def extract_vcs(self):
-        logger = logging.getLogger('PyDigger.fetch')
+        logger = logging.getLogger('PyDigger')
         vcs_found = False
         for vcs in vcs_es:
             self.entry[vcs] = False
@@ -213,7 +213,7 @@ class PyPackage:
             logger.info(f"No VCS found for project {self.lcname} Version {self.entry['version']}")
 
     def is_this_a_vcs(self, vcs, vcs_url):
-        logger = logging.getLogger('PyDigger.fetch')
+        logger = logging.getLogger('PyDigger')
         if vcs_url is None:
             return False
 
@@ -229,7 +229,7 @@ class PyPackage:
         return False
 
     def process_release(self, package_data):
-        logger = logging.getLogger('PyDigger.fetch')
+        logger = logging.getLogger('PyDigger')
         version = self.entry['version']
         if 'urls' in package_data:
             self.entry['urls'] = package_data['urls']
@@ -264,7 +264,7 @@ class PyPackage:
                 self.entry['upload_time'] = datetime.strptime(upload_time, "%Y-%m-%dT%H:%M:%S")
 
     def check_github(self):
-        logger = logging.getLogger('PyDigger.fetch')
+        logger = logging.getLogger('PyDigger')
         logger.debug("check_github user='{}', project='{}".format(self.entry['github_user'], self.entry['github_project']))
         if not self.github:
             return
@@ -358,7 +358,7 @@ class PyPackage:
         """Use ``urllib.request.urlretrieve`` to download package to file in sandbox
            dir.
         """
-        logger = logging.getLogger('PyDigger.fetch')
+        logger = logging.getLogger('PyDigger')
         if 'download_url' not in self.entry or self.entry['download_url'] is None:
             logger.info("No download_url")
             return()
@@ -402,7 +402,7 @@ class PyPackage:
             self.downloaded_from_url = True
 
     def save(self):
-        logger = logging.getLogger('PyDigger.fetch')
+        logger = logging.getLogger('PyDigger')
         entry = self.entry
         logger.info("save_entry: '{}'".format(entry['name']))
 
@@ -465,7 +465,7 @@ def main():
     args = get_args()
     setup(args)
 
-    logger = logging.getLogger('PyDigger.fetch')
+    logger = logging.getLogger('PyDigger')
     logger.info("Starting main")
     src_dir = PyDigger.common.get_source_dir()
     logger.info("Source directory: {}".format(src_dir))
@@ -522,7 +522,7 @@ def main():
     logger.info("Finished")
 
 def update_packages(args, names):
-    logger = logging.getLogger('PyDigger.fetch')
+    logger = logging.getLogger('PyDigger')
     count = 0
     logger.info("Start updating packages")
     for name in names:
@@ -539,7 +539,7 @@ def update_packages(args, names):
 
 # going over the RSS feed most recent first
 def get_from_rss():
-    logger = logging.getLogger('PyDigger.fetch')
+    logger = logging.getLogger('PyDigger')
     logger.debug("get_from_rss")
     rss_data = get_rss()
     packages = []
@@ -603,7 +603,7 @@ def get_from_rss():
     return packages
 
 def get_rss():
-    logger = logging.getLogger('PyDigger.fetch')
+    logger = logging.getLogger('PyDigger')
     latest_url = 'https://pypi.org/rss/updates.xml'
     logger.debug('get_rss from ' + latest_url)
     try:

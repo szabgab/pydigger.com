@@ -52,7 +52,7 @@ cases['has_vcs_has_author']  = { '$and' : [ cases['has_vcs'], cases['has_author'
 cases['has_vcs_no_summary']   = { '$and' : [ cases['has_vcs'], cases['no_summary'] ] }
 
 def get_client_and_db():
-    log = logging.getLogger('PyDigger.common')
+    log = logging.getLogger('PyDigger')
     log.info("get_client_and_db")
     config = read_config()
     log.info("username: {} server: {}".format(config["username"], config["server"] ))
@@ -80,7 +80,7 @@ def get_source_dir():
     return get_root() + "/src"
 
 def remove_package(name):
-    log = logging.getLogger('PyDigger.common')
+    log = logging.getLogger('PyDigger')
     db = get_db()
     doc = db.packages.find_one({'name' : name})
     if not doc:
@@ -89,7 +89,7 @@ def remove_package(name):
     log.info("res: {}".format(res))
 
 def show_package(name):
-    log = logging.getLogger('PyDigger.common')
+    log = logging.getLogger('PyDigger')
     db = get_db()
     doc = db.packages.find_one({'name' : name})
     if not doc:
@@ -97,7 +97,7 @@ def show_package(name):
     log.info("doc: {}".format(doc))
 
 def read_config():
-    log = logging.getLogger('PyDigger.common')
+    log = logging.getLogger('PyDigger')
     config_file = os.environ.get('PYDIGGER_CONFIG')
     if config_file is None:
         root = os.path.dirname(os.path.dirname(__file__))
@@ -131,7 +131,7 @@ def get_latests_from_cache():
 
 def get_flake8_report():
     db = get_db()
-    log = logging.getLogger('PyDigger.common')
+    log = logging.getLogger('PyDigger')
 
     # https://stackoverflow.com/questions/16492891/mongodb-aggregation-get-counts-of-key-value-pairs
     my_map = Code("""
@@ -180,6 +180,8 @@ def get_stats():
     return stats
 
 def update_cache():
+    logger = logging.getLogger('PyDigger')
+    logger.info("update_cache")
     stats = get_stats()
     latests = get_latests()
     db = get_db()
