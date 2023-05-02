@@ -1,0 +1,13 @@
+{% include "incl/header.html" %}
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <table class="table">
+        {% for file in logs %}
+            <tr><td>{{file}}</td><td></td></tr>
+        {% endfor %}
+        </table>
+    </div>
+    <div class="col-md-1"></div>
+</div>
+{% include "incl/footer.html" %}

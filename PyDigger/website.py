@@ -185,6 +185,19 @@ def show_list(author = '', mongo_query = None, search_query = ''):
         gravatar = gravatar_code,
     )
 
+@app.route("/logs")
+def logs():
+    logs_dir = "/logs"
+    if not os.path.exists(logs_dir):
+        return "Logs folder does not exist"
+
+    files = os.listdir(logs_dir)
+    return render_template('logs.html',
+        title = "Logs",
+        logs = files,
+    )
+
+
 @app.route("/keywords")
 def keywords():
     db = PyDigger.common.get_db()
