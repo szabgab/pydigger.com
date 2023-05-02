@@ -60,10 +60,8 @@
         -->
             <tr><td><a href="/search/no-keywords">No keywords</a></td><td>{{stats.no_keywords | commafy}}</td><td>{{(100 * stats.no_keywords / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/has-keywords">Has keywords</a></td><td>{{stats.has_keywords | commafy}}</td><td>{{ (100 * stats.has_keywords / stats.total) | round(2)}}%</td></tr>
-            {% if stats.has_requirements %}
             <tr><td><a href="/search/has-requirements">Has requirements</a></td><td>{{stats.has_requirements | commafy}}</td><td>{{ (100 * stats.has_requirements / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/no-requirements">No requirements</a></td><td>{{stats.no_requirements | commafy}}</td><td>{{ (100 * stats.no_requirements / stats.total) | round(2)}}%</td></tr>
-            {% endif %}
             <tr><td><a href="/search/no-editconfig">No editconfig</a></td><td>{{stats.no_editconfig | commafy}}</td><td>{{(100 * stats.no_editconfig / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/has-editconfig">Has editconfig</a></td><td>{{stats.has_editconfig | commafy}}</td><td>{{(100 * stats.has_editconfig / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/no-dockbot">No dockbot</a></td><td>{{stats.no_dockbot | commafy}}</td><td>{{(100 * stats.no_dockbot / stats.total) | round(2)}}%</td></tr>
