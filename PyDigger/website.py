@@ -201,7 +201,7 @@ def logs():
 def show_log_file(filename):
     if not re.search(r'^[a-z0-9-]+\.log$', filename):
         return f"Invalid name '{filename}'"
-    send_file(os.path.join(logs_dir, filename))
+    return send_file(os.path.join(logs_dir, filename))
 
 @app.route("/keywords")
 def keywords():
