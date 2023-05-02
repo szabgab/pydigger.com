@@ -194,7 +194,7 @@ def logs():
     files = os.listdir(logs_dir)
     return render_template('logs.html',
         title = "Logs",
-        logs = files,
+        logs = sorted(files, reverse=True),
     )
 
 @app.route("/logs/<filename>")
