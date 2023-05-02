@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, url_for, Response, jsonify, g, abort
+from flask import Flask, render_template, redirect, request, url_for, Response, jsonify, g, abort, send_file
 import datetime
 import hashlib
 import json
@@ -15,6 +15,7 @@ from PyDigger.common import cases, get_stats_from_cache, get_latests_from_cache,
 max_license_length = 50
 
 app = Flask('PyDigger')
+logs_dir = "/logs"
 
 def setup():
     if os.environ.get('PYDIGGER_SKIP_SETUP'):
@@ -187,7 +188,6 @@ def show_list(author = '', mongo_query = None, search_query = ''):
 
 @app.route("/logs")
 def logs():
-    logs_dir = "/logs"
     if not os.path.exists(logs_dir):
         return "Logs folder does not exist"
 
@@ -197,6 +197,11 @@ def logs():
         logs = files,
     )
 
+@app.route("/logs/<filename>")
+def logs(filename):
+    if not re.search(r'^[a-z0-9-]+\.log$', filename):
+        return f"Invalid name '{filename}'"
+    send_file(os.path.join(log_dir, filename))
 
 @app.route("/keywords")
 def keywords():
