@@ -34,6 +34,8 @@ cases = {
     ]},
     'has_github_no_travis_ci' : { '$and' : [ { 'github' : True }, {'$or' : [ { 'travis_ci' : { '$exists' : False } }, { 'travis_ci' : False}] }] },
     'has_github_no_coveralls' : { '$and' : [ { 'github' : True }, {'$or' : [ { 'coveralls' : { '$exists' : False } }, { 'coveralls' : False}] }] },
+    'github_not_found' : { 'github_not_found': { '$exists': True}},
+    'github_fetch_exception' : { 'github_fetch_exception': { '$exists': True}},
 }
 
 for field in ['tox', 'appveyor', 'editconfig', 'dockbot', 'landscape', 'coveralls', 'travis_ci', 'circleci', 'github', 'gitlab', 'bitbucket', 'github_actions']:

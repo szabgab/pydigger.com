@@ -68,6 +68,8 @@
             <tr><td><a href="/search/has-dockbot">Has dockbot</a></td><td>{{stats.has_dockbot | commafy}}</td><td>{{(100 * stats.has_dockbot / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/no-landscape">No landscape</a></td><td>{{stats.no_landscape | commafy}}</td><td>{{(100 * stats.no_landscape / stats.total) | round(2)}}%</td></tr>
             <tr><td><a href="/search/has-landscape">Has landscape</a></td><td>{{stats.has_landscape | commafy}}</td><td>{{(100 * stats.has_landscape / stats.total) | round(2)}}%</td></tr>
+            <tr><td><a href="/search/github-not-found">Has GitHub link but it gives 404</a></td><td>{{stats.github_not_found | commafy}}</td><td>{{(100 * stats.github_not_found / stats.total) | round(2)}}%</td></tr>
+            <tr><td><a href="/search/github-fetch-exception">Has GitHub link but there was an exception fetching it</a></td><td>{{stats.github_fetch_exception | commafy}}</td><td>{{(100 * stats.github_fetch_exception / stats.total) | round(2)}}%</td></tr>
         </table>
         {% endif %}
 
