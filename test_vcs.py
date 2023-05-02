@@ -106,3 +106,20 @@ def test_vcs(tmpdir):
         'github_project': 'project'
     }
 
+    # codeberg plain url in home_page
+    package = fetch.PyPackage("foo")
+    package.entry['home_page'] = 'https://codeberg.org/user/project'
+    package.entry['version'] = '1.0'
+    package.extract_vcs()
+    assert package.entry == {
+        'home_page': 'https://codeberg.org/user/project',
+        'version': '1.0',
+        'github': False,
+        'gitlab': False,
+        'bitbucket': False,
+        'codeberg': True,
+        'codeberg_user': 'user',
+        'codeberg_project': 'project'
+    }
+
+
