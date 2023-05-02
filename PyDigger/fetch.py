@@ -444,7 +444,7 @@ def setup_logger(args):
         if not os.path.exists(log_dir):
             os.makedirs(log_dir)
         log_file = os.path.join(log_dir, datetime.now().strftime("fetch-%Y-%m-%d-%H-%M-%S.log"))
-        ch = logging.handlers.FileHandler(log_file)
+        ch = logging.FileHandler(log_file)
         ch.setLevel(log_level)
         ch.setFormatter(log_format)
         logger.addHandler(ch)
