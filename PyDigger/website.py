@@ -201,7 +201,13 @@ def logs():
 def show_log_file(filename):
     if not re.search(r'^[a-z0-9-]+\.log$', filename):
         return f"Invalid name '{filename}'"
-    return send_file(os.path.join(logs_dir, filename))
+    with open(os.path.join(logs_dir, filename)) as fh:
+        content = fh.read()
+    return render_template('logfile.html',
+        title = f"Log of {filename}",
+        text = content,
+    )
+
 
 @app.route("/keywords")
 def keywords():
