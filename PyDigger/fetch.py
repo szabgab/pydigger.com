@@ -196,7 +196,7 @@ class PyPackage:
                 vcs_found = self.is_this_a_vcs(vcs, vcs_url)
                 if vcs_found:
                     break
-            if 'project_urls' in self.entry:
+            if self.entry.get('project_urls') is not None:
                 logger.info(f"project_urls found in project {self.lcname} Version {self.entry['version']}")
                 logger.info(f"project_urls keys: {self.entry['project_urls'].keys()}")
                 # Officially https://packaging.python.org/en/latest/specifications/declaring-project-metadata/#urls
