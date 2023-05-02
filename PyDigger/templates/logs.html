@@ -4,7 +4,7 @@
     <div class="col-md-10">
         <table class="table">
         {% for file in logs %}
-            <tr><td>{{file}}</td><td></td></tr>
+            <tr><td><a href="/logs/{{file}}">{{file}}</a></td></tr>
         {% endfor %}
         </table>
     </div>
