@@ -198,7 +198,7 @@ def logs():
     )
 
 @app.route("/logs/<filename>")
-def logs(filename):
+def show_log_file(filename):
     if not re.search(r'^[a-z0-9-]+\.log$', filename):
         return f"Invalid name '{filename}'"
     send_file(os.path.join(log_dir, filename))
