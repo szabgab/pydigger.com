@@ -443,7 +443,7 @@ def setup_logger(args):
             log_dir = os.path.join(project_root, 'log')
         if not os.path.exists(log_dir):
             os.makedirs(log_dir)
-        log_file = os.path.join(log_dir, datetime.now().strptime("fetch-%Y-%m-%d-%H-%M-%S.log"))
+        log_file = os.path.join(log_dir, datetime.now().strftime("fetch-%Y-%m-%d-%H-%M-%S.log"))
         ch = logging.handlers.FileHandler(log_file)
         ch.setLevel(log_level)
         ch.setFormatter(log_format)
