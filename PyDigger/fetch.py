@@ -265,13 +265,13 @@ class PyPackage:
 
     def check_github(self):
         logger = logging.getLogger('PyDigger')
-        logger.debug("check_github user='{}', project='{}".format(self.entry['github_user'], self.entry['github_project']))
+        logger.debug(f"check_github user='{self.entry['github_user']}', project='{self.entry['github_project']}'")
         if not self.github:
             return
 
         repo = self.github.repository(self.entry['github_user'], self.entry['github_project'])
         if not repo:
-            logger.error("Could not fetch GitHub repository for {}".format(self.entry['name']))
+            logger.error(f"Could not fetch GitHub repository for {self.entry['name']}")
             self.entry['error'] = "Could not fetch GitHub repository"
             return
 
@@ -280,7 +280,7 @@ class PyPackage:
         # get the last commit of the default branch
         branch = repo.branch(repo.default_branch)
         if not branch:
-            logger.error("Could not fetch GitHub branch {} for {}".format(repo.default_branch, self.entry['name']))
+            logger.error(f"Could not fetch GitHub branch {repo.default_branch} for {self.entry['name']}")
             self.entry['error'] = "Could not fetch GitHub branch"
             return
 
@@ -343,11 +343,11 @@ class PyPackage:
                                 for w in warn:
                                     logger.warning(str(w))
                     except urllib.error.HTTPError as err:
-                        logger.error(f"Exception when handling the {field}.txt: {err}")
+                        logger.error(f"HTTPError in project '{self.lcname}' when handling the '{field}.txt': {err}")
                         if "rate limit exceeded" in err:
                             time.sleep(2)
-                    except Exception:
-                        logger.exception(f"Exception when handling the {field}.txt")
+                    except Exception as err:
+                        logger.exception(f"Exception in project '{self.lcname}' when handling the '{field}.txt' {err}")
         logger.debug("github finished")
         return
 
@@ -363,7 +363,7 @@ class PyPackage:
             logger.info("No download_url")
             return()
 
-        logger.info('download_url {}'.format(self.entry['download_url']))
+        logger.info(f"download_url {self.entry['download_url']}")
 
         #if 'local_dir' in self.entry:
         #    logger.info('')
@@ -373,7 +373,7 @@ class PyPackage:
             local_dir = match.group(1)
             extension = match.group(2)
         else:
-            logger.warning("Unsupported download file format: '{}'".format(self.entry['download_url']))
+            logger.warning("Unsupported download file format: '{self.entry['download_url']}'")
             return()
 
         logger.info(f"local_dir '{local_dir}' extension '{extension}'")
@@ -404,7 +404,7 @@ class PyPackage:
     def save(self):
         logger = logging.getLogger('PyDigger')
         entry = self.entry
-        logger.info("save_entry: '{}'".format(entry['name']))
+        logger.info(f"save_entry: '{entry['name']}'")
 
         # TODO make sure we only add newer version!
         # Version numbers I've seen:
@@ -418,7 +418,7 @@ class PyPackage:
         db.packages.delete_one({'name' : entry['name']})
         db.packages.delete_one({'name' : entry['name'].lower()})
         res = db.packages.insert_one(entry)
-        logger.info("INSERT res='{}'".format(res))
+        logger.info(f"INSERT res='{res}'")
 
 
 def setup_logger(args):
@@ -468,12 +468,12 @@ def main():
     logger = logging.getLogger('PyDigger')
     logger.info("Starting main")
     src_dir = PyDigger.common.get_source_dir()
-    logger.info("Source directory: {}".format(src_dir))
+    logger.info(f"Source directory: {src_dir}")
     names = []
     packages = None
 
     if args.update:
-        logger.debug("update: {}".format(args.update))
+        logger.debug(f"update: {args.update}")
         if args.update == 'rss':
             packages = get_from_rss()
         elif args.update == 'package':
@@ -490,23 +490,23 @@ def main():
             seen = {}
             for field in requirements_fields:
                 packages_with_requirements = db.packages.find({field : { '$exists' : True }}, { 'name' : True, field : True})
-                for p in packages_with_requirements:
-                    for r in p[field]:
-                        name = r['name']
+                for pkg in packages_with_requirements:
+                    for requirement in pkg[field]:
+                        name = requirement['name']
                         if not name:
-                            logger.info("{} {} found without a name in package {}".format(field, r, p))
+                            logger.info(f"{field} {requirement} found without a name in package {pkg}")
                             continue
                         if name not in seen:
                             seen[name] = True
-                            p = db.packages.find_one({'lcname': name.lower()})
-                            if not p:
+                            pkg = db.packages.find_one({'lcname': name.lower()})
+                            if not pkg:
                                 names.append(name)
         elif args.update == 'all':
             packages = db.packages.find({}, {'name': True})
         elif re.search(r'^\d+$', args.update):
             packages = db.packages.find().sort([('pubDate', 1)]).limit(int(args.update))
         else:
-            logger.error("The update option '{}' is not implemented yet".format(args.update))
+            logger.error(f"The update option '{args.update}' is not implemented yet")
 
         if packages:
             names = [ p['name'] for p in packages ]
