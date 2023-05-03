@@ -328,19 +328,20 @@ class PyPackage:
                             content = content.decode('utf8')
 
                         # TODO: either fix the parser or find a better parser for requirements.txt files.
+                        # Pip requirements file format: https://pip.pypa.io/en/stable/reference/requirements-file-format/
 
                         # The parser does not handle a single dot: https://github.com/madpah/requirements-parser/issues/83
                         if content == "." or content == ".\n":
                             continue
 
                         # The parser does not handle -e: https://github.com/madpah/requirements-parser/issues/84
-                        if re.search(r'^\s*-e', content):
+                        if re.search(r'^\s*-e', content, re.MULTILINE):
                             continue
 
                         # https://github.com/ingresso-group/pyticketswitch/blob/master/requirements.txt
                         # contains -r requirements/common.txt  which means we need to fetch that file as well
                         # for now let's just skip this
-                        if re.search(r'^\s*-r', content):
+                        if re.search(r'^\s*-r', content, re.MULTILINE):
                             continue
 
                         # Capture: UserWarning: Private repos not supported. Skipping.
