@@ -196,11 +196,21 @@ def logs():
     files = sorted(files, reverse=True)
     for filename in files:
         size = os.path.getsize(os.path.join(logs_dir, filename))
+        errors = 0
+        rate_limit = 0
+        with open(os.path.join(logs_dir, filename)) as fh:
+            for row in fh:
+                if re.search(r'rate limit exceeded', row):
+                    rate_limit += 1
+                elif re.search(r'- ERROR ', row):
+                    errors += 1
         entries.append({
             "filename": filename,
             "size": size,
+            "errors": errors,
+            "rate_limit": rate_limit,
         })
-    
+
     return render_template('logs.html',
         title = "Logs",
         logs = entries,

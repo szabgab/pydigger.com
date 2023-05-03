@@ -3,8 +3,9 @@
     <div class="col-md-1"></div>
     <div class="col-md-10">
         <table class="table">
+            <tr><th>filename</th><th>errors</th><th>rate limit</th><th>file size</th></tr>
         {% for file in logs %}
-            <tr><td><a href="/logs/{{file.filename}}">{{file.filename}}</a></td><td>{{file.size}}</td></tr>
+            <tr><td><a href="/logs/{{file.filename}}">{{file.filename}}</a></td><td>{{file.errors}}</td><td>{{file.rate_limit}}</td><td>{{file.size | commafy}}</td></tr>
         {% endfor %}
         </table>
     </div>
