@@ -327,21 +327,32 @@ class PyPackage:
                         if content.__class__.__name__ == 'bytes':
                             content = content.decode('utf8')
 
+                        # TODO: either fix the parser or find a better parser for requirements.txt files.
+
+                        # The parser does not handle a single dot: https://github.com/madpah/requirements-parser/issues/83
+                        if content == "." or content == ".\n":
+                            continue
+
+                        # The parser does not handle -e: https://github.com/madpah/requirements-parser/issues/84
+                        if re.search(r'^\s*-e', content):
+                            continue
+
                         # https://github.com/ingresso-group/pyticketswitch/blob/master/requirements.txt
                         # contains -r requirements/common.txt  which means we need to fetch that file as well
                         # for now let's just skip this
-                        match = re.search(r'^\s*-r', content)
-                        if not match:
-                            # Capture: UserWarning: Private repos not supported. Skipping.
-                            with warnings.catch_warnings(record=True) as warn:
-                                warnings.simplefilter("always")
-                                for req in requirements.parse(content):
-                                    logger.debug(f"{field}: {req.name} {req.specs} {req.extras}")
-                                    # we cannot use the req.name as a key in the dictionary as some of the package names have a . in them
-                                    # and MongoDB does not allow . in fieldnames.
-                                    self.entry[field].append({ 'name' : req.name, 'specs' : req.specs })
-                                for w in warn:
-                                    logger.warning(str(w))
+                        if re.search(r'^\s*-r', content):
+                            continue
+
+                        # Capture: UserWarning: Private repos not supported. Skipping.
+                        with warnings.catch_warnings(record=True) as warn:
+                            warnings.simplefilter("always")
+                            for req in requirements.parse(content):
+                                logger.debug(f"{field}: {req.name} {req.specs} {req.extras}")
+                                # we cannot use the req.name as a key in the dictionary as some of the package names have a . in them
+                                # and MongoDB does not allow . in fieldnames.
+                                self.entry[field].append({ 'name' : req.name, 'specs' : req.specs })
+                            for w in warn:
+                                logger.warning(str(w))
                     except urllib.error.HTTPError as err:
                         logger.error(f"HTTPError in project '{self.lcname}' when handling the '{field}.txt': {err}")
                         if "rate limit exceeded" in err:
