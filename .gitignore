@@ -18,3 +18,4 @@ dev.yml
 *~
 docker-compose.override.yml
 cron.log
+/backup/

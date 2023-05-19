@@ -33,12 +33,11 @@ services:
     volumes:
       - mongo-data:/data/db
       - mongo-configdb:/data/configdb
-      - mongo-backup:/data/backup
+      - ./backup:/backup
     restart: unless-stopped
     hostname: pydigger-mongodb
 
 volumes:
   mongo-data:
   mongo-configdb:
-  mongo-backup:
   logs:
