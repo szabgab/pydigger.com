@@ -461,6 +461,7 @@ def setup_logger(args):
         ch.setFormatter(log_format)
         logger.addHandler(ch)
 
+    logger._pydigger_start_time = time.time()
     logger.info("======================== Starting =================================")
 
 def setup_db():
@@ -479,6 +480,7 @@ def main():
 
     logger = logging.getLogger('PyDigger')
     logger.info("Starting main")
+    logger.info(logger._pydigger_start_time)
     src_dir = PyDigger.common.get_source_dir()
     logger.info(f"Source directory: {src_dir}")
     names = []
