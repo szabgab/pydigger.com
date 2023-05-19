@@ -26,7 +26,9 @@ services:
       - logs:/logs
 
   mymongo:
-    image: mongo:4.4
+    build:
+      context: mongodb
+      dockerfile: Dockerfile
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: Secret
@@ -34,6 +36,7 @@ services:
       - mongo-data:/data/db
       - mongo-configdb:/data/configdb
       - ./backup:/backup
+      - ./tools:/tools
     restart: unless-stopped
     hostname: pydigger-mongodb
 
