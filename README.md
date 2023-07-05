@@ -27,7 +27,9 @@ user
 * Save the token it in the `dev.yml` file in the `github-token` field.
 * Copy `docker-compose.override.yml.example` to `docker-compose.override.yml` and personalize it if necessary.
 
-In one terminal:
+If you're using Windows, make sure to have a docker daemon up and running, e.g. via Docker Desktop.
+
+Open a terminal and run the following from within your cloned pydigger.com directory:
 ```
 docker-compose up --build
 ```
