@@ -16,6 +16,7 @@ os.environ['PYDIGGER_SKIP_SETUP'] = ''
 root = os.path.dirname(os.path.dirname(__file__))
 sys.path.insert(0, root)
 
+
 def create_config_files():
     logger = logging.getLogger('PyDigger.test')
     tmpdir = tempfile.mkdtemp()
@@ -44,7 +45,8 @@ class TestDigger:
 # TODO: Make sure the web site can be loaded even if the configuration files are missing and there is no access to the
 # databse. Report this properly in the log or on the generate web page.
 
-class Tools():
+
+class Tools:
     def setup_class(self):
         self.logger = logging.getLogger('PyDigger.test')
         self.tmpdir = create_config_files()
@@ -61,27 +63,27 @@ class TestEmptyWeb(Tools):
     def test_main(self):
         rv = self.app.get('/')
         assert rv.status == '200 OK'
-        #print(rv.data)
+        # print(rv.data)
         assert b'<title>PyDigger - unearthing stuff about Python</title>' in rv.data
 
     def test_stats(self):
         rv = self.app.get('/stats')
         assert rv.status == '200 OK'
-        #print(rv.data)
+        # print(rv.data)
         assert b'<title>PyDigger - Statistics</title>' in rv.data
 
     def test_about(self):
         rv = self.app.get('/about')
         assert rv.status == '200 OK'
-        #print(rv.data)
+        # print(rv.data)
         assert b'<title>About PyDigger</title>' in rv.data
 
     def test_404(self):
         rv = self.app.get('/other-page')
         assert rv.status == '404 NOT FOUND'
-        #print('----------------------------')
-        #print(rv.data)
-        #print('----------------------------')
+        # print('----------------------------')
+        # print(rv.data)
+        # print('----------------------------')
         assert b'<title></title>' in rv.data  # TODO make 404 page look nicer and have some title and body
 
     def test_api_recent(self):
@@ -91,12 +93,13 @@ class TestEmptyWeb(Tools):
         assert rv.headers['Content-Type'] == 'application/json'
         assert rv.json == []
 
+
 class TestWeb(Tools):
     def setup_class(self):
         super().setup_class(self)
-        #os.system("printenv | sort")
-        #os.system("cat $PYDIGGER_CONFIG")
-        # This fails on development machines beacuse there is no GitHub token in the test code.
+        # os.system("printenv | sort")
+        # os.system("cat $PYDIGGER_CONFIG")
+        # This fails on development machines because there is no GitHub token in the test code.
         # Strangely the test passes in either way
         if 'CI' in os.environ:
             os.system("{} fetch_recent.py --update rss --log DEBUG --screen --limit 5".format(sys.executable))
@@ -107,8 +110,8 @@ class TestWeb(Tools):
         assert rv.status == '200 OK'
         assert rv.headers['Content-Type'] == 'application/json'
         recent = rv.json
-        #print(recent)
-        #assert len(recent) == 5
+        # print(recent)
+        # assert len(recent) == 5
         for entry in recent:
             assert 'name' in entry
             assert 'home_page' in entry
