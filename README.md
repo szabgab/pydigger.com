@@ -48,9 +48,9 @@ To run the tests type in
 pytest --cache-clear -vs
 ```
 
-We could also use the flake8 flag but due to a bug pytest-flake8 does not work with the recent versions of flake8.
+To run the linter type in
 ```
-pytest --cache-clear --flake8 -vs
+flake8 --count --show-source --statistics
 ```
 
 To collect data from a single GitHub repository:
