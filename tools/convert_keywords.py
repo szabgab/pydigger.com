@@ -10,7 +10,7 @@ client = MongoClient()
 db = client.pydigger
 all = db.packages.find()
 for p in all:
-    #print(p)
+    # print(p)
     print(p['name'])
     split_keywords = []
     if 'keywords' in p:
@@ -25,7 +25,8 @@ for p in all:
                 split_keywords = kw.split(' ')
 
     print("  ", split_keywords)
-    db.packages.update({'_id' : p['_id']}, {'$set' : {'split_keywords' : split_keywords}})
-    #print(db.packages.find_one({'_id' : p['_id']}))
-    #print(d)
-#    break
+    db.packages.update(
+        {'_id': p['_id']}, {'$set': {'split_keywords': split_keywords}})
+    # print(db.packages.find_one({'_id' : p['_id']}))
+    # print(d)
+    # break

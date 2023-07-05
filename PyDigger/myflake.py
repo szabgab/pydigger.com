@@ -19,7 +19,7 @@ def process(path_to_dir):
             # 2 F401 '.controllers' imported but unused
             match = re.search(r'^\d+\s(\w+)\s', entry)
             if not match:
-                continue # TODO report
+                continue  # TODO report
             code = match.group(1)
             if code not in reports:
                 reports[code] = 0
@@ -50,8 +50,8 @@ def get_python_files(path_to_dir):
         for filename in files:
             if not filename.endswith('.py'):
                 continue
-
-            path = os.path.join(dirname, filename)   # relative path to the "current" file
+            # relative path to the "current" file
+            path = os.path.join(dirname, filename)
             python_files.append(path)
     return python_files
 

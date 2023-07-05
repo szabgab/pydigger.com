@@ -3,13 +3,15 @@ from PyDigger import fetch
 import os
 import yaml
 
+
 def test_vcs(tmpdir):
     print(tmpdir)
-    config_file = os.environ['PYDIGGER_CONFIG'] = os.path.join(tmpdir, 'config.yml')
+    config_file = os.environ['PYDIGGER_CONFIG'] = os.path.join(
+        tmpdir, 'config.yml')
     print(os.environ['PYDIGGER_CONFIG'])
     config = {'github-token': 'fake'}
     with open(config_file, 'w') as outfile:
-            yaml.dump(config, outfile, default_flow_style=False)
+        yaml.dump(config, outfile, default_flow_style=False)
 
     # github plain url in home_page
     package = fetch.PyPackage("foo")
@@ -42,7 +44,6 @@ def test_vcs(tmpdir):
         'github_user': 'user',
         'github_project': 'project'
     }
-
 
     # gitlab plain url + version is a string in home_page
     package = fetch.PyPackage("foo")
@@ -121,5 +122,3 @@ def test_vcs(tmpdir):
         'codeberg_user': 'user',
         'codeberg_project': 'project'
     }
-
-
