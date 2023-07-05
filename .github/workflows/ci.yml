@@ -64,7 +64,7 @@ jobs:
     - name: Build the stack again now with example
       run: docker-compose -f docker-compose.yml -f docker-compose.override.yml.example up -d
     - name: Run linting
-      run: docker exec pydiggercom-web-1 flake8 --count --show-source --statistics
+      run: docker exec pydiggercom_web_1 flake8 --count --show-source --statistics
     - name: Run the test again
-      run: docker exec pydiggercom-web-1 pytest -svv # --flake8 --mypy
+      run: docker exec pydiggercom_web_1 pytest -svv # --flake8 --mypy
 
