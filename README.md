@@ -1,5 +1,7 @@
 # PyDigger
 
+[![GitHub stars](https://img.shields.io/github/stars/szabgab/pydigger.com.svg)](https://github.com/szabgab/pydigger.com/stargazers) [![GitHub forks](https://img.shields.io/github/forks/szabgab/pydigger.com.svg)](https://github.com/szabgab/pydigger.com/network/members) [![GitHub watchers](https://img.shields.io/github/watchers/szabgab/pydigger.com.svg)](https://github.com/szabgab/pydigger.com/watchers) [![GitHub commits](https://img.shields.io/github/commit-activity/m/szabgab/pydigger.com.svg)](https://github.com/szabgab/pydigger.com/commits)
+
 Source code of [PyDigger](https://pydigger.com/)
 
 See the [about page](https://pydigger.com/about) on the web site for some explanation.
