@@ -96,6 +96,13 @@ Cleaning up database (during development)
 docker exec pydiggercom_web_1 python remove_db.py
 ```
 
+Remove a package
+
+```
+docker exec pydiggercom_web_1 python remove_package.py NAME
+```
+
+
 ## Deployment
 
 ssh to the server and run
