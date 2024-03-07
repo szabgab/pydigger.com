@@ -85,7 +85,7 @@ def remove_package(name):
     doc = db.packages.find_one({'name' : name})
     if not doc:
         exit("Could not find package {}".format(name))
-    res = db.packages.remove({'name' : name})
+    res = db.packages.delete_one({'name' : name})
     log.info("res: {}".format(res))
 
 def show_package(name):
