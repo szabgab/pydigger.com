@@ -1,6 +1,13 @@
 #!/usr/bin/bash
 #export PATH=$PATH:/home/gabor/docker-compose/bin
 
+if [ "$1" == "stop" ];
+then
+  echo "stop"
+  docker compose stop
+  exit 0
+fi
+
 if [ "$1" == "deploy" ];
 then
   echo "deploy"
@@ -15,5 +22,6 @@ then
   docker compose up --detach --timeout 0 --remove-orphans
   docker image prune -f
 else
-  echo "Usage: $0 [deploy|restart]"
+
+  echo "Usage: $0 [deploy|restart|stop]"
 fi
