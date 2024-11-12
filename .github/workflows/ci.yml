@@ -54,15 +54,15 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Build the stack
-      run: docker-compose up -d
+      run: docker compose up -d
     - name: Test
       run: docker exec pydiggercom_web_1 pytest -svv
 
     - name: Stop the docker compose
-      run: docker-compose stop
+      run: docker compose stop
 
     - name: Build the stack again now with example
-      run: docker-compose -f docker-compose.yml -f docker-compose.override.yml.example up -d
+      run: docker compose -f docker-compose.yml -f docker-compose.override.yml.example up -d
     # - name: Run linting
     #   run: docker exec pydiggercom_web_1 flake8 --count --show-source --statistics # need to fix linting issue
     - name: Run the test again
