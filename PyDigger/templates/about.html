@@ -5,7 +5,7 @@
     <div class="col-md-10">
         <h2>Collection process</h2>
         <p>
-        Using a cron-job, we monitor the <a href=">https://pypi.org/rss/updates.xml">updates.xml</a> file on PyPI. For each item we take the name, version number, description and pubDate and add the package
+        Using a cron-job, we monitor the <a href="https://pypi.org/rss/updates.xml">updates.xml</a> file on PyPI. For each item we take the name, version number, description and pubDate and add the package
         to our database. Then we go over the newly added packages and try to fetch the JSON file describing them in details from <b>https://pypi.org/pypi/NAME/json</b>.
         <p>
         We extract a lot of fields from the JSON file. For example <b>maintainer</b>, <b>author</b>, <b>description</b>, <b>license</b> and many more. The <b>keywords</b> fields is split
