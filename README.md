@@ -80,6 +80,16 @@ python fetch_recent.py --update rss --screen --log DEBUG
 python fetch_recent.py --update deps --screen --log DEBUG
 ```
 
+### MongodB configuration
+
+Edit `docker-compose.yml`
+
+```
+./deploy.sh stop
+docker container rm pydiggercom-mymongo-1 pydiggercom-web-1  pydiggercom-cron-1
+./deploy.sh deploy
+```
+
 ### Connect to the shell of the MongoDB server
 
 ```
