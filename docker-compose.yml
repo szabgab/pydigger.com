@@ -29,7 +29,7 @@ services:
     build:
       context: mongodb
       dockerfile: Dockerfile
-    mem_limit: 2048m
+    mem_limit: 4096m
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: Secret
